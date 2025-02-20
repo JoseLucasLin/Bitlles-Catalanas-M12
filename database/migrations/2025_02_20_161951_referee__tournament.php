@@ -23,9 +23,9 @@ return new class extends Migration
         Schema::dropIfExists('Referee_Tournament');
         Schema::create('Referee_Tournament', function (Blueprint $table) {
             $table->id() -> primary();
-            $table->integer('id_tournament') -> nullable(false);
-            $table->integer('id_user_referee') -> nullable(false);
-            $table->integer('id_field') -> nullable(false);
+            $table->integer('id_tournament') -> nullable(false)->references('id')->on('Tournaments');
+            $table->integer('id_user_referee') -> nullable(false)->references('id')->on('Referees');
+            $table->integer('id_field') -> nullable(false)->references('id')->on('Fields');
         });
     }
 
