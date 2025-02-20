@@ -21,8 +21,8 @@ return new class extends Migration
     expected_date VARCHAR(50),
     start_date TIMESTAMP,
     end_date TIMESTAMP */
-        Schema::dropIfExists('Tournament');
-        Schema::create('Tournament', function (Blueprint $table) {
+        Schema::dropIfExists('Tournaments');
+        Schema::create('Tournaments', function (Blueprint $table) {
             $table->id()->primary();
             $table->string('name',255)->nullable(false);
             $table->integer('type')->nullable(false);
@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('image',250)->default('image.png');
             $table->timestamp('expected_date');
             $table->timestamp('start_date');
-            $table->timestamp('end_date');
+            $table->timestamp('end_date')->nullable(true);
         });
     }
 
@@ -41,6 +41,6 @@ return new class extends Migration
     public function down(): void
     {
         //
-        Schema::dropIfExists('Tournament');
+        Schema::dropIfExists('Tournaments');
     }
 };
