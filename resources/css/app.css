@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    --crema: #f6f4f2;
+    --crema-oscuro: #e5e2dd;
+    --blanco: #ffffff;
+    --rojo: #be1622;
+    --azul: #2f3b64;
+}
+
+.navbar {
+    background-color: var(--crema);
+}
+.navbar-text {
+    color: var(--azul);
+}
+.navbar-text:hover {
+    color: var(--rojo);
+}
+.navbar-mini {
+    background-color: var(--crema-oscuro);
+}

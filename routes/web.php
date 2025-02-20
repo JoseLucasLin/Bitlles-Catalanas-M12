@@ -6,4 +6,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/test', function () {
+    return view('main.index');
+});
+
 Route::get('/p', [ServerController::class, 'index']);
