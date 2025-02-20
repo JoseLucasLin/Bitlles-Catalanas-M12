@@ -27,7 +27,7 @@ return new class extends Migration
         Schema::dropIfExists('Player_History_Stats');
         Schema::create('Player_History_Stats', function (Blueprint $table) {
             $table->id() ->primary();
-            $table->integer('id_player') ->nullable(false);
+            $table->integer('id_player') ->nullable(false)->references('id')->on('Players');
             $table->integer('number_game_makes') ->nullable(false);
             $table->integer('total_points_all_game') ->nullable(false);
             $table->integer('last_game_points') ->nullable(false);

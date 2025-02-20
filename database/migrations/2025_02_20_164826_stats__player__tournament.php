@@ -21,10 +21,10 @@ return new class extends Migration
         Schema::dropIfExists('Stats_Player_Tournaments');
         Schema::create('Stats_Player_Tournaments', function (Blueprint $table) {
             $table->id()->primary();
-            $table->integer('id_player')->nullable(false);
-            $table->integer('id_tournament')->nullable(false);
+            $table->integer('id_player')->nullable(false)->references('id')->on('Players');
+            $table->integer('id_tournament')->nullable(false)->references('id')->on('Tournaments');
             $table->integer('total_points')->nullable(false)->default(0);
-            $table->integer('total_points')->nullable(true);
+            $table->integer('accuracy')->nullable(true);
         });
     }
 
