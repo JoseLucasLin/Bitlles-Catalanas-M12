@@ -3,19 +3,25 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRolesTable extends Migration
+return new class extends Migration
 {
-    public function up()
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
     {
-        Schema::dropIfExists('Roles');
-        Schema::create('Roles', function (Blueprint $table) {
-            $table->id()-> primary() ->autoIncrement();
-            $table->string('role_name', 40);
+        Schema::create('role', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
         });
     }
 
-    public function down()
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
     {
-        Schema::dropIfExists('Roles');
+        Schema::dropIfExists('role');
     }
-}
+};
