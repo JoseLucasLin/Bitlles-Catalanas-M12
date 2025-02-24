@@ -22,3 +22,55 @@
 .navbar-mini {
     background-color: var(--crema-oscuro);
 }
+
+.hero-image {
+    width: 100%;
+    height: 700px; /*tocar este parametro para altura de la imagen grande en main*/
+    overflow: hidden;
+    position: relative;
+}
+.img-responsive {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.main-text{
+    color: var(--azul);
+}
+.main-border{
+    border-color: var(--azul);
+}
+.main-link{
+    color: var(--azul);
+    text-decoration: underline;
+}
+.main-link:hover{
+    color: var(--rojo);
+    text-decoration: underline;
+}
+
+.active-tournament-img{
+    height: 700px;
+}
+@media (max-width: 768px) {
+    .active-tournament-img {
+        height: 350px;
+    }
+}
+@media (min-width: 769px) and (max-width: 1024px) {
+    .active-tournament-img {
+        height: 500px;
+    }
+}
+
+.active-tournament-border{
+    border: 2px solid var(--azul);
+}
+
+.slider-image {
+    width: 100%;
+    height: 300px; /* Altura fija para que todas las imágenes tengan el mismo tamaño */
+    object-fit: cover; /* Hace que las imágenes se recorten y mantengan proporciones */
+}

@@ -13,9 +13,8 @@
 
     @include('layouts.main-img')
 
-    <h1 class="text-3xl font-bold underline">
-        ¡Bienvenido a mi proyecto Laravel!
-    </h1>
+    @include('main.active-tournament')
+    @include('main.history-tournament')
 
     @include('layouts.footer')
 
