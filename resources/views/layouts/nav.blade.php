@@ -16,6 +16,12 @@
         <a href="#" class="header-link p-3 transition-all duration-300 rounded-lg font-semibold text-lg navbar-text">Paises</a>
       </div>
 
+      <div>
+        @foreach (config('app.available_locales') as $locale)
+          <a href="{{ route('locale.change', $locale) }}">{{ strtoupper($locale) }}</a>
+        @endforeach
+      </div>
+
       <div class="hidden md:flex md:items-center md:space-x-6">
         <a class="header-link p-3 transition-all duration-300 rounded-lg font-semibold text-lg navbar-text" href="#">LOGIN</a>
       </div>

@@ -11,3 +11,12 @@ Route::get('/test', function () {
 });
 
 Route::get('/p', [ServerController::class, 'index']);
+
+//ruta cambio idioma
+Route::get('locale/{locale}', function ($locale) {
+    if (in_array($locale, config('app.available_locales'))) {
+        session()->put('locale', $locale);
+        app()->setLocale($locale);
+    }
+    return redirect()->back();
+})->name('locale.change');
