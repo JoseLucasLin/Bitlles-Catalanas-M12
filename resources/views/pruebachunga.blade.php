@@ -20,15 +20,17 @@
         @endif
     </head>
     <body class="font-sans antialiased dark:bg-black dark:text-white/50">
-        
-           <button class="btn" value={{ "hola" }}>{{ "hola" }}</button>
+            <?php $hola="a"?>
+           <button class="btn" value={{ $hola }}>{{ $hola }}</button>
            Server Status
-           {{ 'a '}}
-           <?php
+         
+           <?php/*
            $results='cd '.__DIR__. DIRECTORY_SEPARATOR.'..'. DIRECTORY_SEPARATOR.'..'. DIRECTORY_SEPARATOR.'Server-ws'.DIRECTORY_SEPARATOR;
            
            // btn encender server . --->composer $result = Process::run('sudo apt install supervisor' );
  
-             echo $result->output(); ?>
+             echo $result->output();*/
+             @include('Server-ws.client.index')
+             ?>
     </body>
 </html>
