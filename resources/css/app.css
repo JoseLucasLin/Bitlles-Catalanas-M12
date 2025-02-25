@@ -1,3 +1,82 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    --crema: #f6f4f2;
+    --crema-oscuro: #e5e2dd;
+    --blanco: #ffffff;
+    --rojo: #be1622;
+    --azul: #2f3b64;
+}
+
+.navbar {
+    background-color: var(--crema);
+}
+.navbar-text {
+    color: var(--azul);
+}
+.navbar-text:hover {
+    color: var(--rojo);
+}
+.navbar-mini {
+    background-color: var(--crema-oscuro);
+}
+
+.hero-image {
+    width: 100%;
+    height: 700px; /*tocar este parametro para altura de la imagen grande en main*/
+    overflow: hidden;
+    position: relative;
+}
+.img-responsive {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.main-text {
+    color: var(--azul);
+}
+.main-border {
+    border-color: var(--azul);
+}
+.main-link {
+    color: var(--azul);
+    text-decoration: underline;
+}
+.main-link:hover {
+    color: var(--rojo);
+    text-decoration: underline;
+}
+
+.active-tournament-img {
+    height: 700px;
+}
+@media (max-width: 768px) {
+    .active-tournament-img {
+        height: 350px;
+    }
+}
+@media (min-width: 769px) and (max-width: 1024px) {
+    .active-tournament-img {
+        height: 500px;
+    }
+}
+
+.active-tournament-border {
+    border: 2px solid var(--azul);
+}
+
+.swiper-wrapper {
+    width: 100%;
+    height: max-content !important;
+    padding-bottom: 64px !important;
+    -webkit-transition-timing-function: linear !important;
+    transition-timing-function: linear !important;
+    position: relative;
+}
+.swiper-pagination-bullet {
+    background: #4f46e5;
+}
