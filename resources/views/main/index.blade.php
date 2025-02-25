@@ -6,14 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Bitlles Catalanes</title>
     @vite(['resources/css/app.css'])
+    <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </head>
 <body>
 
     @include('layouts.nav')
 
-    <h1 class="text-3xl font-bold underline">
-        ¡Bienvenido a mi proyecto Laravel!
-    </h1>
     @include('layouts.main-img')
 
     @include('main.active-tournament')
@@ -29,6 +28,31 @@
 
     mobileMenuButton.addEventListener('click', () => {
       mobileMenu.classList.toggle('hidden');
+    });
+
+    //aqui lo del slider
+    var swiper = new Swiper(".multiple-slide-carousel", {
+    loop: true,
+    slidesPerView: 3,
+    spaceBetween: 20,
+    navigation: {
+        nextEl: ".multiple-slide-carousel .swiper-button-next",
+        prevEl: ".multiple-slide-carousel .swiper-button-prev",
+    },
+    breakpoints: {
+        1920: {
+            slidesPerView: 3,
+            spaceBetween: 30
+        },
+        1028: {
+            slidesPerView: 2,
+            spaceBetween: 30
+        },
+        990: {
+            slidesPerView: 1,
+            spaceBetween: 0
+        }
+    }
     });
 </script>
 

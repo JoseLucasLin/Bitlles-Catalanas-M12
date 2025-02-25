@@ -69,8 +69,14 @@
     border: 2px solid var(--azul);
 }
 
-.slider-image {
+.swiper-wrapper {
     width: 100%;
-    height: 300px; /* Altura fija para que todas las imágenes tengan el mismo tamaño */
-    object-fit: cover; /* Hace que las imágenes se recorten y mantengan proporciones */
+    height: max-content !important;
+    padding-bottom: 64px !important;
+    -webkit-transition-timing-function: linear !important;
+    transition-timing-function: linear !important;
+    position: relative;
+}
+.swiper-pagination-bullet {
+    background: #4f46e5;
 }
