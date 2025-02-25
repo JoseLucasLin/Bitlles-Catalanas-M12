@@ -3,7 +3,8 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "vite"
+        "dev": "concurrently \"vite\" \"npm run server\"",
+        "server": "cd ./Server-ws && node --watch ./server/index.js"
     },
     "devDependencies": {
         "autoprefixer": "^10.4.20",
