@@ -1,3 +1,7 @@
+@extends('admin.index')
+
+@section('content')
+
 <main class="flex-1 ms-10 me-10">
 
     <div class="text-center mt-10 mb-10">
@@ -97,3 +101,5 @@
 
     </div>
 </main>
+
+@endsection
