@@ -15,10 +15,13 @@ Route::get('/test', function () {
 Route::get('/admin', function () {
     return view('admin.admin-panel');
 });
-
 // CREATE REFEREE
 Route::get('/admin/create-referee', function () {
     return view('admin.create-referee');
+});
+// ADD PLAYERS
+Route::get('/admin/add-players', function () {
+    return view('admin.add-players');
 });
 
 Route::get('/p', [ServerController::class, 'index']);
