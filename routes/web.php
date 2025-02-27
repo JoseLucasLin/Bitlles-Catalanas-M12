@@ -11,8 +11,14 @@ Route::get('/test', function () {
 });
 
 // ADMIN
+// por defecto cargaremos el panel del admin
 Route::get('/admin', function () {
-    return view('admin.index');
+    return view('admin.admin-panel');
+});
+
+// CREATE REFEREE
+Route::get('/admin/create-referee', function () {
+    return view('admin.create-referee');
 });
 
 Route::get('/p', [ServerController::class, 'index']);

@@ -11,7 +11,7 @@
     
     @include('layouts.nav')
 
-    @include('admin.admin-panel')
+    @yield('content')
 
     @include('layouts.footer')
 
