@@ -10,6 +10,11 @@ Route::get('/test', function () {
     return view('main.index');
 });
 
+// ADMIN
+Route::get('/admin', function () {
+    return view('admin.index');
+});
+
 Route::get('/p', [ServerController::class, 'index']);
 
 //ruta cambio idioma
