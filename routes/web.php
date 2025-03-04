@@ -7,3 +7,7 @@ Route::get('/', function () {
 });
 
 Route::get('/p', [ServerController::class, 'index']);
+
+Route::get('/create', function () {
+    return view('createTournament.create');
+});
