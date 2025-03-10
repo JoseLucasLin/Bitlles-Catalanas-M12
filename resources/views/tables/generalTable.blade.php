@@ -69,7 +69,6 @@
     <td class="border border-[var(--azul)] p-2 text-lg text-gray-600 text-center">6</td>
     <td class="border border-[var(--azul)] p-2 text-lg text-white text-center bg-[#BE1622]">14</td>
   </tr>
-     
   </tbody>
 </table>
 @endsection

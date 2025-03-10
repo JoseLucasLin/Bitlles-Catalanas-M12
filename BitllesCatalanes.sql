@@ -56,7 +56,7 @@ CREATE TABLE Type_Tournament (
     type_name VARCHAR(255) NOT NULL,
     description VARCHAR(255),
     draw_case VARCHAR(255),
-    winner_prize VARCHAR(255) DEFAULT NULL
+    winner_prize VARCHAR(255)
 );
 
 CREATE TABLE Player_History_Stats (
@@ -87,7 +87,7 @@ CREATE TABLE Tournament_Round (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     id_tournament INTEGER NOT NULL,
     id_round INTEGER NOT NULL,
-    finish_hour TIME DEFAULT NULL
+    finish_hour TIME NOT NULL
 );
 
 CREATE TABLE Stats_Player_Tournament (

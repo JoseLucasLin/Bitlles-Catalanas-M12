@@ -3,6 +3,7 @@ use App\Http\Controllers\ServerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 
+use App\Http\Controllers\MainController;
 Route::get('/', function () {
     return view('main.index');
 });
@@ -14,6 +15,8 @@ Route::get('/perro', function () {
 Route::get('/test', function () {
     return view('main.index');
 });
+//MAIN
+Route::get('/', [MainController::class, 'index']);
 
 // ADMIN
 // por defecto cargaremos el panel del admin
@@ -31,6 +34,10 @@ Route::get('/admin/add-players', function () {
 
 Route::get('/p', [ServerController::class, 'index']);
 
+
+Route::get('/create', function () {
+    return view('createTournament.create');
+});
 
 
 //ruta cambio idioma
@@ -51,5 +58,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+
+Route::get('/general', function () {
+    return view('tables.generalTable');
+});
+
+Route::get('/global', function () {
+    return view('tables.globalTable');
 });
 
