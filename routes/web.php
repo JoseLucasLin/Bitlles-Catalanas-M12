@@ -26,6 +26,10 @@ Route::get('/admin/add-players', function () {
 
 Route::get('/p', [ServerController::class, 'index']);
 
+Route::get('/create', function () {
+    return view('createTournament.create');
+});
+
 //ruta cambio idioma
 Route::get('locale/{locale}', function ($locale) {
     if (in_array($locale, config('app.available_locales'))) {
@@ -34,3 +38,11 @@ Route::get('locale/{locale}', function ($locale) {
     }
     return redirect()->back();
 })->name('locale.change');
+
+Route::get('/general', function () {
+    return view('tables.generalTable');
+});
+
+Route::get('/global', function () {
+    return view('tables.globalTable');
+});

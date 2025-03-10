@@ -9,11 +9,7 @@ const port = process.env.PORT ?? 8100;
 const app = express();
 const server = createServer(app)
 const io = new Server(server,{
-    connectionStateRecovery:{},
-    cors: {
-        origin: "http://localhost:8000", // Permite solicitudes desde Laravel
-        methods: ["GET", "POST"]
-    }
+    connectionStateRecovery:{}
 });
 
 
@@ -37,10 +33,10 @@ io.on('connection',(socket )=>{
 app.use(logger('dev'))
 
 //route
-/*app.get('/',(req,res) =>{
+app.get('/',(req,res) =>{
     res.sendFile(process.cwd()+'/client/index.html');
 
-})*/
+})
 
 
 //listen
