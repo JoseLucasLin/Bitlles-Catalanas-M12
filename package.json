@@ -3,8 +3,7 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "concurrently \"vite\" \"npm run server\"",
-        "server": "cd ./Server-ws && node --watch ./server/index.js"
+        "dev": "vite"
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.2",

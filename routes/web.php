@@ -28,6 +28,10 @@ Route::get('/admin/add-players', function () {
 Route::get('/p', [ServerController::class, 'index']);
 
 
+Route::get('/create', function () {
+    return view('createTournament.create');
+});
+
 
 //ruta cambio idioma
 Route::get('locale/{locale}', function ($locale) {
@@ -39,6 +43,7 @@ Route::get('locale/{locale}', function ($locale) {
 })->name('locale.change');
 
 
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -47,5 +52,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+
+Route::get('/general', function () {
+    return view('tables.generalTable');
+});
+
+Route::get('/global', function () {
+    return view('tables.globalTable');
 });
 
