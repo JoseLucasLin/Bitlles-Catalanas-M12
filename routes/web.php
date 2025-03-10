@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('main.index');
 });
 
 Route::get('/test', function () {
@@ -38,10 +38,6 @@ Route::get('locale/{locale}', function ($locale) {
     return redirect()->back();
 })->name('locale.change');
 
-
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::get('/dashboard', function () {
     return view('dashboard');
