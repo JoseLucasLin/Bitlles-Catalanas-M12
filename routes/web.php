@@ -2,13 +2,10 @@
 use App\Http\Controllers\ServerController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+use App\Http\Controllers\MainController;
 
-Route::get('/test', function () {
-    return view('main.index');
-});
+//MAIN
+Route::get('/', [MainController::class, 'index']);
 
 // ADMIN
 // por defecto cargaremos el panel del admin
