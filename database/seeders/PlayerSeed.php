@@ -21,7 +21,7 @@ class PlayerSeed extends Seeder
                 'name' => 'Pepe-'.Str::random(60),
                 'lastname' => 'NOSOYSANCHEZ-'.Str::random(40),
                 'mail' => Str::random(10).'@example.com',
-                'code' => $i%2==0?Str::random(15):null,
+                'code' => Str::random(15),
                 'partner' => $i%2,
                 'image' => Str::random(5).'.jpeg',
                 'last_login' => now(),

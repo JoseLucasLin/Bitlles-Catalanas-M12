@@ -8,6 +8,6 @@ class ServerController extends Controller
 {
     public function index(){
         //dd("asd");
-        return view('pruebachunga');
+        return view('indexWS');
     }
 }

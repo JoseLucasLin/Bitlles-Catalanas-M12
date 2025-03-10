@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('name',255);
             $table->string('lastname',255);
             $table->string('mail',120);
-            $table->string('code',15)->nullable();
-            $table->boolean('partner')->nullable();
+            $table->string('code',15)->nullable(false)->uniqid();
+            $table->boolean('partner')->nullable(false);
             $table->string('image',255)->default('default_image.png');
             $table->timestamp('last_login');
             $table->integer('attemp_logins');
@@ -31,7 +31,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('Fields');
+        Schema::dropIfExists('Player');
         //
     }
 };
