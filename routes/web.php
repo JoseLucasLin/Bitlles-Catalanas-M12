@@ -43,7 +43,6 @@ Route::get('/admin/add-players', function () {
     return view('admin.add-players');
 })->middleware(['auth']);
 
-});
 // CREATE PLAYER
 Route::get('/admin/create-player', function () {
     return view('admin.create-player');
