@@ -28,6 +28,10 @@ Route::get('/admin', function () {
 Route::get('/admin/create-referee', function () {
     return view('admin.create-referee');
 });
+// CREATE PLAYER
+Route::get('/admin/create-player', function () {
+    return view('admin.create-player');
+});
 // ADD PLAYERS
 Route::get('/admin/add-players', function () {
     return view('admin.add-players');
@@ -40,6 +44,15 @@ Route::get('/admin/tournament-manager', function () {
 Route::get('/admin/points-manager', function () {
     return view('admin.points-manager');
 });
+
+// LOGIN
+Route::get('/login', function () {
+    return view('layouts.login');
+});
+
+
+
+
 
 
 Route::get('/p', [ServerController::class, 'index']);
