@@ -21,14 +21,15 @@ return new class extends Migration
         attemp_logins INTEGER */
         Schema::dropIfExists('Users');
         Schema::create('Users', function (Blueprint $table) {
-            $table->id()->primary();
+            $table->id(); // Eliminar ->primary() - id() ya es clave primaria
             $table->string('username',255)->nullable(false);
             $table->string('password')->nullable(false);
             $table->string('mail',140)->nullable(false);
+            $table->Integer('role')->nullable(false)->default(0)->references('id')->on('Roles');
             $table->string('image',250)->default('default_image.png');
-            $table->timestamp('last_login');
-            $table->integer('attemp_logins');
-            $table->string('refresh_token');
+            $table->timestamp('last_login')->nullable(); // Hacer nullable
+            $table->integer('attemp_logins')->nullable(); // Hacer nullable, opcional
+            $table->timestamps(); // Agregar timestamps estándar de Laravel
         });
     }
 
@@ -37,7 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
         Schema::dropIfExists('Users');
     }
 };
