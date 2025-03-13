@@ -12,13 +12,6 @@ Route::get('/perro', function () {
     return view('createTournament.create');
 });
 
-Route::get('/tablaGlobal', function () {
-    return view('tables.globalTable');
-});
-Route::get('/tablaGeneral', function () {
-    return view('tables.generalTable');
-});
-
 Route::get('/test', function () {
     return view('main.index');
 });
