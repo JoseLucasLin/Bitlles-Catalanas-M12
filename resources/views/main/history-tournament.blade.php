@@ -1,5 +1,5 @@
 <div class="text-center mt-20 mb-20 flex items-center justify-center gap-2">
-    <p class="text-4xl main-text font-bold">Historial</p>
+    <p class="text-4xl main-text font-bold">{{__('main.history')}}</p>
     
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10 main-text">
         <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
@@ -11,7 +11,7 @@
         <div class="swiper-wrapper mb-16">
             <div class="swiper-slide">
                 <div class="bg-indigo-50 rounded-2xl h-96 flex justify-center items-center">
-                    <span class="text-2xl font-semibold text-indigo-600">Slide 1a </span>
+                    <span class="text-2xl font-semibold text-indigo-600">Slide 1 </span>
                 </div>
             </div>
             <div class="swiper-slide">

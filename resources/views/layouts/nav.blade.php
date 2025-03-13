@@ -17,13 +17,11 @@
       </div>
 
       <div>
-        @foreach (config('app.available_locales') as $locale)
-          <a href="{{ route('locale.change', $locale) }}">{{ strtoupper($locale) }}</a>
-        @endforeach
+        <!--añadir lista de lenguajes disponibles-->
       </div>
 
       <div class="hidden md:flex md:items-center md:space-x-6">
-        <a class="header-link p-3 transition-all duration-300 rounded-lg font-semibold text-lg navbar-text" href="#">LOGIN</a>
+        <a class="header-link p-3 transition-all duration-300 rounded-lg font-semibold text-lg navbar-text" href="#">{{__('main.login')}}</a>
       </div>
 
       <div id="mobile-menu-button" class="flex items-center md:hidden navbar-text">
@@ -47,7 +45,7 @@
     </div>
 
     <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 text-center">
-      <a class="header-link p-3 transition-all duration-300 rounded-lg font-semibold text-lg navbar-text" href="#">LOGIN</a>
+      <a class="header-link p-3 transition-all duration-300 rounded-lg font-semibold text-lg navbar-text" href="#">{{__('main.login')}}</a>
     </div>
 
   </div>
