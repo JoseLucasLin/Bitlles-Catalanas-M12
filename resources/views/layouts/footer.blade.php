@@ -1,5 +1,5 @@
 <footer>
     <div class="text-center text-[var(--azul)]">
-        <p>&copy; 2025 BitllesCatalanes. Todos los derechos reservados.</p>
+        <p>&copy; {{__('main.footer')}}</p>
     </div>
 </footer>

@@ -2,6 +2,8 @@
 use App\Http\Controllers\ServerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\LanguageController;
+
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
@@ -64,7 +66,8 @@ Route::get('/login', function () {
     return view('layouts.login');
 });
 
-
+// CAMBIAR IDIOMA
+Route::get('language/{locale}', [LanguageController::class, 'switch'])->name('language.switch');
 
 
 
