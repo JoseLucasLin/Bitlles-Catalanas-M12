@@ -25,6 +25,7 @@ Route::get('/test', function () {
     return view('main.index');
 });
 
+
 // ADMIN
 Route::get('/admin', function () {
     return view('admin.admin-panel');
@@ -39,6 +40,34 @@ Route::get('/admin/create-referee', function () {
 Route::get('/admin/add-players', function () {
     return view('admin.add-players');
 })->middleware(['auth']);
+
+});
+// CREATE PLAYER
+Route::get('/admin/create-player', function () {
+    return view('admin.create-player');
+});
+// ADD PLAYERS
+Route::get('/admin/add-players', function () {
+    return view('admin.add-players');
+});
+// TOURNAMENT MANAGER
+Route::get('/admin/tournament-manager', function () {
+    return view('admin.tournament-manager');
+});
+// POINTS MANAGER
+Route::get('/admin/points-manager', function () {
+    return view('admin.points-manager');
+});
+
+// LOGIN
+Route::get('/login', function () {
+    return view('layouts.login');
+});
+
+
+
+
+
 
 Route::get('/p', [ServerController::class, 'index']);
 

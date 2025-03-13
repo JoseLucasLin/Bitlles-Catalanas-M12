@@ -10,6 +10,12 @@
 @extends('admin.index')
 @section('content')
 <body class="bg-[#ffffff]">
+
+  @extends('admin.index')
+
+  @section('content')
+
+<main class="flex-1 ms-10 me-10">
     <div class="flex flex-col justify-center pt-16">
         <div class="text-center">
             <h2 class="text-2xl font-bold text-[var(--azul)] mb-4">Creador de Torneos</h2>
@@ -52,9 +58,10 @@
             </form>
         </div>
     </div>
-</body>
+  </main>
 
 
 @endsection
+
 
 
