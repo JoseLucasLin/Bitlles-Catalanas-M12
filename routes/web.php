@@ -18,6 +18,7 @@ Route::get('/test', function () {
 //MAIN
 Route::get('/', [MainController::class, 'index']);
 
+
 // ADMIN
 // por defecto cargaremos el panel del admin
 Route::get('/admin', function () {
@@ -31,6 +32,15 @@ Route::get('/admin/create-referee', function () {
 Route::get('/admin/add-players', function () {
     return view('admin.add-players');
 });
+// TOURNAMENT MANAGER
+Route::get('/admin/tournament-manager', function () {
+    return view('admin.tournament-manager');
+});
+// POINTS MANAGER
+Route::get('/admin/points-manager', function () {
+    return view('admin.points-manager');
+});
+
 
 Route::get('/p', [ServerController::class, 'index']);
 
