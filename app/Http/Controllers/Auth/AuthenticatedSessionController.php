@@ -8,6 +8,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Models\User;
+use App\Models\Role;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -28,12 +30,28 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        // Actualizar last_login si quieres mantener un registro
+        // Actualizar last_login utilizando el método update en lugar de save
+        $userId = Auth::id();
+        User::where('id', $userId)->update(['last_login' => now()]);
+
+        // Obtener el usuario actualizado
         $user = Auth::user();
 
-        $user->last_login = now();
+        // Obtener información del rol
+        $role = Role::find($user->role);
 
-        // Cambiar esta línea para redirigir a la página principal
+        // Verificar que el rol exista y corresponda al esperado
+        if ($role) {
+            if ($role->id == 1 && $role->name == 'arbitro') {
+                // Rol de árbitro verificado
+                return redirect('/');
+            } elseif ($role->id == 2 && $role->name == 'admin') {
+                // Rol de administrador verificado
+                return redirect('/admin');
+            }
+        }
+
+        // Si no coincide con los roles esperados o hay un problema
         return redirect('/');
     }
 
