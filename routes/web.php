@@ -1,4 +1,8 @@
 <?php
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\RefereeController;
+use App\Http\Controllers\TournamentController;
+use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\ServerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
@@ -8,9 +12,7 @@ Route::get('/', function () {
     return view('main.index');
 });
 
-Route::get('/perro', function () {
-    return view('createTournament.create');
-});
+
 
 Route::get('/test', function () {
     return view('main.index');
@@ -21,17 +23,14 @@ Route::get('/', [MainController::class, 'index']);
 
 // ADMIN
 // por defecto cargaremos el panel del admin
-Route::get('/admin', function () {
-    return view('admin.admin-panel');
-});
+Route::get('/admin', [AdminController::class, 'index']);
+
 // CREATE REFEREE
-Route::get('/admin/create-referee', function () {
-    return view('admin.create-referee');
-});
+Route::get('/admin/create-referee', [RefereeController::class, 'create']);
+
 // CREATE PLAYER
-Route::get('/admin/create-player', function () {
-    return view('admin.create-player');
-});
+Route::get('/admin/create-player', [PlayerController::class, 'create']);
+
 // ADD PLAYERS
 Route::get('/admin/add-players', function () {
     return view('admin.add-players');
@@ -40,6 +39,9 @@ Route::get('/admin/add-players', function () {
 Route::get('/admin/tournament-manager', function () {
     return view('admin.tournament-manager');
 });
+// CREATE TOURNAMENT
+Route::get('/admin/create-tournament', [TournamentController::class, 'create']);
+
 // POINTS MANAGER
 Route::get('/admin/points-manager', function () {
     return view('admin.points-manager');
