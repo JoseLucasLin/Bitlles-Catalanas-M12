@@ -18,7 +18,7 @@
 
                 <div class="mb-4">
                     <label for="name" class="block text-lg font-medium text-[var(--azul)]">{{ __('Nombre') }}</label>
-                    <input type="text" id="name" name="name" class="mt-2 p-2 w-full border border-[var(--azul)] rounded bg-[var(--crema)]" value="{{ old('name', $user->name) }}" required autofocus>
+                    <input type="text" id="name" name="name" class="mt-2 p-2 w-full border border-[var(--azul)] rounded bg-[var(--crema)]" value="{{ old('name', $user->username) }}" required autofocus>
                     @error('name')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
@@ -36,6 +36,14 @@
                     <button type="submit" class="bg-[var(--rojo)] text-[var(--blanco)] px-4 py-2 rounded transition duration-300 hover:bg-[var(--azul)] font-bold hover:scale-105">
                         {{ __('Guardar Cambios') }}
                     </button>
+                </div>
+                <!-- Añadir esto después del botón "Guardar Cambios" -->
+                <div class="mt-2">
+                    @if (session('status') === 'profile-updated')
+                        <p class="text-green-600 text-sm">
+                            {{ __('¡Perfil actualizado correctamente!') }}
+                        </p>
+                    @endif
                 </div>
             </form>
         </div>
@@ -77,6 +85,14 @@
                     <button type="submit" class="bg-[var(--rojo)] text-[var(--blanco)] px-4 py-2 rounded transition duration-300 hover:bg-[var(--azul)] font-bold hover:scale-105">
                         {{ __('Cambiar Contraseña') }}
                     </button>
+                </div>
+                <!-- Añadir esto después del botón "Cambiar Contraseña" -->
+                <div class="mt-2">
+                    @if (session('status') === 'password-updated')
+                        <p class="text-green-600 text-sm">
+                            {{ __('¡Contraseña actualizada correctamente!') }}
+                        </p>
+                    @endif
                 </div>
             </form>
         </div>
