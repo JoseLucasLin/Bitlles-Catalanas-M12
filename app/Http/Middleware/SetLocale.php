@@ -12,13 +12,13 @@ class SetLocale
 {
     public function handle($request, Closure $next)
     {
-        // Verifica si hay un idioma guardado en la sesión
         if (Session::has('locale')) {
-            // Establece el idioma de la aplicación
             App::setLocale(Session::get('locale'));
+        } else {
+            App::setLocale('cat');
+            Session::put('locale', 'cat');
         }
 
-        // Continúa con la solicitud
         return $next($request);
     }
 }

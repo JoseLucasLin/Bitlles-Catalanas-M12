@@ -16,13 +16,43 @@
                 <a href="#" class="header-link p-3 transition-all duration-300 rounded-lg font-semibold text-lg navbar-text">Paises</a>
             </div>
 
-            <div>
-
+            <div class="flex items-center">
+                <div class="relative" x-data="{ languageOpen: false }">
+                    <button @click="languageOpen = !languageOpen" @click.away="languageOpen = false" class="flex items-center focus:outline-none">
+                        <img src="{{ asset('flags/' . app()->getLocale() . '.png') }}" alt="{{ app()->getLocale() }}" class="h-5 w-7 me-1">
+                        <span class="text-[var(--azul)] font-semibold transition-colors duration-300 hover:text-[var(--rojo)]">
+                            {{ strtoupper(app()->getLocale()) }}
+                        </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 ms-1 text-[var(--azul)] transition-colors duration-300 hover:text-[var(--rojo)]">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                        </svg>
+                    </button>
+            
+                    <div x-show="languageOpen" class="absolute right-0 mt-2 w-24 bg-white rounded-md shadow-lg py-1 z-50 border border-[var(--azul)]">
+                        <a href="{{ url('language/es') }}" class="flex items-center px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-300">
+                            <img src="{{ asset('flags/es.png') }}" alt="ES" class="h-5 w-7 mr-2">
+                            <span class="text-[var(--azul)] font-semibold transition-colors duration-300 hover:text-[var(--rojo)]">ES</span>
+                        </a>
+                        <a href="{{ url('language/cat') }}" class="flex items-center px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-300">
+                            <img src="{{ asset('flags/cat.png') }}" alt="CAT" class="h-5 w-7 mr-2">
+                            <span class="text-[var(--azul)] font-semibold transition-colors duration-300 hover:text-[var(--rojo)]">CAT</span>
+                        </a>
+                        <a href="{{ url('language/en') }}" class="flex items-center px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-300">
+                            <img src="{{ asset('flags/en.png') }}" alt="EN" class="h-5 w-7 mr-2">
+                            <span class="text-[var(--azul)] font-semibold transition-colors duration-300 hover:text-[var(--rojo)]">EN</span>
+                        </a>
+                    </div>
+                </div>
             </div>
 
             <div class="hidden md:flex md:items-center md:space-x-6">
                 @guest
-                <a class="header-link p-3 transition-all duration-300 rounded-lg font-semibold text-lg navbar-text" href="{{ route('login') }}">LOGIN</a>
+                <a class="header-link p-3 transition-all duration-300 rounded-lg font-semibold text-lg navbar-text bg-[var(--crema-oscuro)] flex items-center" href="{{ route('login') }}">
+                    LOGIN
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 ml-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    </svg>
+                </a>
                 @else
                 <!-- Menú de usuario autenticado con foto de perfil -->
                 <div class="relative" x-data="{ profileOpen: false }">
@@ -88,7 +118,12 @@
 
         <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 text-center">
             @guest
-            <a class="header-link p-3 transition-all duration-300 rounded-lg font-semibold text-lg navbar-text" href="{{ route('login') }}">LOGIN</a>
+            <a class="header-link p-3 transition-all duration-300 rounded-lg font-semibold text-lg navbar-text bg-[var(--crema)] inline-flex items-center justify-center" href="{{ route('login') }}">
+                LOGIN
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 ml-2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                </svg>
+            </a>
             @else
             <div class="flex flex-col items-center">
                 <!-- Foto de perfil genérica en móvil -->

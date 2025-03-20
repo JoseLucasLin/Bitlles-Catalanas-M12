@@ -11,7 +11,7 @@
     <p class="mt-5 mb-5 text-center text-2xl main-text transition-all duration-300"><a href="" class="main-link font-bold transition-all duration-300">{{__('main.view_table')}}</a> {{__('main.of_tournament')}}</p>
 </div>
 
-<div class="mt-24 border-b-4 main-border">a</div>
+<div class="mt-24 border-b-4 main-border"></div>
 
 
 
