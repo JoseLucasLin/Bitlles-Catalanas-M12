@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'footer'            => '2025 Bitlles Catalanes. All rights reserved.',
     'login'             => 'Log in',
     'email'             => 'Email',
     'email_example'     => 'example@email.com',
@@ -14,4 +13,5 @@ return [
     'of_tournament'     => 'of tournament',
 
     'history'           => 'History',
+    'view_result'       => 'View results',
 ];
