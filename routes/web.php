@@ -18,7 +18,57 @@ use App\Http\Controllers\MainController;
 // Rutas principales accesibles para todos
 Route::get('/', [MainController::class, 'index']);
 
+
+// Rutas de prueba
+Route::get('/perro', function () {
+    return view('createTournament.create');
+});
+
+Route::get('/test', function () {
+    return view('main.index');
+});
+
+
+// ADMIN
+Route::get('/admin', function () {
+    return view('admin.admin-panel'); 
+})->middleware(['auth']); // Proteger con autenticación
+
+// CREATE REFEREE
+Route::post('/admin/create-referee',[RegisteredUserController::class, 'store'])->middleware(['auth'])->name("registro"); //RegisteredUserController [RegisteredUserController::class, 'index'] view('admin.create-referee') ;
+Route::get('/admin/create-referee',[RegisteredUserController::class, 'index'])->middleware(['auth'])->name("registro.store"); //RegisteredUserController [RegisteredUserController::class, 'index'] view('admin.create-referee') ;
+
+// ADD PLAYERS
+Route::get('/admin/add-players', function () {
+    return view('admin.add-players');
+})->middleware(['auth']);
+
+// CREATE PLAYER
+Route::get('/admin/create-player', function () {
+    return view('admin.create-player');
+});
+// ADD PLAYERS
+Route::get('/admin/add-players', function () {
+    return view('admin.add-players');
+});
+// TOURNAMENT MANAGER
+Route::get('/admin/tournament-manager', function () {
+    return view('admin.tournament-manager');
+});
+// POINTS MANAGER
+Route::get('/admin/points-manager', function () {
+    return view('admin.points-manager');
+});
+
+// LOGIN
+Route::get('/login', function () {
+    return view('layouts.login');
+});
+
+// CAMBIAR IDIOMA
+
 // Rutas para cambio de idioma
+
 Route::get('language/{locale}', [LanguageController::class, 'switch'])->name('language.switch');
 Route::get('locale/{locale}', function ($locale) {
     if (in_array($locale, config('app.available_locales'))) {
