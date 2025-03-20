@@ -80,9 +80,9 @@
                         <label for="remember_me" class="inline-flex items-center">
                             <input id="remember_me" type="checkbox" name="remember" class="rounded border-[var(--azul)] text-[var(--azul)]">
                             <span class="ml-2 text-sm text-[var(--azul)]">Remember me</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
-                                <path fill-rule="evenodd" d="M4.25 2A2.25 2.25 0 0 0 2 4.25v11.5A2.25 2.25 0 0 0 4.25 18h11.5A2.25 2.25 0 0 0 18 15.75V4.25A2.25 2.25 0 0 0 15.75 2H4.25ZM6 13.25V3.5h8v9.75a.75.75 0 0 1-1.064.681L10 12.576l-2.936 1.355A.75.75 0 0 1 6 13.25Z" clip-rule="evenodd" />
-                              </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ms-1 size-4 text-[var(--azul)]">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+                              </svg>                              
                         </label>
                     </div>
 
@@ -95,14 +95,6 @@
                         <div class="mt-2">
                             <a href="{{ route('password.request') }}" class="text-[var(--azul)] hover:text-[var(--rojo)] font-semibold flex items-center justify-center transition duration-300 underline">
                                 {{__('main.forgot_password')}}
-                            </a>
-                        </div>
-                        @endif
-
-                        @if (Route::has('register'))
-                        <div class="mt-2">
-                            <a href="{{ route('register') }}" class="text-[var(--azul)] hover:text-[var(--rojo)] font-semibold flex items-center justify-center transition duration-300 underline">
-                                {{__('main.no_account')}}
                             </a>
                         </div>
                         @endif
