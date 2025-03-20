@@ -30,13 +30,12 @@ Route::get('/test', function () {
 
 // ADMIN
 Route::get('/admin', function () {
-    return view('admin.admin-panel');
+    return view('admin.admin-panel'); 
 })->middleware(['auth']); // Proteger con autenticación
 
 // CREATE REFEREE
-Route::get('/admin/create-referee', function () {
-    return view('admin.create-referee');
-})->middleware(['auth']);
+Route::post('/admin/create-referee',[RegisteredUserController::class, 'store'])->middleware(['auth'])->name("registro"); //RegisteredUserController [RegisteredUserController::class, 'index'] view('admin.create-referee') ;
+Route::get('/admin/create-referee',[RegisteredUserController::class, 'index'])->middleware(['auth'])->name("registro.store"); //RegisteredUserController [RegisteredUserController::class, 'index'] view('admin.create-referee') ;
 
 // ADD PLAYERS
 Route::get('/admin/add-players', function () {
