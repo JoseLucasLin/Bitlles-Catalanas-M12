@@ -33,7 +33,7 @@ class UserSeed extends Seeder
         // Crear usuario admin
         DB::table('Users')->insert([
             'username' => 'admin',
-            'password' => bcrypt('1234ASDF'),
+            'password' => bcrypt('admin'),
             'mail' => 'admin@gmail.com',
             'image' => 'admin-example.png',
             'role' => 2, // Asumiendo que 2 es el rol de admin
@@ -44,7 +44,7 @@ class UserSeed extends Seeder
         // Crear usuario árbitro
         DB::table('Users')->insert([
             'username' => 'arbitro',
-            'password' => bcrypt('1234ASDF'),
+            'password' => bcrypt('arbitro'),
             'mail' => 'arbitro@gmail.com',
             'image' => 'referee-example.png',
             'role' => 1, // Asumiendo que 1 es el rol de árbitro
