@@ -32,10 +32,6 @@ class ProfileController extends Controller
         $user->username = $request->name;
         $user->mail = $request->email;
 
-        if ($user->isDirty('mail')) {
-            $user->email_verified_at = null;
-        }
-
         $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
