@@ -9,7 +9,11 @@ const port = process.env.PORT ?? 8100;
 const app = express();
 const server = createServer(app)
 const io = new Server(server,{
-    connectionStateRecovery:{}
+    connectionStateRecovery:{},
+    cors: {
+        origin: "http://localhost:8000",
+        methods: ["GET", "POST"]
+      }
 });
 
 

@@ -34,20 +34,28 @@ return [
     |            "failover", "roundrobin"
     |
     */
-
+    
+    'from' => ['address' => 'Pepemax528@gmail.com', 'name' => 'App Name'],
+    'default' => env('MAIL_MAILER', 'smtp'),
     'mailers' => [
-
         'smtp' => [
             'transport' => 'smtp',
-            'scheme' => env('MAIL_SCHEME'),
-            'url' => env('MAIL_URL'),
-            'host' => env('MAIL_HOST', '127.0.0.1'),
+            'host' => env('MAIL_HOST', 'sandbox.smtp.mailtrap.io'),
             'port' => env('MAIL_PORT', 2525),
+            'encryption' => env('MAIL_ENCRYPTION', 'tls'),
             'username' => env('MAIL_USERNAME'),
             'password' => env('MAIL_PASSWORD'),
-            'timeout' => null,
-            'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url(env('APP_URL', 'http://localhost'), PHP_URL_HOST)),
+            'timeout' => 30,
+            'auth_mode' => 'login', // Let Laravel auto-detect (PLAIN/LOGIN)
+            'stream' => [
+                'ssl' => [
+                    'allow_self_signed' => true,
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                ],
+            ],
         ],
+    
 
         'ses' => [
             'transport' => 'ses',

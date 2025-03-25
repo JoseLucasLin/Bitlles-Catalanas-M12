@@ -15,6 +15,9 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\MainController;
 
+use App\Mail\MailableLogin;
+use Illuminate\Support\Facades\Mail;
+
 // Rutas principales accesibles para todos
 Route::get('/', [MainController::class, 'index']);
 
@@ -110,6 +113,13 @@ Route::middleware(['auth', 'role:1'])->prefix('admin')->group(function () {
     // Otras rutas específicas para árbitros
 });
 
+
+Route::get('/emailpro', function() {
+    $name = "Funny Coder";
+
+    // The email sending is done using the to method on the Mail facade
+    Mail::to('jlinares1@inscamidemar.com')->send(new MailableLogin($name));
+});
 // Rutas accesibles para cualquier usuario autenticado
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
