@@ -27,8 +27,8 @@ class MailableLogin extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address('jlinares1@inscamidemar.com', 'Test Sender'),
-             subject: 'Test Email',
+            from: new Address('bitllescatalanesdaw@gmail.com', 'Bitlles catalanes'),
+             subject: 'Bitlles catalanes',
         );
     }
 

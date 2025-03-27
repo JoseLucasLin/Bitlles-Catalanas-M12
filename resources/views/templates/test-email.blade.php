@@ -1,3 +1,3 @@
-Hey {{$name}}, 
-Can your Laravel app send emails yet? 😉 
-Mailtrap
+Hola {{$name}},
+<br>
+Este es tu Codigo de verificacion: {{$code}}

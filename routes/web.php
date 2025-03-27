@@ -34,7 +34,7 @@ Route::get('/test', function () {
 
 // ADMIN
 Route::get('/admin', function () {
-    return view('admin.admin-panel'); 
+    return view('admin.admin-panel');
 })->middleware(['auth']); // Proteger con autenticación
 
 // CREATE REFEREE
@@ -115,7 +115,7 @@ Route::middleware(['auth', 'role:1'])->prefix('admin')->group(function () {
 
 
 Route::get('/emailpro', function() {
-    $name = "Funny Coder";
+    $name = "client";
 
     // The email sending is done using the to method on the Mail facade
     Mail::to('agonzalez9@inscamidemar.cat')->send(new MailableLogin($name));
