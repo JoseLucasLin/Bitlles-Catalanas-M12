@@ -40,7 +40,7 @@ Route::get('/admin/tournament-manager', function () {
     return view('admin.tournament-manager');
 });
 // CREATE TOURNAMENT
-Route::get('/admin/create-tournament', [TournamentController::class, 'create']);
+Route::get('/admin/create-tournament', [TournamentController::class, 'create']) -> name('createTournament');
 
 // POINTS MANAGER
 Route::get('/admin/points-manager', function () {
@@ -93,4 +93,8 @@ Route::get('/general', function () {
 Route::get('/global', function () {
     return view('tables.globalTable');
 });
+
+//ENVIO DE DATOS
+//CREADOR DE TORNEOS
+Route::post('/admin/create-tournament', [TournamentController::class, 'store']) -> name('submitTournament');
 

@@ -26,12 +26,12 @@ return new class extends Migration
             $table->id()->primary();
             $table->string('name',255)->nullable(false);
             $table->integer('type')->nullable(false);
-            $table->float('normal_price')->nullable(true);
-            $table->float('partner_price')->nullable(true);
+            $table->float('normal_price')->nullable(false);
+            $table->float('partner_price')->nullable(false);
             $table->string('image',250)->default('image.png');
-            $table->timestamp('expected_date');
-            $table->timestamp('start_date');
-            $table->timestamp('end_date')->nullable(true);
+            $table->timestamp('expected_date')->nullable();
+            $table->timestamp('start_date')->nullable();
+            $table->timestamp('end_date')->nullable();
         });
     }
 

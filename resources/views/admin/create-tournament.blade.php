@@ -1,51 +1,101 @@
-  @extends('admin.index')
+@extends('admin.index')
 
-  @section('content')
+@section('content')
+    <main class="flex-1 ms-10 me-10">
+        <div class="flex flex-col justify-center pt-16">
+            <div class="text-center">
+                <h2 class="text-2xl font-bold text-[var(--azul)] mb-4">Creador de Torneos</h2>
+            </div>
+            <div class="flex justify-center p-4">
+                <form action="{{ route('submitTournament') }}" method="POST" enctype="multipart/form-data" class="w-full max-w-lg">
+                    @csrf
+                    <div class="grid grid-cols-2 gap-4 mt-3 mb-2">
+                        <!-- Campo Nombre -->
+                        <div>
+                            <label for="name" class="block text-lg font-semibold text-[var(--azul)]">Nombre Torneo</label>
+                            <input type="text" name="name" id="name" value="{{ old('name') }}" required
+                                   class="w-full bg-[#F6F4F2] border border-[var(--azul)] rounded-md focus:border-sky-500 p-2 @error('name') border-red-500 @enderror">
+                            @error('name')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
 
-<main class="flex-1 ms-10 me-10">
-    <div class="flex flex-col justify-center pt-16">
-        <div class="text-center">
-            <h2 class="text-2xl font-bold text-[var(--azul)] mb-4">Creador de Torneos</h2>
+                        <!-- Campo Tipo -->
+                        <div>
+                            <label for="type" class="block text-lg font-semibold text-[var(--azul)]">Tipo de torneo</label>
+                            <select name="type" id="type" required
+                                    class="w-full bg-[#F6F4F2] border border-[var(--azul)] rounded-md focus:border-sky-500 p-2 @error('type') border-red-500 @enderror">
+                                <option value="">Seleccione una opción</option>
+                                <option value="1" @selected(old('type') == '1')>Opción 1</option>
+                                <option value="2" @selected(old('type') == '2')>Opción 2</option>
+                                <option value="3" @selected(old('type') == '3')>Opción 3</option>
+                            </select>
+                            @error('type')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Campo Precio Normal -->
+                        <div>
+                            <label for="normal_price" class="block text-lg font-semibold text-[var(--azul)]">Precio Normal</label>
+                            <input type="number" name="normal_price" id="normal_price" step="0.01" value="{{ old('normal_price') }}" required
+                                   class="w-full bg-[#F6F4F2] border border-[var(--azul)] rounded-md focus:border-sky-500 p-2 @error('normal_price') border-red-500 @enderror">
+                            @error('normal_price')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Campo Precio Partner -->
+                        <div>
+                            <label for="partner_price" class="block text-lg font-semibold text-[var(--azul)]">Precio Partner</label>
+                            <input type="number" name="partner_price" id="partner_price" step="0.01" value="{{ old('partner_price') }}" required
+                                   class="w-full bg-[#F6F4F2] border border-[var(--azul)] rounded-md focus:border-sky-500 p-2 @error('partner_price') border-red-500 @enderror">
+                            @error('partner_price')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Campo Fecha Estimada -->
+                        <div>
+                            <label for="expected_date" class="block text-lg font-semibold text-[var(--azul)]">Fecha Estimada</label>
+                            <input type="date" name="expected_date" id="expected_date" value="{{ old('expected_date') }}" required
+                                   class="w-full bg-[#F6F4F2] border border-[var(--azul)] rounded-md focus:border-sky-500 p-2 @error('expected_date') border-red-500 @enderror">
+                            @error('expected_date')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Campo Imagen -->
+                        <div>
+                            <label for="image" class="block text-lg font-semibold text-[var(--azul)]">Imagen</label>
+                            <input type="file" name="image" id="image" accept="image/jpeg, image/png" required
+                                   class="w-full bg-[#F6F4F2] border border-[var(--azul)] rounded-md focus:border-sky-500 p-2 @error('image') border-red-500 @enderror">
+                            @error('image')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <!-- Mensajes generales de éxito/error -->
+                    @if(session('success'))
+                        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    @if(session('error'))
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
+                    <div class="flex justify-center mt-4">
+                        <button type="submit" class="btn-primary px-4 py-2 bg-[var(--rojo)] text-white rounded-md hover:bg-[var(--azul)] font-bold hover:scale-105">
+                            Crear
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="flex justify-center p-4">
-            <form action="" method="GET" class="w-full max-w-lg">
-                <div class="grid grid-cols-2 gap-4 mt-3 mb-2">
-                    <div>
-                        <label for="name" class="block text-lg font-semibold text-[var(--azul)]">Nombre Torneo</label>
-                        <input type="text" name="name" id="name" class="w-full bg-[#F6F4F2] border border-[var(--azul)] rounded-md focus:border-sky-500 p-2">
-                    </div>
-                    <div>
-                        <label for="type" class="block text-lg font-semibold text-[var(--azul)]">Tipo de torneo</label>
-                        <select name="type" id="type" class="w-full bg-[#F6F4F2] border border-[var(--azul)] rounded-md focus:border-sky-500 p-2">
-                        <option value="1">opcion1</option>
-                        <option value="2">opcion2</option>
-                        <option value="3">opcion3</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="price" class="block text-lg font-semibold text-[var(--azul)]">Precio</label>
-                        <input type="number" name="price" id="price" step="0.01" class="w-full bg-[#F6F4F2] border border-[var(--azul)] rounded-md focus:border-sky-500 p-2">
-                    </div>
-                    <div>
-                        <label for="partnerPrice" class="block text-lg font-semibold text-[var(--azul)]">Precio partner</label>
-                        <input type="number" name="partnerPrice" id="partnerPrice" step="0.01" class="w-full bg-[#F6F4F2] border border-[var(--azul)] rounded-md focus:border-sky-500 p-2">
-                    </div>
-                    <div>
-                        <label for="date" class="block text-lg font-semibold text-[var(--azul)]">Fecha</label>
-                        <input type="date" name="date" id="date" class="w-full bg-[#F6F4F2] border border-[var(--azul)] rounded-md focus:border-sky-500 p-2">
-                    </div>
-                    <div>
-                        <label for="image" class="block text-lg font-semibold text-[var(--azul)]">Imagen</label>
-                        <input type="file" name="image" id="image" class="w-full bg-[#F6F4F2] border border-[var(--azul)] rounded-md focus:border-sky-500 p-2">
-                    </div>
-                    </div>
-                        <div class="flex justify-center mt-4">
-                        <button class="btn-primary px-4 py-2 bg-[#BE1622] text-white rounded-md">Crear</button>
-                    </div>
-            </form>
-        </div>
-    </div>
-  </main>
-
+    </main>
 @endsection
-
