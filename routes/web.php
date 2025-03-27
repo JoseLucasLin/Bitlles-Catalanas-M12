@@ -118,7 +118,7 @@ Route::get('/emailpro', function() {
     $name = "Funny Coder";
 
     // The email sending is done using the to method on the Mail facade
-    Mail::to('jlinares1@inscamidemar.com')->send(new MailableLogin($name));
+    Mail::to('agonzalez9@inscamidemar.cat')->send(new MailableLogin($name));
 });
 // Rutas accesibles para cualquier usuario autenticado
 Route::middleware(['auth'])->group(function () {
