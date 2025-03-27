@@ -19,11 +19,31 @@ const io = new Server(server,{
 
 io.on('connection',(socket )=>{
     console.log("user connected")
+
     socket.on('disconnect',()=>{
         console.log("user disconected")
     })
+
+    socket.on('setConecction',(mensage)=>{
+        //load all list channels
+        console.log("evento setConnection")
+        let channelList = [1,2,3,4]
+        if(mensage.user === "pepe"){
+            console.log(true)
+            io.emit('setConecction',{channelList});
+        }
+        
+    })
+
+
+
+
+
+
+
     socket.on('message',(mensage)=>{
-        console.log("mensaje "+mensage)
+        console.log("evento message :"+mensage.user);
+        console.log("mensaje "+(mensage.mensaje))
         io.emit('message',mensage)
         
     })
