@@ -1,4 +1,8 @@
 <?php
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\RefereeController;
+use App\Http\Controllers\TournamentController;
+use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\ServerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
@@ -24,9 +28,7 @@ Route::get('/', [MainController::class, 'index']);
 
 
 // Rutas de prueba
-Route::get('/perro', function () {
-    return view('createTournament.create');
-});
+
 
 Route::get('/test', function () {
     return view('main.index');
@@ -48,9 +50,8 @@ Route::get('/admin/add-players', function () {
 })->middleware(['auth']);
 
 // CREATE PLAYER
-Route::get('/admin/create-player', function () {
-    return view('admin.create-player');
-});
+Route::get('/admin/create-player', [PlayerController::class, 'create']);
+
 // ADD PLAYERS
 Route::get('/admin/add-players', function () {
     return view('admin.add-players');
@@ -59,6 +60,9 @@ Route::get('/admin/add-players', function () {
 Route::get('/admin/tournament-manager', function () {
     return view('admin.tournament-manager');
 });
+// CREATE TOURNAMENT
+Route::get('/admin/create-tournament', [TournamentController::class, 'create']) -> name('createTournament');
+
 // POINTS MANAGER
 Route::get('/admin/points-manager', function () {
     return view('admin.points-manager');
@@ -207,3 +211,7 @@ Route::get('/create', function () {
 });
 
 Route::get('/p', [ServerController::class, 'index']);
+//ENVIO DE DATOS
+//CREADOR DE TORNEOS
+Route::post('/admin/create-tournament', [TournamentController::class, 'store']) -> name('submitTournament');
+
