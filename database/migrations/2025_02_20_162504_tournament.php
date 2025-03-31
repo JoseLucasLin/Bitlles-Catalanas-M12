@@ -13,25 +13,33 @@ return new class extends Migration
     {
         /*
             id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL,
-    type INTEGER NOT NULL,
-    normal_price FLOAT NOT NULL,
-    partner_price FLOAT NOT NULL,
-    image VARCHAR(100) DEFAULT 'default_image.png',
-    expected_date VARCHAR(50),
-    start_date TIMESTAMP,
-    end_date TIMESTAMP */
+            name VARCHAR(255) NOT NULL,
+            type INTEGER NOT NULL,
+            normal_price FLOAT NOT NULL,
+            partner_price FLOAT NOT NULL,
+            image VARCHAR(100) DEFAULT 'default_image.png',
+            expected_date VARCHAR(50),
+            start_date TIMESTAMP,
+            end_date TIMESTAMP
+        */
         Schema::dropIfExists('Tournaments');
         Schema::create('Tournaments', function (Blueprint $table) {
-            $table->id()->primary();
+            $table->id(); // Quita el ->primary(), id() ya es primary key
             $table->string('name',255)->nullable(false);
             $table->integer('type')->nullable(false);
             $table->float('normal_price')->nullable(false);
             $table->float('partner_price')->nullable(false);
-            $table->string('image',250)->default('image.png');
-            $table->timestamp('expected_date')->nullable();
+            $table->string('image',250)->default('image.png')->nullable(false);
+
+            // Cambiamos expected_date a string como en el comentario
+            $table->string('expected_date', 50)->nullable();
+
+            // Hacemos los timestamps nullable
             $table->timestamp('start_date')->nullable();
             $table->timestamp('end_date')->nullable();
+
+            // Añadimos los timestamps estándar de Laravel
+            $table->timestamps();
         });
     }
 
@@ -40,7 +48,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
         Schema::dropIfExists('Tournaments');
     }
 };

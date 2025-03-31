@@ -11,9 +11,19 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Storage;
+
 
 class RegisteredUserController extends Controller
 {
+    /**
+     * Display the registration view.
+     */
+    public function index(): View
+    {
+        
+        return view('admin.create-referee');
+    }
     /**
      * Display the registration view.
      */
@@ -29,22 +39,40 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+      //todo poner mensaje de que se creo correctamente. 
+ //Textos completos id 	username 	password 	mail 	role 	image 	last_login 	attemp_logins 	created_at 	updated_at
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'username' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:Users,mail'], // Cambiar
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        $originalName="default_image.png";
+      //guardar archivo
+        if ($request->hasFile('image')) {
+
+            $originalName= $request->username.".".$request->file('image')->getClientOriginalExtension();
+            $image_path = "user-img";
+            Storage::disk('public')->putFileAs($image_path , $request->file('image'),$originalName);
+
+
+       }
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
+            'username' => $request->username, // 
+            'mail' => $request->email, // 
             'password' => Hash::make($request->password),
+            'role' => 2, // referee
+            'image' => $originalName,
+            'attemp_logins' => 0,
+            'last_login' => now(),
+            'created_at' => now(),
         ]);
+        //dd($user);
 
         event(new Registered($user));
 
-        Auth::login($user);
+        //Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect()->back();
     }
 }
