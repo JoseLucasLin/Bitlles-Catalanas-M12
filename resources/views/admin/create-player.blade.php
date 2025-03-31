@@ -6,7 +6,7 @@
         <h2 class="text-2xl font-bold text-[var(--azul)] mb-4">Registro de Jugador</h2>
     </div>
 
-    <form action="#" method="POST" enctype="multipart/form-data" class="max-w-xl mx-auto">
+    <form action="{{route('create-player.store')}}" method="POST" enctype="multipart/form-data" class="max-w-xl mx-auto">
         @csrf
 
         <div class="mb-4">
@@ -48,7 +48,7 @@
                     </svg>
                     <span class="ms-1">Volver al Panel Principal</span>
                 </a>
-            </div>                       
+            </div>
         </div>
     </form>
 </main>

@@ -1,0 +1,81 @@
+<?php
+
+namespace App\Http\Controllers\Auth;
+
+use App\Http\Controllers\Controller;
+use App\Models\Players;
+use App\Models\User;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules;
+use Illuminate\View\View;
+use Illuminate\Support\Facades\Storage;
+
+
+class RegisteredPlayerController extends Controller
+{
+    /**
+     * Display the registration view.
+     */
+    public function index(): View
+    {
+
+        return view('admin.create-player');
+    }
+    /**
+     * Display the registration view.
+     */
+    public function create()
+    {
+        return redirect() -> back();
+    }
+
+    /**
+     * Handle an incoming registration request.
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function store(Request $request): View
+    {
+      //todo poner mensaje de que se creo correctamente.
+ //Textos completos id 	username 	password 	mail 	role 	image 	last_login 	attemp_logins 	created_at 	updated_at
+
+        $request->validate([
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255'], // Cambiar
+            'partner' => ['required', 'integer'],
+        ]);
+
+
+        $originalName="default_image.png";
+        //guardar archivo
+        if ($request->hasFile('image')) {
+
+            $originalName= $request->first_name.$request->last_name.".".$request->file('image')->getClientOriginalExtension();
+            $image_path = "user-img";
+            Storage::disk('public')->putFileAs($image_path , $request->file('image'),$originalName);
+
+
+        }
+        $player = Players::create([
+            'name' => $request->first_name,
+            'lastname' => $request->last_name,
+            'mail' => $request->email,
+            'image' => $originalName,
+            'code' => uniqid(),
+            'partner' => $request->partner,
+            'attemp_logins' => 0,
+            'last_login' => now(),
+        ]);
+
+        $player->save();
+
+        //Auth::login($user);
+
+        return view('admin.create-player');
+    }
+}

@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\RegisteredPlayerController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\MainController;
@@ -97,6 +98,8 @@ Route::middleware(['auth', 'role:2'])->prefix('admin')->group(function () {
     Route::get('/add-players', function () {
         return view('admin.add-players');
     });
+    Route::get('/create-player', [RegisteredPlayerController::class, 'index'])->name('create-player');
+    Route::post('/create-player', [RegisteredPlayerController::class, 'store'])->name('create-player.store');
     Route::get('/create-player', function () {
         return view('admin.create-player');
     });
@@ -106,7 +109,7 @@ Route::middleware(['auth', 'role:2'])->prefix('admin')->group(function () {
 });
 
 // Rutas para árbitros (role:1)
-Route::middleware(['auth', 'role:1'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'role:1'])->prefix('arbitro')->group(function () {
     Route::get('/points-manager', function () {
         return view('admin.points-manager');
     });
@@ -162,6 +165,17 @@ Route::middleware('guest')->group(function () {
                 ->name('password.reset');
     Route::post('reset-password', [NewPasswordController::class, 'store'])
                 ->name('password.update');
+    Route::get('/forgot-password', [App\Http\Controllers\Auth\PasswordResetLinkController::class, 'create'])
+    ->middleware('guest')
+    ->name('password.request');
+
+    Route::post('/forgot-password', [App\Http\Controllers\Auth\PasswordResetLinkController::class, 'store'])
+    ->middleware('guest')
+    ->name('password.email');
+
+    Route::post('/reset-password', [App\Http\Controllers\Auth\NewPasswordController::class, 'store'])
+    ->middleware('guest')
+    ->name('password.store');
 });
 
 // Rutas para verificación de email y otras operaciones de autenticación
