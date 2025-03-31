@@ -18,7 +18,7 @@
                 <a href="#" class="header-link p-3 transition-all duration-300 rounded-lg font-semibold text-lg navbar-text hover:bg-[var(--crema-oscuro)]">Paises</a>
             </div>
 
-            <!-- Elementos de la derecha -->
+            <!-- Elementos de la derechaa -->
             <div class="flex items-center space-x-2">
                 <!-- Selector de idioma -->
                 <div class="relative" x-data="{ languageOpen: false }">
