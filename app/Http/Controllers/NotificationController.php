@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
-//    //
-//    public function sendEmail($data, $hasFile = false, $file = null){
-//
-//    }
+    //
+    public function sendEmail($data, $hasFile = false, $file = null){
+
+    }
 }

@@ -12,7 +12,7 @@ class AdminController extends Controller
     }
 
     //gestion de los torneos
-//    public function manageTournament($id){
-//
-//    }
+    public function manageTournament($id){
+
+    }
 }
