@@ -38,29 +38,24 @@ class RegisteredPlayerController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): View
+    public function store(Request $request): RedirectResponse
     {
-      //todo poner mensaje de que se creo correctamente.
- //Textos completos id 	username 	password 	mail 	role 	image 	last_login 	attemp_logins 	created_at 	updated_at
-
+        // Validación
         $request->validate([
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255'], // Cambiar
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:Player,mail'],
             'partner' => ['required', 'integer'],
         ]);
 
-
-        $originalName="default_image.png";
-        //guardar archivo
+        $originalName = "default_image.png";
+        // Guardar archivo
         if ($request->hasFile('image')) {
-
-            $originalName= $request->first_name.$request->last_name.".".$request->file('image')->getClientOriginalExtension();
+            $originalName = $request->first_name.$request->last_name.".".$request->file('image')->getClientOriginalExtension();
             $image_path = "user-img";
-            Storage::disk('public')->putFileAs($image_path , $request->file('image'),$originalName);
-
-
+            Storage::disk('public')->putFileAs($image_path, $request->file('image'), $originalName);
         }
+
         $player = Players::create([
             'name' => $request->first_name,
             'lastname' => $request->last_name,
@@ -72,10 +67,7 @@ class RegisteredPlayerController extends Controller
             'last_login' => now(),
         ]);
 
-        $player->save();
-
-        //Auth::login($user);
-
-        return view('admin.create-player');
+        /// Redireccionar con mensaje de éxito - usa el nombre completo de la ruta
+        return redirect('/admin/create-player')->with('success', 'Jugador registrado correctamente');
     }
 }

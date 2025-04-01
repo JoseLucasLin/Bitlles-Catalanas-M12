@@ -49,19 +49,15 @@ Route::get('/admin/add-players', function () {
     return view('admin.add-players');
 })->middleware(['auth']);
 
-// CREATE PLAYER
-Route::get('/admin/create-player', [PlayerController::class, 'create']);
-
-// ADD PLAYERS
-Route::get('/admin/add-players', function () {
-    return view('admin.add-players');
-});
 // TOURNAMENT MANAGER
 Route::get('/admin/tournament-manager', function () {
     return view('admin.tournament-manager');
 });
 // CREATE TOURNAMENT
 Route::get('/admin/create-tournament', [TournamentController::class, 'create']) -> name('createTournament');
+
+// CREATE PLAYER
+Route::get('/admin/create-player', [PlayerController::class, 'create']);
 
 // POINTS MANAGER
 Route::get('/admin/points-manager', function () {
