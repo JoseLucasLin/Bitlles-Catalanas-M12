@@ -14,7 +14,7 @@
             <h3 class="text-lg font-semibold text-[var(--azul)]">{{ __('admin.create_tournament') }}</h3>
             <p class="text-sm text-gray-600">{{ __('admin.create_tournament_description') }}</p>
             <div class="mt-2 flex justify-start">
-                <a href="#" class="bg-[var(--rojo)] text-[var(--blanco)] px-4 py-2 rounded transition duration-300 hover:bg-[var(--azul)] font-bold hover:scale-105 inline-flex items-center space-x-2">
+                <a href="/admin/create-tournament" class="bg-[var(--rojo)] text-[var(--blanco)] px-4 py-2 rounded transition duration-300 hover:bg-[var(--azul)] font-bold hover:scale-105 inline-flex items-center space-x-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                     </svg>

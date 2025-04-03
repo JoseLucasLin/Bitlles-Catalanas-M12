@@ -69,4 +69,18 @@ return [
         'delete_confirm_message' => 'Una vez que se elimine su cuenta, todos sus recursos y datos se borrarán permanentemente. Por favor, ingrese su contraseña para confirmar que desea eliminar permanentemente su cuenta.',
         'cancel' => 'Cancelar'
     ],
+    'ct_referee' => [
+        'register_of_referee' => 'Registro de Árbitro',
+        'username' => 'Nombre de usuario',
+        'enter_username' => 'Escribe el nombre de usuario',
+        'email' => 'Correo electrónico',
+        'example_email' => 'ejemplo@correo.com',
+        'password' => 'Contraseña',
+        'create_password' => 'Crea una contraseña',
+        'confirm_password' => 'Confirmar contraseña',
+        'repeat_password' => 'Repite la contraseña',
+        'profile_image' => 'Imagen de perfil',
+        'register_referee' => 'Registrar Árbitro',
+        'back_to_dashboard' => 'Volver al Panel Principal',
+    ],
 ];

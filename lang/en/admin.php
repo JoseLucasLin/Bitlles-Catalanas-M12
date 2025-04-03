@@ -69,4 +69,19 @@ return [
         'delete_confirm_message' => 'Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.',
         'cancel' => 'Cancel'
     ],
+
+    'ct_referee' => [
+        'register_of_referee' => 'Referee Registration',
+        'username' => 'Username',
+        'enter_username' => 'Enter username',
+        'email' => 'Email',
+        'example_email' => 'example@email.com',
+        'password' => 'Password',
+        'create_password' => 'Create password',
+        'confirm_password' => 'Confirm Password',
+        'repeat_password' => 'Repeat password',
+        'profile_image' => 'Profile Image',
+        'register_referee' => 'Register Referee',
+        'back_to_dashboard' => 'Back to Dashboard',
+    ],
 ];

@@ -90,7 +90,7 @@
                     @endif
 
                     <div class="flex justify-center mt-4">
-                        <button type="submit" class="btn-primary px-4 py-2 bg-[var(--rojo)] text-white rounded-md hover:bg-[var(--azul)] font-bold hover:scale-105">
+                        <button type="submit" class="btn-primary px-4 py-2 bg-[var(--rojo)] text-white rounded-md transition-all duration-300 hover:bg-[var(--azul)] font-bold hover:scale-105">
                             Crear
                         </button>
                     </div>

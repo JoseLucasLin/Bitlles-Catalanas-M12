@@ -61,7 +61,7 @@ class RegisteredUserController extends Controller
             'username' => $request->username, //
             'mail' => $request->email, //
             'password' => Hash::make($request->password),
-            'role' => 2, // referee
+            'role' => 1, // referee
             'image' => $originalName,
             'attemp_logins' => 0,
             'last_login' => now(),
