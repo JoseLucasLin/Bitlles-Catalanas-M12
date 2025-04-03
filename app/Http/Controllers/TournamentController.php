@@ -18,7 +18,6 @@ class TournamentController extends Controller
 
     //Guarda el torneo
     public function store(Request $request){
-        // Validación con mensajes personalizados
         $messages = [
             'name.required' => 'El nombre del torneo es obligatorio',
             'type.required' => 'Seleccione un tipo de torneo',
@@ -43,53 +42,26 @@ class TournamentController extends Controller
             'expected_date' => 'required|date|after:today',
             'image' => 'required|image|mimes:jpg,png|max:2048'
         ], $messages);
-
-        // Depuración: Ver datos validados
-        Log::info('Datos validados:', $validatedData);
-
+    
         try {
-            // Procesamiento de la imagen
-            $imagePath = $request->file('image')->store('public/tournaments');
-            $imageUrl = Storage::url($imagePath);
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
 
-            Log::info('Imagen guardada en:', [
-                'path' => $imagePath,
-                'url' => $imageUrl
-            ]);
-
-            // Preparación de datos para la BD
-            $tournamentData = [
+            $image->move(public_path('tournament-images'), $imageName);
+    
+            $tournament = Tournament::create([
                 'name' => $validatedData['name'],
                 'type' => $validatedData['type'],
                 'normal_price' => $validatedData['normal_price'],
                 'partner_price' => $validatedData['partner_price'],
-                'expected_date' => Carbon::parse($validatedData['expected_date']),
-                'image' => $imageUrl
-            ];
-
-            Log::info('Datos preparados para insertar:', $tournamentData);
-
-            // Creación del torneo con depuración
-            $tournament = Tournament::create($tournamentData);
-
-            if ($tournament->exists) {
-                Log::info('Torneo creado exitosamente:', $tournament->toArray());
-                return redirect()->route('createTournament')
-                    ->with('success', 'Torneo creado exitosamente!');
-            } else {
-                Log::error('El torneo no se creó correctamente');
-                throw new \Exception('No se pudo crear el torneo en la base de datos');
-            }
-
-        } catch (\Exception $e) {
-            Log::error('Error al crear torneo:', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-                'input' => $request->all()
+                'expected_date' => $validatedData['expected_date'],
+                'image' => $imageName
             ]);
-
-            return back()->withInput()
-                ->with('error', 'Error al crear torneo: '.$e->getMessage());
+    
+            return redirect()->route('createTournament')->with('success', 'Torneo creado!');
+    
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', 'Error: ' . $e->getMessage());
         }
 
     }

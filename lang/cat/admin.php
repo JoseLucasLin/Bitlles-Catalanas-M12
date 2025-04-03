@@ -69,4 +69,19 @@ return [
         'delete_confirm_message' => 'Un cop s\'elimini el vostre compte, tots els seus recursos i dades s\'esborraran permanentment. Si us plau, introduïu la vostra contrasenya per confirmar que voleu eliminar permanentment el vostre compte.',
         'cancel' => 'Cancel·lar'
     ],
+
+    'ct_referee' => [
+        'register_of_referee' => 'Registre d\'Àrbitre',
+        'username' => 'Nom d\'usuari',
+        'enter_username' => 'Escriu el nom d\'usuari',
+        'email' => 'Correu electrònic',
+        'example_email' => 'exemple@correu.com',
+        'password' => 'Contrasenya',
+        'create_password' => 'Crea una contrasenya',
+        'confirm_password' => 'Confirma la contrasenya',
+        'repeat_password' => 'Repeteix la contrasenya',
+        'profile_image' => 'Imatge de perfil',
+        'register_referee' => 'Registrar Àrbitre',
+        'back_to_dashboard' => 'Tornar al Tauler Principal',
+    ],
 ];

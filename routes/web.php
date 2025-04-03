@@ -39,6 +39,10 @@ Route::get('/test', function () {
 Route::get('/admin', function () {
     return view('admin.admin-panel');
 })->middleware(['auth']); // Proteger con autenticación
+// REFEREE
+Route::get('/referee', function () {
+    return view('referee.referee-panel');
+})->middleware(['auth']); // Proteger con autenticación
 
 // CREATE REFEREE
 Route::post('/admin/create-referee',[RegisteredUserController::class, 'store'])->middleware(['auth'])->name("registro.store"); //RegisteredUserController [RegisteredUserController::class, 'index'] view('admin.create-referee') ;
@@ -109,9 +113,12 @@ Route::middleware(['auth', 'role:2'])->prefix('admin')->group(function () {
 });
 
 // Rutas para árbitros (role:1)
-Route::middleware(['auth', 'role:1'])->prefix('arbitro')->group(function () {
+Route::middleware(['auth', 'role:1'])->prefix('referee')->group(function () {
+    Route::get('/', function () {
+        return view('referee.referee-panel');
+    });
     Route::get('/points-manager', function () {
-        return view('admin.points-manager');
+        return view('referee.points-manager');
     });
     // Otras rutas específicas para árbitros
 });
