@@ -21,7 +21,7 @@ class RegisteredUserController extends Controller
      */
     public function index(): View
     {
-        
+
         return view('admin.create-referee');
     }
     /**
@@ -39,7 +39,7 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-      //todo poner mensaje de que se creo correctamente. 
+      //todo poner mensaje de que se creo correctamente.
  //Textos completos id 	username 	password 	mail 	role 	image 	last_login 	attemp_logins 	created_at 	updated_at
         $request->validate([
             'username' => ['required', 'string', 'max:255'],
@@ -51,15 +51,15 @@ class RegisteredUserController extends Controller
       //guardar archivo
         if ($request->hasFile('image')) {
 
-            $originalName= $request->username.".".$request->file('image')->getClientOriginalExtension();
-            $image_path = "user-img";
-            Storage::disk('public')->putFileAs($image_path , $request->file('image'),$originalName);
+            $image = $request->file('image');
+            $originalName = $request->first_name.$request->last_name.".".$request->file('image')->getClientOriginalExtension();
+            $image->move(public_path('user-img'), $originalName);
 
 
        }
         $user = User::create([
-            'username' => $request->username, // 
-            'mail' => $request->email, // 
+            'username' => $request->username, //
+            'mail' => $request->email, //
             'password' => Hash::make($request->password),
             'role' => 2, // referee
             'image' => $originalName,
