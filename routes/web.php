@@ -19,6 +19,7 @@ use App\Http\Controllers\Auth\RegisteredPlayerController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\PlayerSearchController;
 
 use App\Mail\MailableLogin;
 use Illuminate\Support\Facades\Mail;
@@ -106,6 +107,13 @@ Route::middleware(['auth', 'role:2'])->prefix('admin')->group(function () {
     Route::get('/tournament-manager', function () {
         return view('admin.tournament-manager');
     });
+
+    // Rutas de búsqueda de jugadores
+    Route::get('/player-search', [PlayerSearchController::class, 'index'])->name('admin.player-search');
+
+    // Rutas para gestionar jugadores
+    Route::get('/edit-player/{id}', [PlayerController::class, 'edit'])->name('admin.edit-player');
+    Route::put('/update-player/{id}', [PlayerController::class, 'update'])->name('admin.update-player');
 });
 
 // Rutas para árbitros (role:1)
@@ -210,4 +218,8 @@ Route::get('/p', [ServerController::class, 'index']);
 //ENVIO DE DATOS
 //CREADOR DE TORNEOS
 Route::post('/admin/create-tournament', [TournamentController::class, 'store']) -> name('submitTournament');
+
+//API
+Route::get('/api/players/{id}', [PlayerSearchController::class, 'getPlayerDetails'])->name('api.player.details');
+
 

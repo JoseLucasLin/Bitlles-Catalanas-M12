@@ -51,9 +51,9 @@ class RegisteredPlayerController extends Controller
         $originalName = "default_image.png";
         // Guardar archivo
         if ($request->hasFile('image')) {
+            $image = $request->file('image');
             $originalName = $request->first_name.$request->last_name.".".$request->file('image')->getClientOriginalExtension();
-            $image_path = "user-img";
-            Storage::disk('public')->putFileAs($image_path, $request->file('image'), $originalName);
+            $image->move(public_path('player-img'), $originalName);
         }
 
         $player = Players::create([
