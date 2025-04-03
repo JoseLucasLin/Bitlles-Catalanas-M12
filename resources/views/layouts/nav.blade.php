@@ -1,4 +1,4 @@
-<nav class="navbar" x-data="{ mobileOpen: false }">
+<nav class="navbar border-b border-[var(--azul)]" x-data="{ mobileOpen: false }">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-24">
 
@@ -11,11 +11,11 @@
 
             <!-- Menú principal (escritorio) -->
             <div class="hidden md:flex md:items-center md:space-x-6">
-                <a href="#" class="header-link p-3 transition-all duration-300 rounded-lg font-semibold text-lg navbar-text hover:bg-[var(--crema-oscuro)]">Novedades</a>
-                <a href="#" class="header-link p-3 transition-all duration-300 rounded-lg font-semibold text-lg navbar-text hover:bg-[var(--crema-oscuro)]">Tanques</a>
-                <a href="#" class="header-link p-3 transition-all duration-300 rounded-lg font-semibold text-lg navbar-text hover:bg-[var(--crema-oscuro)]">Piezas</a>
-                <a href="#" class="header-link p-3 transition-all duration-300 rounded-lg font-semibold text-lg navbar-text hover:bg-[var(--crema-oscuro)]">Outlet</a>
-                <a href="#" class="header-link p-3 transition-all duration-300 rounded-lg font-semibold text-lg navbar-text hover:bg-[var(--crema-oscuro)]">Paises</a>
+                <a href="#" class="header-link p-3 transition-all duration-300 rounded-lg font-semibold text-lg navbar-text hover:bg-[var(--crema-oscuro)]">{{__("navbar.option1")}}</a>
+                <a href="#" class="header-link p-3 transition-all duration-300 rounded-lg font-semibold text-lg navbar-text hover:bg-[var(--crema-oscuro)]">{{__("navbar.option2")}}</a>
+                <a href="#" class="header-link p-3 transition-all duration-300 rounded-lg font-semibold text-lg navbar-text hover:bg-[var(--crema-oscuro)]">{{__("navbar.option3")}}</a>
+                <a href="#" class="header-link p-3 transition-all duration-300 rounded-lg font-semibold text-lg navbar-text hover:bg-[var(--crema-oscuro)]">{{__("navbar.option4")}}</a>
+                <a href="#" class="header-link p-3 transition-all duration-300 rounded-lg font-semibold text-lg navbar-text hover:bg-[var(--crema-oscuro)]">{{__("navbar.option5")}}</a>
             </div>
 
             <!-- Elementos de la derechaa -->
@@ -73,22 +73,22 @@
                                 {{ Auth::user()->username }}
                             </div>
                             <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-[var(--azul)] hover:bg-[var(--crema-oscuro)] transition-all duration-300">
-                                Mi Perfil
+                                {{__("navbar.my_profile")}}
                             </a>
                             @if(Auth::user()->role == 2)
                             <a href="{{ url('/admin') }}" class="block px-4 py-2 text-sm text-[var(--azul)] hover:bg-[var(--crema-oscuro)] transition-all duration-300">
-                                Panel Admin
+                                {{__("navbar.admin_panel")}}
                             </a>
                             @endif
                             @if(Auth::user()->role == 1)
                             <a href="{{ url('/arbitro') }}" class="block px-4 py-2 text-sm text-[var(--azul)] hover:bg-[var(--crema-oscuro)] transition-all duration-300">
-                                Panel Árbitro
+                                {{__("navbar.referee_panel")}}
                             </a>
                             @endif
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-[var(--azul)] hover:bg-[var(--crema-oscuro)] transition-all duration-300">
-                                    Cerrar Sesión
+                                    {{__("navbar.logout")}}
                                 </button>
                             </form>
                         </div>
@@ -118,22 +118,22 @@
 
                         <div x-show="profileOpen" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-[var(--azul)]">
                             <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-[var(--azul)] hover:bg-[var(--crema-oscuro)] transition-all duration-300">
-                                Mi Perfil
+                                {{__("navbar.my_profile")}}
                             </a>
                             @if(Auth::user()->role == 2)
                             <a href="{{ url('/admin') }}" class="block px-4 py-2 text-sm text-[var(--azul)] hover:bg-[var(--crema-oscuro)] transition-all duration-300">
-                                Panel Admin
+                                {{__("navbar.admin_panel")}}
                             </a>
                             @endif
                             @if(Auth::user()->role == 1)
                             <a href="{{ url('/arbitro') }}" class="block px-4 py-2 text-sm text-[var(--azul)] hover:bg-[var(--crema-oscuro)] transition-all duration-300">
-                                Panel Árbitro
+                                {{__("navbar.referee_panel")}}
                             </a>
                             @endif
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-[var(--azul)] hover:bg-[var(--crema-oscuro)] transition-all duration-300">
-                                    Cerrar Sesión
+                                    {{__("navbar.logout")}}
                                 </button>
                             </form>
                         </div>
@@ -156,11 +156,11 @@
     <!-- Menú móvil (se mantiene igual) -->
     <div x-show="mobileOpen" class="md:hidden navbar-mini">
         <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 text-center">
-            <a href="#" class="block header-link p-3 rounded-lg transition-all duration-300 font-medium text-lg navbar-text hover:bg-[var(--crema)]">Novedades</a>
-            <a href="#" class="block header-link p-3 rounded-lg transition-all duration-300 font-medium text-lg navbar-text hover:bg-[var(--crema)]">Tanques</a>
-            <a href="#" class="block header-link p-3 rounded-lg transition-all duration-300 font-medium text-lg navbar-text hover:bg-[var(--crema)]">Piezas</a>
-            <a href="#" class="block header-link p-3 rounded-lg transition-all duration-300 font-medium text-lg navbar-text hover:bg-[var(--crema)]">Outlet</a>
-            <a href="#" class="block header-link p-3 rounded-lg transition-all duration-300 font-medium text-lg navbar-text hover:bg-[var(--crema)]">Paises</a>
+            <a href="#" class="block header-link p-3 rounded-lg transition-all duration-300 font-medium text-lg navbar-text hover:bg-[var(--crema)]">{{__("navbar.option1")}}</a>
+            <a href="#" class="block header-link p-3 rounded-lg transition-all duration-300 font-medium text-lg navbar-text hover:bg-[var(--crema)]">{{__("navbar.option2")}}</a>
+            <a href="#" class="block header-link p-3 rounded-lg transition-all duration-300 font-medium text-lg navbar-text hover:bg-[var(--crema)]">{{__("navbar.option3")}}</a>
+            <a href="#" class="block header-link p-3 rounded-lg transition-all duration-300 font-medium text-lg navbar-text hover:bg-[var(--crema)]">{{__("navbar.option4")}}</a>
+            <a href="#" class="block header-link p-3 rounded-lg transition-all duration-300 font-medium text-lg navbar-text hover:bg-[var(--crema)]">{{__("navbar.option5")}}</a>
         </div>
     </div>
 </nav>

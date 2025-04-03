@@ -1,6 +1,6 @@
-<footer class="bg-[var(--azul)] text-[var(--crema)] transition-all duration-300">
+<footer class="bg-[var(--azul)] text-[var(--crema)] transition-all duration-300 mt-5">
     <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div>
                 <h3 class="text-lg font-semibold mb-4">{{__('footer.about_us')}}</h3>
                 <p class="text-sm text-[var(--crema)]">{{__('footer.desc')}}</p>
