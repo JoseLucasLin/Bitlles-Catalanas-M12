@@ -44,4 +44,29 @@ return [
     'search_player' => 'Buscar Jugador',
     'search_player_description' => 'Busca información sobre un jugador específico.',
     'search' => 'Buscar',
+
+    'profile' => [
+        'title' => 'Mi Perfil',
+        'personal_info' => 'Información Personal',
+        'personal_info_description' => 'Actualice su información de perfil y dirección de correo electrónico.',
+        'name' => 'Nombre',
+        'email' => 'Correo Electrónico',
+        'save_changes' => 'Guardar Cambios',
+        'update_success' => '¡Perfil actualizado correctamente!',
+        
+        'update_password' => 'Actualizar Contraseña',
+        'password_description' => 'Asegúrese de que su cuenta esté usando una contraseña larga y aleatoria para mantener la seguridad.',
+        'current_password' => 'Contraseña Actual',
+        'new_password' => 'Nueva Contraseña',
+        'confirm_password' => 'Confirmar Contraseña',
+        'change_password' => 'Cambiar Contraseña',
+        'password_success' => '¡Contraseña actualizada correctamente!',
+        
+        'delete_account' => 'Eliminar Cuenta',
+        'delete_description' => 'Una vez que se elimine su cuenta, todos sus recursos y datos se borrarán permanentemente. Antes de eliminar su cuenta, descargue cualquier dato o información que desee conservar.',
+        'delete_button' => 'Eliminar Cuenta',
+        'delete_confirm_title' => '¿Está seguro de que desea eliminar su cuenta?',
+        'delete_confirm_message' => 'Una vez que se elimine su cuenta, todos sus recursos y datos se borrarán permanentemente. Por favor, ingrese su contraseña para confirmar que desea eliminar permanentemente su cuenta.',
+        'cancel' => 'Cancelar'
+    ],
 ];

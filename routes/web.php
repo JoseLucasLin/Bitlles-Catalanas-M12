@@ -41,7 +41,7 @@ Route::get('/admin', function () {
 })->middleware(['auth']); // Proteger con autenticación
 
 // CREATE REFEREE
-Route::post('/admin/create-referee',[RegisteredUserController::class, 'store'])->middleware(['auth'])->name("registro"); //RegisteredUserController [RegisteredUserController::class, 'index'] view('admin.create-referee') ;
+Route::post('/admin/create-referee',[RegisteredUserController::class, 'store'])->middleware(['auth'])->name("registro.store"); //RegisteredUserController [RegisteredUserController::class, 'index'] view('admin.create-referee') ;
 Route::get('/admin/create-referee',[RegisteredUserController::class, 'index'])->middleware(['auth'])->name("registro.store"); //RegisteredUserController [RegisteredUserController::class, 'index'] view('admin.create-referee') ;
 
 // ADD PLAYERS
