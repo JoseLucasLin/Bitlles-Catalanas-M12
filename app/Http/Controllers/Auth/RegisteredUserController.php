@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Str;
 
 class RegisteredUserController extends Controller
 {
@@ -52,9 +52,8 @@ class RegisteredUserController extends Controller
         if ($request->hasFile('image')) {
 
             $image = $request->file('image');
-            $originalName = $request->first_name.$request->last_name.".".$request->file('image')->getClientOriginalExtension();
+            $originalName = Str::random(15) . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('user-img'), $originalName);
-
 
        }
         $user = User::create([
@@ -67,7 +66,6 @@ class RegisteredUserController extends Controller
             'last_login' => now(),
             'created_at' => now(),
         ]);
-        //dd($user);
 
         event(new Registered($user));
 

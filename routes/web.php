@@ -105,9 +105,7 @@ Route::middleware(['auth', 'role:2'])->prefix('admin')->group(function () {
     });
     Route::get('/create-player', [RegisteredPlayerController::class, 'index'])->name('create-player');
     Route::post('/create-player', [RegisteredPlayerController::class, 'store'])->name('create-player.store');
-    Route::get('/create-player', function () {
-        return view('admin.create-player');
-    });
+    
     Route::get('/tournament-manager', function () {
         return view('admin.tournament-manager');
     });
