@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('type_name') -> nullable(false);
             $table->string('description');
             $table->string('draw_case');
-            $table->string('winner_prize');
+            $table->string('winner_prize') -> nullable();
         });
     }
 
