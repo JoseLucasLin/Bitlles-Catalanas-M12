@@ -23,12 +23,13 @@
                         <!-- Campo Tipo -->
                         <div>
                             <label for="type" class="block text-lg font-semibold text-[var(--azul)]">Tipo de torneo</label>
-                            <select name="type" id="type" required
-                                    class="w-full bg-[#F6F4F2] border border-[var(--azul)] rounded-md focus:border-sky-500 p-2 @error('type') border-red-500 @enderror">
+                            <select name="type" id="type" required class="w-full bg-[#F6F4F2] border border-[var(--azul)] rounded-md focus:border-sky-500 p-2 @error('type') border-red-500 @enderror">
                                 <option value="">Seleccione una opción</option>
-                                <option value="1" @selected(old('type') == '1')>Opción 1</option>
-                                <option value="2" @selected(old('type') == '2')>Opción 2</option>
-                                <option value="3" @selected(old('type') == '3')>Opción 3</option>
+                                @foreach ($types as $type)
+                                    <option value="{{ $type->id }}" @selected(old('type') == $type->id)>
+                                        {{ $type->type_name }}
+                                    </option>
+                                @endforeach                                
                             </select>
                             @error('type')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -74,6 +75,27 @@
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
+
+                        <!--pistas-->
+                        <div id="fields-container" class="col-span-2">
+                            <h3 class="text-lg font-semibold text-[var(--azul)] mb-2">Añadir Pistas</h3>
+
+                            <div class="field-group mb-4">
+                                <input type="text" name="fields[0][name]" placeholder="Nombre de la pista"
+                                    class="field-input w-full mb-2 bg-[#F6F4F2] border border-[var(--azul)] rounded-md p-2" required>
+
+                                <select name="fields[0][referee]" class="referee-select w-full bg-[#F6F4F2] border border-[var(--azul)] rounded-md p-2" required>
+                                    <option value="">Seleccione un árbitro</option>
+                                    @foreach($referees as $ref)
+                                        <option value="{{ $ref->id }}">{{ $ref->username }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <button type="button" id="add-field" class="mt-2 px-3 py-1 bg-[var(--azul)] text-white rounded hover:bg-[var(--rojo)] transition">
+                                + Añadir pista
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Mensajes generales de éxito/error -->
@@ -94,6 +116,31 @@
                             Crear
                         </button>
                     </div>
+
+                    <script>
+                        let fieldIndex = 1;
+                    
+                        document.getElementById('add-field').addEventListener('click', () => {
+                            const container = document.getElementById('fields-container');
+                            const group = document.createElement('div');
+                            group.classList.add('field-group', 'mb-4');
+                    
+                            group.innerHTML = `
+                                <input type="text" name="fields[${fieldIndex}][name]" placeholder="Nombre de la pista"
+                                       class="field-input w-full mb-2 bg-[#F6F4F2] border border-[var(--azul)] rounded-md p-2" required>
+                    
+                                <select name="fields[${fieldIndex}][referee]" class="referee-select w-full bg-[#F6F4F2] border border-[var(--azul)] rounded-md p-2" required>
+                                    <option value="">Seleccione un árbitro</option>
+                                    @foreach($referees as $ref)
+                                        <option value="{{ $ref->id }}">{{ $ref->username }}</option>
+                                    @endforeach
+                                </select>
+                            `;
+                            container.insertBefore(group, document.getElementById('add-field'));
+                            fieldIndex++;
+                        });
+                    </script>
+                    
                 </form>
             </div>
         </div>

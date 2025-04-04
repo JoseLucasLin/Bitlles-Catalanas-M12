@@ -7,17 +7,24 @@ use App\Models\Tournament;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+use App\Models\Type_Tournament;
+use App\Models\User;
+use App\Models\Fields;
+use App\Models\Referee_Tournament;
 
 class TournamentController extends Controller
 {
     //Abre el formulario de creacion de torneos
     public function create()
     {
-        return view('admin.create-tournament');
+        $types = Type_Tournament::all();
+        $referees = User::where('role', 1)->get();
+        return view('admin.create-tournament', compact('types', 'referees'));
     }
 
     //Guarda el torneo
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $messages = [
             'name.required' => 'El nombre del torneo es obligatorio',
             'type.required' => 'Seleccione un tipo de torneo',
@@ -31,24 +38,29 @@ class TournamentController extends Controller
             'image.required' => 'La imagen es requerida',
             'image.image' => 'El archivo debe ser una imagen',
             'image.mimes' => 'Formatos aceptados: JPG, PNG',
-            'image.max' => 'La imagen no debe superar 2MB'
+            'image.max' => 'La imagen no debe superar 2MB',
+            'fields.required' => 'Debe añadir al menos una pista',
+            'fields.*.name.required' => 'El nombre de la pista es obligatorio',
+            'fields.*.referee.required' => 'Debe asignar un árbitro a cada pista',
         ];
 
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'type' => 'required|integer|in:1,2,3',
+            'type' => 'required|integer|exists:Type_Tournament,id',
             'normal_price' => 'required|numeric|min:0',
             'partner_price' => 'required|numeric|min:0',
             'expected_date' => 'required|date|after:today',
-            'image' => 'required|image|mimes:jpg,png|max:2048'
+            'image' => 'required|image|mimes:jpg,png|max:2048',
+            'fields' => 'required|array|min:1',
+            'fields.*.name' => 'required|string|max:120',
+            'fields.*.referee' => 'required|integer|exists:users,id',
         ], $messages);
-    
+        
         try {
             $image = $request->file('image');
             $imageName = time() . '_' . $image->getClientOriginalName();
-
             $image->move(public_path('tournament-images'), $imageName);
-    
+
             $tournament = Tournament::create([
                 'name' => $validatedData['name'],
                 'type' => $validatedData['type'],
@@ -57,13 +69,25 @@ class TournamentController extends Controller
                 'expected_date' => $validatedData['expected_date'],
                 'image' => $imageName
             ]);
-    
-            return redirect()->route('createTournament')->with('success', 'Torneo creado!');
-    
+
+            $fields = $validatedData['fields'];
+            foreach ($fields as $field) {
+                $newField = \App\Models\Fields::create([
+                    'field_name' => $field['name']
+                ]);
+
+                \App\Models\Referee_Tournament::create([
+                    'id_tournament' => $tournament->id,
+                    'id_user_referee' => $field['referee'],
+                    'id_field' => $newField->id
+                ]);
+            }
+
+            return redirect()->route('createTournament')->with('success', 'Torneo creado con éxito!');
+        
         } catch (\Exception $e) {
             return back()->withInput()->with('error', 'Error: ' . $e->getMessage());
         }
-
     }
 
     //Abre el formulario de edicion de torneos
