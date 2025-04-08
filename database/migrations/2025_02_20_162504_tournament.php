@@ -22,8 +22,8 @@ return new class extends Migration
             start_date TIMESTAMP,
             end_date TIMESTAMP
         */
-        Schema::dropIfExists('Tournaments');
-        Schema::create('Tournaments', function (Blueprint $table) {
+        Schema::dropIfExists('tournaments');
+        Schema::create('tournaments', function (Blueprint $table) {
             $table->id(); // Quita el ->primary(), id() ya es primary key
             $table->string('name',255)->nullable(false);
             $table->integer('type')->nullable(false);
@@ -48,6 +48,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('Tournaments');
+        Schema::dropIfExists('tournaments');
     }
 };

@@ -12,7 +12,7 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $table = 'Users'; // Asegúrate de que coincida con el nombre de la tabla
+    protected $table = 'users';
 
     protected $fillable = [
         'username',

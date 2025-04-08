@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::dropIfExists('Tournament_Round');
-        Schema::create('Tournament_Round', function (Blueprint $table) {
+        Schema::dropIfExists('tournament_round');
+        Schema::create('tournament_round', function (Blueprint $table) {
             $table->id() -> primary();
-            $table->integer('id_tournament') -> nullable(false)->references('id')->on('Tournament');
-            $table->integer('id_round') -> nullable(false)->references('id')->on('Round');
+            $table->integer('id_tournament') -> nullable(false)->references('id')->on('tournament');
+            $table->integer('id_round') -> nullable(false)->references('id')->on('round');
             $table->time('finish_hour') -> nullable(false);
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('Tournament_Round');
+        Schema::dropIfExists('tournament_Round');
     }
 };

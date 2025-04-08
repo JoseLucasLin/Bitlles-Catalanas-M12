@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Players extends Model
 {
-    protected $table = 'Player'; // Nombre de la tabla
+    protected $table = 'player'; // Nombre de la tabla
     protected $primaryKey = 'id'; // Clave primaria
     public $timestamps = false;
     protected $fillable = [

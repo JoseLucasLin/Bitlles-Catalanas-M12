@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::dropIfExists('Fields');
-        Schema::create('Fields', function (Blueprint $table) {
+        Schema::dropIfExists('fields');
+        Schema::create('fields', function (Blueprint $table) {
             $table->id()->primary()->autoIncrement();
             $table->string('field_name',120);
             $table->timestamps();
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('Fields');
+        Schema::dropIfExists('fields');
     }
 };

@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::dropIfExists('Type_Tournament');
-        Schema::create('Type_Tournament', function (Blueprint $table) {
+        Schema::dropIfExists('type_tournament');
+        Schema::create('type_tournament', function (Blueprint $table) {
             $table->id() -> primary();
             $table->string('type_name') -> nullable(false);
             $table->string('description');
@@ -36,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('Type_Tournament');
+        Schema::dropIfExists('type_tournament');
     }
 };

@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::dropIfExists('Status');
-        Schema::create('Status', function (Blueprint $table) {
+        Schema::dropIfExists('status');
+        Schema::create('status', function (Blueprint $table) {
             $table->id() -> autoIncrement();
             $table->string('name') -> nullable(false);
         });

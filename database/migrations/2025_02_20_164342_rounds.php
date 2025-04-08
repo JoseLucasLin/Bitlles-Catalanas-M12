@@ -18,12 +18,12 @@ return new class extends Migration
         id_field INTEGER NOT NULL,
         id_status INTEGER NOT NULL
         ); */
-        Schema::dropIfExists('Rounds');
-        Schema::create('Rounds', function (Blueprint $table) {
+        Schema::dropIfExists('rounds');
+        Schema::create('rounds', function (Blueprint $table) {
             $table->id()->primary();
-            $table->integer('id_player')->nullable(false)->references('id')->on('Players');
-            $table->integer('id_field')->nullable(false)->references('id')->on('Fields');
-            $table->integer('id_status')->nullable(false)->references('id')->on('Status');
+            $table->integer('id_player')->nullable(false)->references('id')->on('players');
+            $table->integer('id_field')->nullable(false)->references('id')->on('fields');
+            $table->integer('id_status')->nullable(false)->references('id')->on('status');
         });
     }
 
@@ -32,7 +32,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('Rounds');
+        Schema::dropIfExists('rounds');
         //
     }
 };

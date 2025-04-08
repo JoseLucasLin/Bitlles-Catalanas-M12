@@ -24,10 +24,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::dropIfExists('Player_History_Stats');
-        Schema::create('Player_History_Stats', function (Blueprint $table) {
+        Schema::dropIfExists('player_history_stats');
+        Schema::create('player_history_stats', function (Blueprint $table) {
             $table->id() ->primary();
-            $table->integer('id_player') ->nullable(false)->references('id')->on('Players');
+            $table->integer('id_player') ->nullable(false)->references('id')->on('players');
             $table->integer('number_game_makes') ->nullable(false);
             $table->integer('total_points_all_game') ->nullable(false);
             $table->integer('last_game_points') ->nullable(false);
@@ -41,6 +41,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('Player_History_Stats');
+        Schema::dropIfExists('player_history_stats');
     }
 };
