@@ -21,7 +21,8 @@ return new class extends Migration
         Schema::dropIfExists('rounds');
         Schema::create('rounds', function (Blueprint $table) {
             $table->id()->primary();
-            $table->integer('id_player')->nullable(false)->references('id')->on('players');
+            $table->integer('id_tournament')->nullable(false)->references('id')->on('tournaments');
+            $table->integer('id_round')->nullable(false)->references('id')->on('rounds');
             $table->integer('id_field')->nullable(false)->references('id')->on('fields');
             $table->integer('id_status')->nullable(false)->references('id')->on('status');
         });
