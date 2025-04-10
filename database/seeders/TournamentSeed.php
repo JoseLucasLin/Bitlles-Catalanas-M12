@@ -31,8 +31,6 @@ class TournamentSeed extends Seeder
             'partner_price' => (1.2) ,
 
             'expected_date' => now(),
-            'start_date' => now(),
-            'end_date' => (date("Y-m-d", strtotime("+ 1 day"))),
         ]);
     }
 }
