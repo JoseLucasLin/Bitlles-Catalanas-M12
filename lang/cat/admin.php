@@ -84,4 +84,17 @@ return [
         'register_referee' => 'Registrar Àrbitre',
         'back_to_dashboard' => 'Tornar al Tauler Principal',
     ],
+
+    'player_registration' => 'Registre de Jugador',
+    'first_name' => 'Nom',
+    'first_name_placeholder' => 'Escriu el nom',
+    'last_name' => 'Cognom/s',
+    'last_name_placeholder' => 'Escriu els cognoms',
+    'email' => 'Correu electrònic (opcional)',
+    'email_placeholder' => 'exemple@correu.com',
+    'is_partner' => 'És partner?',
+    'yes' => 'Sí',
+    'no' => 'No',
+    'profile_image' => 'Imatge de perfil (opcional)',
+    'back_to_dashboard' => 'Tornar al Panell Principal',
 ];

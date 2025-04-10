@@ -84,4 +84,17 @@ return [
         'register_referee' => 'Register Referee',
         'back_to_dashboard' => 'Back to Dashboard',
     ],
+
+    'player_registration' => 'Player Registration',
+    'first_name' => 'First Name',
+    'first_name_placeholder' => 'Enter first name',
+    'last_name' => 'Last Name',
+    'last_name_placeholder' => 'Enter last name',
+    'email' => 'Email (optional)',
+    'email_placeholder' => 'example@email.com',
+    'is_partner' => 'Is partner?',
+    'yes' => 'Yes',
+    'no' => 'No',
+    'profile_image' => 'Profile Image (optional)',
+    'back_to_dashboard' => 'Back to Dashboard',
 ];

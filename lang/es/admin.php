@@ -83,4 +83,17 @@ return [
         'register_referee' => 'Registrar Árbitro',
         'back_to_dashboard' => 'Volver al Panel Principal',
     ],
+
+    'player_registration' => 'Registro de Jugador',
+    'first_name' => 'Nombre',
+    'first_name_placeholder' => 'Escribe el nombre',
+    'last_name' => 'Apellido/s',
+    'last_name_placeholder' => 'Escribe los apellidos',
+    'email' => 'Correo electrónico (opcional)',
+    'email_placeholder' => 'ejemplo@correo.com',
+    'is_partner' => 'Es partner?',
+    'yes' => 'Sí',
+    'no' => 'No',
+    'profile_image' => 'Imagen de perfil (opcional)',
+    'back_to_dashboard' => 'Volver al Panel Principal',
 ];
