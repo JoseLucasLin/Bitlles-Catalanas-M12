@@ -86,6 +86,12 @@
                                         </svg>
                                         Editar
                                     </button>
+                                    <button onclick="sendPlayerCode({{ $player->id }})" class="inline-flex items-center justify-center bg-green-500 text-white px-3 py-1 rounded text-sm transition duration-300 hover:bg-green-600 ml-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                        </svg>
+                                        Enviar código
+                                    </button>
                                 </td>
                             </tr>
                         @endforeach
@@ -267,5 +273,67 @@
             closePlayerDetails();
         }
     });
+
+    // Agregar esta función al script existente en player-search.blade.php
+    function sendPlayerCode(playerId) {
+        if (confirm('¿Estás seguro de que deseas enviar el código de acceso al correo del jugador?')) {
+            // Obtener el token CSRF
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            // Mostrar indicador de carga
+            const loadingOverlay = document.createElement('div');
+            loadingOverlay.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            loadingOverlay.innerHTML = `
+                <div class="bg-white p-5 rounded-lg shadow-xl">
+                    <div class="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-[var(--azul)] mx-auto"></div>
+                    <p class="mt-3 text-center">Enviando correo...</p>
+                </div>
+            `;
+            document.body.appendChild(loadingOverlay);
+
+            fetch(`/admin/send-player-code/${playerId}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Eliminar indicador de carga
+                document.body.removeChild(loadingOverlay);
+
+                if (data.success) {
+                    // Mostrar mensaje de éxito
+                    const successAlert = document.createElement('div');
+                    successAlert.className = 'fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded max-w-md shadow-lg z-50';
+                    successAlert.innerHTML = `
+                        <div class="flex items-center">
+                            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>${data.message}</span>
+                        </div>
+                    `;
+                    document.body.appendChild(successAlert);
+
+                    // Eliminar el mensaje después de 5 segundos
+                    setTimeout(() => {
+                        document.body.removeChild(successAlert);
+                    }, 5000);
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                // Eliminar indicador de carga
+                document.body.removeChild(loadingOverlay);
+
+                console.error('Error:', error);
+                alert('Ha ocurrido un error al enviar el código. Por favor, inténtalo de nuevo.');
+            });
+        }
+    }
 </script>
 @endsection
