@@ -9,7 +9,16 @@ class Fields extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['field_name'];
+    protected $table = 'fields';
+
+    protected $fillable = [
+        'field_name'
+    ];
+
+    public function rounds()
+    {
+        return $this->hasMany(Round::class, 'id_field');
+    }
 
     public function refereeTournaments()
     {
