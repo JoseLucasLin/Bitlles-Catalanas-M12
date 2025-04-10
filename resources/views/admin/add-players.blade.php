@@ -1,119 +1,97 @@
 @extends('admin.index')
 
 @section('content')
-
 <main class="flex-1 ms-10 me-10">
     <div class="text-center mt-10 mb-10">
         <h2 class="text-2xl font-bold text-[var(--azul)] mb-4">{{__('admin.add_participants')}}</h2>
     </div>
 
-    <form action="#" method="POST" enctype="multipart/form-data" class="max-w-xl mx-auto">
+    <form action="{{ route('admin.add-players.store') }}" method="POST" enctype="multipart/form-data" class="max-w-xl mx-auto">
         @csrf
 
         <div class="mb-4">
             <label for="tournament" class="block text-lg font-medium text-[var(--azul)]">{{__('admin.select_an_tournament')}}</label>
-            <select id="tournament" name="tournament" class="mt-2 p-2 w-full border border-[var(--azul)] rounded bg-[var(--crema)]" required>
+            <select id="tournament" name="tournament" class="mt-2 p-2 w-full border border-[var(--azul)] rounded bg-[var(--crema)]" required onchange="fetchFields()">
                 <option value="" disabled selected>{{__('admin.select_tournament')}}</option>
-                <option value="1">Torneo 1</option>
-                <option value="2">Torneo 2</option>
-                <option value="3">Torneo 3</option>
+                @foreach($tournaments as $tournament)
+                    <option value="{{ $tournament->id }}">{{ $tournament->name }}</option>
+                @endforeach
             </select>
         </div>
 
         <div class="mb-4">
-            <label for="participant_type" class="block text-lg font-medium text-[var(--azul)]">{{__('admin.participant_type')}}</label>
-            <select id="participant_type" name="participant_type" class="mt-2 p-2 w-full border border-[var(--azul)] rounded bg-[var(--crema)]" required onchange="toggleCourtField()">
-                <option value="" disabled selected>{{__('admin.select_type')}}</option>
-                <option value="player">{{__('admin.player')}}</option>
-                <option value="referee">{{__('admin.referee')}}</option>
+            <label for="player" class="block text-lg font-medium text-[var(--azul)]">{{__('admin.select_player')}}</label>
+            <select id="player" name="player_id" class="mt-2 p-2 w-full border border-[var(--azul)] rounded bg-[var(--crema)]" required>
+                <option value="" disabled selected>{{__('admin.select_player')}}</option>
+                @foreach($players as $player)
+                    <option value="{{ $player->id }}">{{ $player->name }} {{ $player->lastname }}</option>
+                @endforeach
             </select>
         </div>
 
         <div class="mb-4">
-            <label for="username" class="block text-lg font-medium text-[var(--azul)]">{{__('admin.username')}}</label>
-            <input type="text" id="username" name="username" class="mt-2 p-2 w-full border border-[var(--azul)] rounded bg-[var(--crema)]" required placeholder="Escribe el nombre de usuario">
-        </div>
-
-        <div class="mb-4 hidden" id="court-field">
-            <label for="court" class="block text-lg font-medium text-[var(--azul)]">{{__('admin.asigned_track')}}</label>
-            <input type="text" id="court" name="court" class="mt-2 p-2 w-full border border-[var(--azul)] rounded bg-[var(--crema)]" placeholder="Indica la pista">
+            <label for="field" class="block text-lg font-medium text-[var(--azul)]">{{__('admin.select_field')}}</label>
+            <select id="field" name="field_id" class="mt-2 p-2 w-full border border-[var(--azul)] rounded bg-[var(--crema)]" required>
+                <option value="" disabled selected>{{__('admin.select_field')}}</option>
+            </select>
         </div>
 
         <div class="text-center mt-10">
-            <button type="button" onclick="addParticipant()" class="bg-[var(--rojo)] text-[var(--blanco)] px-4 py-2 rounded transition duration-300 hover:bg-[var(--azul)] font-bold hover:scale-105">
+            <button type="submit" class="bg-[var(--rojo)] text-[var(--blanco)] px-4 py-2 rounded transition duration-300 hover:bg-[var(--azul)] font-bold hover:scale-105">
                 {{__('admin.add_participant')}}
             </button>
-            <div class="mt-2">
-                <a href="#" class="text-[var(--azul)] hover:text-[var(--rojo)] font-semibold flex items-center justify-center transition duration-300 underline">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" />
-                    </svg>
-                    <span class="ms-1">{{__('admin.go_back')}}</span>
-                </a>
-            </div>                        
         </div>
     </form>
 
-    <div class="mt-10 max-w-xl mx-auto">
-        <div class="text-center">
-            <h3 class="text-xl font-bold text-[var(--azul)] mb-4">{{__('admin.added_participants')}}</h3>
-        </div>
-        <table class="w-full border border-[var(--azul)] bg-[var(--crema)]">
+    <div class="mt-10">
+        <h3 class="text-xl font-bold mb-4">{{ __('admin.assigned_players') }}</h3>
+        <table class="min-w-full table-auto border-collapse">
             <thead>
-                <tr class="bg-[var(--azul)] text-[var(--blanco)]">
-                    <th class="p-2">{{__('admin.tournament')}}</th>
-                    <th class="p-2">{{__('admin.type')}}</th>
-                    <th class="p-2">{{__('admin.name')}}</th>
-                    <th class="p-2">{{__('admin.track')}}</th>
-                    <th class="p-2">{{__('admin.actions')}}</th>
+                <tr>
+                    <th class="px-4 py-2">{{ __('admin.player') }}</th>
+                    <th class="px-4 py-2">{{ __('admin.field') }}</th>
+                    <th class="px-4 py-2">{{ __('admin.actions') }}</th>
                 </tr>
             </thead>
-            <tbody id="participants-list">
-                
+            <tbody>
+                @foreach($assignedPlayers as $assigned)
+                    <tr>
+                        <td class="px-4 py-2">{{ $assigned->player->name }} {{ $assigned->player->lastname }}</td>
+                        <td class="px-4 py-2">{{ $assigned->field->field_name }}</td>
+                        <td class="px-4 py-2">
+                            <form action="{{ route('admin.remove-player', $assigned->id) }}" method="POST" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-600 hover:text-red-800">
+                                    {{ __('admin.remove') }}
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
     </div>
 </main>
 
 <script>
-    function toggleCourtField() {
-        const type = document.getElementById("participant_type").value;
-        const courtField = document.getElementById("court-field");
-        if (type === "referee") {
-            courtField.classList.remove("hidden");
-        } else {
-            courtField.classList.add("hidden");
+    function fetchFields() {
+        const tournamentId = document.getElementById('tournament').value;
+        if (tournamentId) {
+            fetch(`/admin/get-fields/${tournamentId}`)
+                .then(response => response.json())
+                .then(fields => {
+                    const fieldSelect = document.getElementById('field');
+                    fieldSelect.innerHTML = '<option value="" disabled selected>{{__('admin.select_field')}}</option>';
+                    fields.forEach(field => {
+                        const option = document.createElement('option');
+                        option.value = field.id;
+                        option.textContent = field.field_name;
+                        fieldSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
         }
-    }
-
-    function addParticipant() {
-        const tournament = document.getElementById("tournament").value;
-        const type = document.getElementById("participant_type").value;
-        const username = document.getElementById("username").value;
-        const court = document.getElementById("court").value;
-
-        if (!tournament || !type || !username || (type === "referee" && !court)) {
-            alert("Error.");
-            return;
-        }
-
-        const table = document.getElementById("participants-list");
-        const row = table.insertRow();
-        row.innerHTML = `
-            <td class="p-2">${document.querySelector(`#tournament option[value='${tournament}']`).textContent}</td>
-            <td class="p-2">${type === "player" ? "{{__('admin.player')}}" : "{{__('admin_referee')}}"}</td>
-            <td class="p-2">${username}</td>
-            <td class="p-2">${type === "referee" ? court : "N/A"}</td>
-            <td class="p-2"><button onclick="deleteRow(this)" class="text-red-500">{{__('admin.delete')}}</button></td>
-        `;
-
-        document.getElementById("username").value = "";
-        document.getElementById("court").value = "";
-        toggleCourtField();
-    }
-
-    function deleteRow(button) {
-        button.parentElement.parentElement.remove();
     }
 </script>
 @endsection

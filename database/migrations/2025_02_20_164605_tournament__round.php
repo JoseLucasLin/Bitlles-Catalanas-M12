@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id() -> primary();
             $table->integer('id_tournament') -> nullable(false)->references('id')->on('tournament');
             $table->integer('id_round') -> nullable(false)->references('id')->on('round');
-            $table->time('finish_hour') -> nullable(false);
+            $table->timestamp('finish_hour')->nullable()->default(null);
         });
     }
 

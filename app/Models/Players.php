@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Players extends Model
 {
-    protected $table = 'player'; // Nombre de la tabla
-    protected $primaryKey = 'id'; // Clave primaria
+    use HasFactory;
+
+    protected $table = 'player';
+    protected $primaryKey = 'id';
     public $timestamps = false;
     protected $fillable = [
         'name',
@@ -19,4 +22,14 @@ class Players extends Model
         'last_login',
         'attemp_logins',
     ];
+
+    public function stats()
+    {
+        return $this->hasMany(Stats_Player_Tournament::class, 'id_player');
+    }
+
+    public function rounds()
+    {
+        return $this->hasMany(Round::class, 'id_player');
+    }
 }

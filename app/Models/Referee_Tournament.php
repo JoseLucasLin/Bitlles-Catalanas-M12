@@ -22,13 +22,8 @@ class Referee_Tournament extends Model
         return $this->belongsTo(Tournament::class, 'id_tournament');
     }
 
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'id_user_referee');
-    }
-
     public function field()
     {
-        return $this->belongsTo(Field::class, 'id_field');
+        return $this->belongsTo(Fields::class, 'id_field');
     }
 }

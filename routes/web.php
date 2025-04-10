@@ -20,6 +20,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\PlayerSearchController;
+use App\Http\Controllers\AddPlayersController;
 
 use App\Mail\MailableLogin;
 use Illuminate\Support\Facades\Mail;
@@ -48,11 +49,6 @@ Route::get('/referee', function () {
 // CREATE REFEREE
 Route::post('/admin/create-referee',[RegisteredUserController::class, 'store'])->middleware(['auth'])->name("registro.store"); //RegisteredUserController [RegisteredUserController::class, 'index'] view('admin.create-referee') ;
 Route::get('/admin/create-referee',[RegisteredUserController::class, 'index'])->middleware(['auth'])->name("registro.store"); //RegisteredUserController [RegisteredUserController::class, 'index'] view('admin.create-referee') ;
-
-// ADD PLAYERS
-Route::get('/admin/add-players', function () {
-    return view('admin.add-players');
-})->middleware(['auth']);
 
 // TOURNAMENT MANAGER
 Route::get('/admin/tournament-manager', function () {
@@ -100,9 +96,12 @@ Route::middleware(['auth', 'role:2'])->prefix('admin')->group(function () {
     Route::get('/create-referee', function () {
         return view('admin.create-referee');
     });
-    Route::get('/add-players', function () {
-        return view('admin.add-players');
-    });
+
+    Route::get('/add-players', [AddPlayersController::class, 'index'])->name('admin.add-players');
+    Route::post('/add-players', [AddPlayersController::class, 'store'])->name('admin.add-players.store');
+    Route::get('/get-fields/{tournamentId}', [AddPlayersController::class, 'getFieldsByTournament']);
+    Route::delete('/admin/remove-player/{id}', [AddPlayersController::class, 'removePlayer'])->name('admin.remove-player');
+
     Route::get('/create-player', [RegisteredPlayerController::class, 'index'])->name('create-player');
     Route::post('/create-player', [RegisteredPlayerController::class, 'store'])->name('create-player.store');
     
