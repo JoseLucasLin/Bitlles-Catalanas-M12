@@ -3,8 +3,8 @@
 @section('content')
 <main class="flex-1 ms-10 me-10">
     <div class="text-center mt-10 mb-10">
-        <h2 class="text-2xl font-bold text-[var(--azul)] mb-4">Búsqueda de Jugadores</h2>
-        <p class="text-gray-600">Encuentra y gestiona la información de los jugadores registrados</p>
+        <h2 class="text-2xl font-bold text-[var(--azul)] mb-4">@lang('admin.player_search')</h2>
+        <p class="text-gray-600">@lang('admin.search_description')</p>
     </div>
 
     <!-- Mensaje de éxito -->
@@ -22,7 +22,7 @@
                     type="text"
                     name="search"
                     class="w-full p-3 border border-[var(--azul)] rounded bg-[var(--crema)] focus:outline-none focus:ring-2 focus:ring-[var(--azul)]"
-                    placeholder="Buscar por nombre, apellido o correo electrónico..."
+                    placeholder="@lang('admin.search_placeholder')"
                     value="{{ request('search') }}"
                 >
             </div>
@@ -30,7 +30,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                 </svg>
-                Buscar
+                @lang('admin.search_button')
             </button>
         </form>
     </div>
@@ -42,13 +42,13 @@
                 <table class="min-w-full">
                     <thead class="bg-[var(--azul)] text-[var(--blanco)]">
                         <tr>
-                            <th class="py-3 px-4 text-left">Foto</th>
-                            <th class="py-3 px-4 text-left">Nombre</th>
-                            <th class="py-3 px-4 text-left">Apellido</th>
-                            <th class="py-3 px-4 text-left">Correo</th>
-                            <th class="py-3 px-4 text-center">Partner</th>
-                            <th class="py-3 px-4 text-center">Último acceso</th>
-                            <th class="py-3 px-4 text-center">Acciones</th>
+                            <th class="py-3 px-4 text-left">@lang('admin.photo')</th>
+                            <th class="py-3 px-4 text-left">@lang('admin.name')</th>
+                            <th class="py-3 px-4 text-left">@lang('admin.lastname')</th>
+                            <th class="py-3 px-4 text-left">@lang('admin.email')</th>
+                            <th class="py-3 px-4 text-center">@lang('admin.partner')</th>
+                            <th class="py-3 px-4 text-center">@lang('admin.last_access')</th>
+                            <th class="py-3 px-4 text-center">@lang('admin.actions')</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
@@ -59,38 +59,38 @@
                                 </td>
                                 <td class="py-3 px-4">{{ $player->name }}</td>
                                 <td class="py-3 px-4">{{ $player->lastname }}</td>
-                                <td class="py-3 px-4">{{ $player->mail ?? 'No disponible' }}</td>
+                                <td class="py-3 px-4">{{ $player->mail ?? __('admin.not_available') }}</td>
                                 <td class="py-3 px-4 text-center">
                                     @if($player->partner)
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                            Sí
+                                            @lang('admin.yes')
                                         </span>
                                     @else
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                            No
+                                            @lang('admin.no')
                                         </span>
                                     @endif
                                 </td>
-                                <td class="py-3 px-4 text-center">{{ $player->last_login ? date('d/m/Y H:i', strtotime($player->last_login)) : 'Nunca' }}</td>
+                                <td class="py-3 px-4 text-center">{{ $player->last_login ? date('d/m/Y H:i', strtotime($player->last_login)) : __('admin.never') }}</td>
                                 <td class="py-3 px-4 text-center">
                                     <button onclick="showPlayerDetails({{ $player->id }})" class="inline-flex items-center justify-center bg-[var(--azul)] text-[var(--blanco)] px-3 py-1 rounded text-sm transition duration-300 hover:bg-[var(--rojo)] mr-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                         </svg>
-                                        Ver
+                                        @lang('admin.view')
                                     </button>
                                     <button onclick="editPlayer({{ $player->id }})" class="inline-flex items-center justify-center bg-yellow-500 text-white px-3 py-1 rounded text-sm transition duration-300 hover:bg-yellow-600">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                         </svg>
-                                        Editar
+                                        @lang('admin.edit')
                                     </button>
                                     <button onclick="sendPlayerCode({{ $player->id }})" class="inline-flex items-center justify-center bg-green-500 text-white px-3 py-1 rounded text-sm transition duration-300 hover:bg-green-600 ml-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                         </svg>
-                                        Enviar código
+                                        @lang('admin.send_code')
                                     </button>
                                 </td>
                             </tr>
@@ -112,14 +112,14 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <h3 class="mt-2 text-lg font-medium text-gray-900">No se encontraron jugadores con ese criterio</h3>
-                    <p class="mt-1 text-gray-500">Prueba con otros términos de búsqueda o <a href="{{ route('admin.player-search') }}" class="text-[var(--azul)] hover:text-[var(--rojo)] font-bold">ver todos los jugadores</a>.</p>
+                    <h3 class="mt-2 text-lg font-medium text-gray-900">@lang('admin.no_players_found')</h3>
+                    <p class="mt-1 text-gray-500">@lang('admin.try_other_terms') <a href="{{ route('admin.player-search') }}" class="text-[var(--azul)] hover:text-[var(--rojo)] font-bold">@lang('admin.view_all_players')</a>.</p>
                 @else
                     <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>
-                    <h3 class="mt-2 text-lg font-medium text-gray-900">No hay jugadores registrados</h3>
-                    <p class="mt-1 text-gray-500">Para añadir jugadores, ve a <a href="{{ route('create-player') }}" class="text-[var(--azul)] hover:text-[var(--rojo)] font-bold">Registrar Jugador</a>.</p>
+                    <h3 class="mt-2 text-lg font-medium text-gray-900">@lang('admin.no_players_registered')</h3>
+                    <p class="mt-1 text-gray-500">@lang('admin.register_player_link') <a href="{{ route('create-player') }}" class="text-[var(--azul)] hover:text-[var(--rojo)] font-bold">@lang('admin.register_player_link')</a>.</p>
                 @endif
             </div>
         @endif
@@ -131,7 +131,7 @@
     <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 overflow-hidden">
         <div class="p-6">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold text-[var(--azul)]">Detalles del Jugador</h3>
+                <h3 class="text-xl font-bold text-[var(--azul)]">@lang('admin.player_details')</h3>
                 <button onclick="closePlayerDetails()" class="text-gray-400 hover:text-gray-500">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -146,27 +146,27 @@
                     <div class="flex-1">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <p class="text-sm text-gray-500">Nombre completo</p>
+                                <p class="text-sm text-gray-500">@lang('admin.full_name')</p>
                                 <p id="playerDetailName" class="font-medium"></p>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500">Correo electrónico</p>
+                                <p class="text-sm text-gray-500">@lang('admin.email')</p>
                                 <p id="playerDetailEmail" class="font-medium"></p>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500">Es partner</p>
+                                <p class="text-sm text-gray-500">@lang('admin.partner')</p>
                                 <p id="playerDetailPartner" class="font-medium"></p>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500">Código</p>
+                                <p class="text-sm text-gray-500">@lang('admin.code')</p>
                                 <p id="playerDetailCode" class="font-medium"></p>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500">Último acceso</p>
+                                <p class="text-sm text-gray-500">@lang('admin.last_access')</p>
                                 <p id="playerDetailLastLogin" class="font-medium"></p>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500">Intentos de acceso</p>
+                                <p class="text-sm text-gray-500">@lang('admin.login_attempts')</p>
                                 <p id="playerDetailAttempts" class="font-medium"></p>
                             </div>
                         </div>
@@ -174,18 +174,18 @@
                 </div>
 
                 <div class="border-t border-gray-200 pt-4 mt-2">
-                    <h4 class="font-bold text-[var(--azul)] mb-3">Historial de torneos</h4>
+                    <h4 class="font-bold text-[var(--azul)] mb-3">@lang('admin.tournament_history')</h4>
                     <div id="playerTournamentsHistory" class="max-h-60 overflow-y-auto">
-                        <p class="text-gray-500 text-center py-4">Cargando historial de torneos...</p>
+                        <p class="text-gray-500 text-center py-4">@lang('admin.loading_history')</p>
                     </div>
                 </div>
             </div>
             <div class="mt-8 flex justify-end gap-3">
                 <button onclick="closePlayerDetails()" class="px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded hover:bg-gray-200 transition-all">
-                    Cerrar
+                    @lang('admin.close')
                 </button>
                 <button id="editPlayerBtn" class="px-4 py-2 bg-[var(--azul)] text-[var(--blanco)] font-medium rounded hover:bg-[var(--rojo)] transition-all">
-                    Editar jugador
+                    @lang('admin.edit_player')
                 </button>
             </div>
         </div>
@@ -208,10 +208,10 @@
             .then(player => {
                 document.getElementById('playerDetailImage').src = `{{ asset('player-img/') }}/${player.image}`;
                 document.getElementById('playerDetailName').textContent = `${player.name} ${player.lastname}`;
-                document.getElementById('playerDetailEmail').textContent = player.mail || 'No disponible';
-                document.getElementById('playerDetailPartner').textContent = player.partner ? 'Sí' : 'No';
+                document.getElementById('playerDetailEmail').textContent = player.mail || '@lang('admin.not_available')';
+                document.getElementById('playerDetailPartner').textContent = player.partner ? '@lang('admin.yes')' : '@lang('admin.no')';
                 document.getElementById('playerDetailCode').textContent = player.code;
-                document.getElementById('playerDetailLastLogin').textContent = player.last_login ? new Date(player.last_login).toLocaleString() : 'Nunca';
+                document.getElementById('playerDetailLastLogin').textContent = player.last_login ? new Date(player.last_login).toLocaleString() : '@lang('admin.never')';
                 document.getElementById('playerDetailAttempts').textContent = player.attemp_logins || '0';
 
                 // Configurar el botón de edición
@@ -233,19 +233,19 @@
                                         <p class="font-medium">Torneo Nacional 2024</p>
                                         <p class="text-sm text-gray-500">10/03/2024</p>
                                     </div>
-                                    <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">Posición: 3</span>
+                                    <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">@lang('admin.position'): 3</span>
                                 </div>
                                 <div class="py-3 flex justify-between">
                                     <div>
                                         <p class="font-medium">Campeonato Local</p>
                                         <p class="text-sm text-gray-500">25/01/2024</p>
                                     </div>
-                                    <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">Posición: 7</span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">@lang('admin.position'): 7</span>
                                 </div>
                             </div>
                         `;
                     } else {
-                        tournamentsContainer.innerHTML = '<p class="text-gray-500 text-center py-4">Este jugador no ha participado en ningún torneo.</p>';
+                        tournamentsContainer.innerHTML = '<p class="text-gray-500 text-center py-4">@lang('admin.no_tournaments')</p>';
                     }
                 }, 500);
             })
@@ -276,7 +276,7 @@
 
     // Agregar esta función al script existente en player-search.blade.php
     function sendPlayerCode(playerId) {
-        if (confirm('¿Estás seguro de que deseas enviar el código de acceso al correo del jugador?')) {
+        if (confirm("@lang('admin.send_code_confirmation')")) {
             // Obtener el token CSRF
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
@@ -286,7 +286,7 @@
             loadingOverlay.innerHTML = `
                 <div class="bg-white p-5 rounded-lg shadow-xl">
                     <div class="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-[var(--azul)] mx-auto"></div>
-                    <p class="mt-3 text-center">Enviando correo...</p>
+                    <p class="mt-3 text-center">@lang('admin.sending_email')</p>
                 </div>
             `;
             document.body.appendChild(loadingOverlay);

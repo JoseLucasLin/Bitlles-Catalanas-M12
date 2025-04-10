@@ -62,9 +62,7 @@
                     <!-- Menú de usuario autenticado en móvil (versión compacta) -->
                     <div class="relative md:hidden" x-data="{ mobileProfileOpen: false }">
                         <button @click="mobileProfileOpen = !mobileProfileOpen" class="flex items-center focus:outline-none hover:bg-[var(--crema-oscuro)] p-2 rounded-xl transition-all duration-300" type="button">
-                            <svg class="h-8 w-8 rounded-full p-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                <path fill-rule="evenodd" d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" clip-rule="evenodd" />
-                            </svg>
+                            <img src="{{ asset('user-img/'.Auth::user()->image) }}" alt="user-img" class="w-10 h-10 rounded-full object-cover border-2 border-[var(--azul)]">
                         </button>
 
                         <!-- Menú desplegable móvil -->
@@ -107,9 +105,7 @@
                     @else
                     <div class="relative" x-data="{ profileOpen: false }">
                         <button @click="profileOpen = !profileOpen" @click.away="profileOpen = false" class="flex items-center focus:outline-none hover:bg-[var(--crema-oscuro)] p-2 rounded-xl transition-all duration-300" type="button">
-                            <svg class="h-10 w-10 rounded-full p-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                <path fill-rule="evenodd" d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" clip-rule="evenodd" />
-                            </svg>
+                            <img src="{{ asset('user-img/'.Auth::user()->image) }}" alt="user-img" class="w-10 h-10 rounded-full object-cover border-2 border-[var(--azul)]">
                             <span class="ml-2 text-[var(--azul)]">{{ Auth::user()->username }}</span>
                             <svg class="ml-1 h-5 w-5 text-[var(--azul)]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />

@@ -2,7 +2,7 @@
 
 return [
     'referee_panel' => 'Referee Panel',
-    'tournament-manager' => 'Tournament Manager',
+    'tournament_manager' => 'Tournament Manager',
     'tournament_manager_description' => 'Manage and administer player points.',
     'manage' => 'Manage',
 

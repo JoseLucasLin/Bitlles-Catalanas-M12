@@ -3,13 +3,13 @@
 @section('content')
 <main class="flex-1 ms-10 me-10">
     <div class="text-center mt-10 mb-10">
-        <h2 class="text-2xl font-bold text-[var(--azul)] mb-4">Editar Jugador</h2>
-        <p class="text-gray-600">Actualiza la información del jugador</p>
+        <h2 class="text-2xl font-bold text-[var(--azul)] mb-4">@lang('admin.edit_player')</h2>
+        <p class="text-gray-600">@lang('admin.update_player_info')</p>
     </div>
 
     @if(session('success'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6 max-w-xl mx-auto">
-            <strong>¡Éxito!</strong> {{ session('success') }}
+            <strong>@lang('admin.success')</strong> {{ session('success') }}
         </div>
     @endif
 
@@ -33,7 +33,7 @@
             </div>
             <input type="file" id="image" name="image" class="hidden" accept="image/*" onchange="previewImage()">
             <label for="image" class="text-sm text-[var(--azul)] cursor-pointer hover:text-[var(--rojo)]">
-                Cambiar foto de perfil
+                @lang('admin.change_profile_pic')
             </label>
             @error('image')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -41,34 +41,34 @@
         </div>
 
         <div class="mb-4">
-            <label for="first_name" class="block text-lg font-medium text-[var(--azul)]">Nombre</label>
-            <input type="text" id="first_name" name="first_name" class="mt-2 p-2 w-full border @error('first_name') border-red-500 @else border-[var(--azul)] @enderror rounded bg-[var(--crema)]" required placeholder="Escribe el nombre" value="{{ old('first_name', $player->name) }}">
+            <label for="first_name" class="block text-lg font-medium text-[var(--azul)]">@lang('admin.first_name')</label>
+            <input type="text" id="first_name" name="first_name" class="mt-2 p-2 w-full border @error('first_name') border-red-500 @else border-[var(--azul)] @enderror rounded bg-[var(--crema)]" required placeholder="@lang('admin.first_name')" value="{{ old('first_name', $player->name) }}">
             @error('first_name')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror
         </div>
 
         <div class="mb-4">
-            <label for="last_name" class="block text-lg font-medium text-[var(--azul)]">Apellido/s</label>
-            <input type="text" id="last_name" name="last_name" class="mt-2 p-2 w-full border @error('last_name') border-red-500 @else border-[var(--azul)] @enderror rounded bg-[var(--crema)]" required placeholder="Escribe los apellidos" value="{{ old('last_name', $player->lastname) }}">
+            <label for="last_name" class="block text-lg font-medium text-[var(--azul)]">@lang('admin.last_name')</label>
+            <input type="text" id="last_name" name="last_name" class="mt-2 p-2 w-full border @error('last_name') border-red-500 @else border-[var(--azul)] @enderror rounded bg-[var(--crema)]" required placeholder="@lang('admin.last_name')" value="{{ old('last_name', $player->lastname) }}">
             @error('last_name')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror
         </div>
 
         <div class="mb-4">
-            <label for="email" class="block text-lg font-medium text-[var(--azul)]">Correo electrónico</label>
-            <input type="email" id="email" name="email" class="mt-2 p-2 w-full border @error('email') border-red-500 @else border-[var(--azul)] @enderror rounded bg-[var(--crema)]" placeholder="ejemplo@correo.com" value="{{ old('email', $player->mail) }}">
+            <label for="email" class="block text-lg font-medium text-[var(--azul)]">@lang('admin.email')</label>
+            <input type="email" id="email" name="email" class="mt-2 p-2 w-full border @error('email') border-red-500 @else border-[var(--azul)] @enderror rounded bg-[var(--crema)]" placeholder="@lang('admin.email_placeholder')" value="{{ old('email', $player->mail) }}">
             @error('email')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror
         </div>
 
         <div class="mb-6">
-            <label for="partner" class="block text-lg font-medium text-[var(--azul)]">Es partner?</label>
+            <label for="partner" class="block text-lg font-medium text-[var(--azul)]">@lang('admin.is_partner')</label>
             <select id="partner" name="partner" class="mt-2 p-2 w-full border @error('partner') border-red-500 @else border-[var(--azul)] @enderror rounded bg-[var(--crema)]" required>
-                <option value="1" {{ old('partner', $player->partner) == 1 ? 'selected' : '' }}>Sí</option>
-                <option value="0" {{ old('partner', $player->partner) == 0 ? 'selected' : '' }}>No</option>
+                <option value="1" {{ old('partner', $player->partner) == 1 ? 'selected' : '' }}>@lang('admin.yes')</option>
+                <option value="0" {{ old('partner', $player->partner) == 0 ? 'selected' : '' }}>@lang('admin.no')</option>
             </select>
             @error('partner')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -78,10 +78,10 @@
         <div class="text-center mt-10">
             <div class="flex justify-center space-x-4">
                 <a href="{{ route('admin.player-search') }}" class="px-6 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-all">
-                    Cancelar
+                    @lang('admin.cancel')
                 </a>
                 <button type="submit" class="bg-[var(--rojo)] text-[var(--blanco)] px-6 py-2 rounded transition duration-300 hover:bg-[var(--azul)] font-bold hover:scale-105">
-                    Guardar Cambios
+                    @lang('admin.save_changes')
                 </button>
             </div>
         </div>
