@@ -55,7 +55,7 @@ class TournamentController extends Controller
             'fields.*.name' => 'required|string|max:120',
             'fields.*.referee' => 'required|integer|exists:users,id',
         ], $messages);
-        
+
         try {
             $image = $request->file('image');
             $imageName = time() . '_' . $image->getClientOriginalName();
@@ -84,7 +84,7 @@ class TournamentController extends Controller
             }
 
             return redirect()->route('createTournament')->with('success', 'Torneo creado con éxito!');
-        
+
         } catch (\Exception $e) {
             return back()->withInput()->with('error', 'Error: ' . $e->getMessage());
         }
@@ -102,6 +102,9 @@ class TournamentController extends Controller
 
     //Elimina un torneo
     public function destroy($id){
+        $tournament = Tournament::findOrFail($id);
+        $tournament->delete();
 
+        return redirect()->back()->with('success', 'Torneo eliminado con succeso.');
     }
 }
