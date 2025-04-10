@@ -232,4 +232,8 @@ Route::post('/admin/create-tournament', [TournamentController::class, 'store']) 
 //API
 Route::get('/api/players/{id}', [PlayerSearchController::class, 'getPlayerDetails'])->name('api.player.details');
 
+// Agregar en routes/web.php
+Route::post('/player/verify', [App\Http\Controllers\PlayerDashBoardController::class, 'verify'])->name('player.verify');
+Route::get('/player/dashboard/{id}', [App\Http\Controllers\PlayerDashBoardController::class, 'show'])->name('player.dashboard');
+
 
