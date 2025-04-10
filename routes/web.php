@@ -105,7 +105,7 @@ Route::middleware(['auth', 'role:2'])->prefix('admin')->group(function () {
     });
     Route::get('/create-player', [RegisteredPlayerController::class, 'index'])->name('create-player');
     Route::post('/create-player', [RegisteredPlayerController::class, 'store'])->name('create-player.store');
-    
+
     Route::get('/tournament-manager', function () {
         return view('admin.tournament-manager');
     });
@@ -116,6 +116,9 @@ Route::middleware(['auth', 'role:2'])->prefix('admin')->group(function () {
     // Rutas para gestionar jugadores
     Route::get('/edit-player/{id}', [PlayerController::class, 'edit'])->name('admin.edit-player');
     Route::put('/update-player/{id}', [PlayerController::class, 'update'])->name('admin.update-player');
+
+    // Ruta para enviar código por correo
+    Route::post('/send-player-code/{id}', [PlayerController::class, 'sendCode'])->name('admin.send-player-code');
 });
 
 // Rutas para árbitros (role:1)

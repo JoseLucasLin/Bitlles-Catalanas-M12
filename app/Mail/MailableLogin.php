@@ -9,6 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Address;
+
 class MailableLogin extends Mailable
 {
     use Queueable, SerializesModels;
@@ -16,10 +17,10 @@ class MailableLogin extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(private $name)
-    {
-        //
-    }
+    public function __construct(
+        private $name,
+        private $codigo = null
+    ) {}
 
     /**
      * Get the message envelope.
@@ -27,8 +28,8 @@ class MailableLogin extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address('bitllescatalanesdaw@gmail.com', 'Bitlles catalanes'),
-             subject: 'Bitlles catalanes',
+            from: new Address('bitllescatalanesdaw@gmail.com', 'Bitlles Catalanes'),
+            subject: 'Tu código de acceso - Bitlles Catalanes',
         );
     }
 
@@ -39,7 +40,10 @@ class MailableLogin extends Mailable
     {
         return new Content(
             view: 'templates.test-email',
-            with: ['name' => $this->name],
+            with: [
+                'name' => $this->name,
+                'codigo' => $this->codigo
+            ],
         );
     }
 

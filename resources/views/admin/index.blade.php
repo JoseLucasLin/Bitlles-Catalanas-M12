@@ -6,9 +6,10 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Bitlles Catalanes</title>
         @vite(['resources/css/app.css', 'resources/css/admin.css'])
+        <meta name="csrf-token" content="{{ csrf_token() }}">
     </head>
 <body class="flex flex-col min-h-screen">
-    
+
     @include('layouts.nav')
 
     @yield('content')
