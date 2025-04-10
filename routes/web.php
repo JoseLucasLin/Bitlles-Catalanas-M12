@@ -26,7 +26,9 @@ use Illuminate\Support\Facades\Mail;
 
 // Rutas principales accesibles para todos
 Route::get('/', [MainController::class, 'index']);
-
+Route::get('player-acces', function (){
+    return view('auth.player-acces');
+ });
 
 // Rutas de prueba
 
@@ -142,7 +144,7 @@ Route::get('/emailpro', function() {
 // Rutas accesibles para cualquier usuario autenticado
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        return view ('main.index');
     })->name('dashboard');
 
     // Rutas de perfil de usuario
@@ -172,10 +174,6 @@ Route::middleware('guest')->group(function () {
                 ->name('login');
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
-    //Login Usuario
-    Route::get('/user-login', function (){
-       return view('auth.userLogin');
-    });
     // Recuperación de contraseña
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
                 ->name('password.request');
