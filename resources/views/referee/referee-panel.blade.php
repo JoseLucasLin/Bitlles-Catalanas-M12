@@ -11,7 +11,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
         <div class="bg-[var(--crema)] p-4 shadow-xl rounded-lg border-[var(--azul)] border">
-            <h3 class="text-lg font-semibold text-[var(--azul)]">{{ __('referee.tournament-manager') }}</h3>
+            <h3 class="text-lg font-semibold text-[var(--azul)]">{{ __('referee.tournament_manager') }}</h3>
             <p class="text-sm text-[var(--azul)]">{{ __('referee.tournament_manager_description') }}</p>
             <div class="mt-2 flex justify-start">
                 <a href="/referee/points-manager" class="bg-[var(--rojo)] text-[var(--blanco)] px-4 py-2 rounded transition duration-300 hover:bg-[var(--azul)] font-bold hover:scale-105 inline-flex items-center space-x-2">

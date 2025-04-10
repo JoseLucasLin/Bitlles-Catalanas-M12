@@ -2,7 +2,7 @@
 
 return [
     'referee_panel' => 'Panel del Árbitro',
-    'tournament-manager' => 'Gestor de Torneo',
+    'tournament_manager' => 'Gestor de Torneo',
     'tournament_manager_description' => 'Administra y gestiona puntos de los jugadores.',
     'manage' => 'Gestionar',
 
