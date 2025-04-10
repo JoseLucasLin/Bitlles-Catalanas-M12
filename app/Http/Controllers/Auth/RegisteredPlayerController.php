@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Storage;
-
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class RegisteredPlayerController extends Controller
 {
@@ -30,7 +30,9 @@ class RegisteredPlayerController extends Controller
      */
     public function create()
     {
-        return redirect() -> back();
+        $token = JWTAuth::fromUser();
+
+        return response()->json(['token' => $token]);
     }
 
     /**

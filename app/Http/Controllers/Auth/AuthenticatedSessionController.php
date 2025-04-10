@@ -10,8 +10,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use App\Models\User;
 use App\Models\Role;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
-class AuthenticatedSessionController extends Controller
+class AuthenticatedSessionController extends Controller 
 {
     /**
      * Display the login view.
@@ -26,6 +28,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+        
         $request->authenticate();
 
         $request->session()->regenerate();
@@ -51,6 +54,9 @@ class AuthenticatedSessionController extends Controller
             }
         }
 
+        $token = JWTAuth::fromUser($user);
+
+        cookie()->json(compact('user','token'), 201);
         // Si no coincide con los roles esperados o hay un problema
         return redirect('/');
     }
@@ -66,6 +72,11 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
+        JWTAuth::invalidate(JWTAuth::getToken());
+
+        //return response()->json(['message' => 'Successfully logged out']);
         return redirect('/');
     }
+
+
 }
