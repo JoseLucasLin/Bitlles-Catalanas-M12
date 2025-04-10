@@ -29,7 +29,7 @@
                                     <option value="{{ $type->id }}" @selected(old('type') == $type->id)>
                                         {{ $type->type_name }}
                                     </option>
-                                @endforeach                                
+                                @endforeach
                             </select>
                             @error('type')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -119,16 +119,16 @@
 
                     <script>
                         let fieldIndex = 1;
-                    
+
                         document.getElementById('add-field').addEventListener('click', () => {
                             const container = document.getElementById('fields-container');
                             const group = document.createElement('div');
                             group.classList.add('field-group', 'mb-4');
-                    
+
                             group.innerHTML = `
                                 <input type="text" name="fields[${fieldIndex}][name]" placeholder="Nombre de la pista"
                                        class="field-input w-full mb-2 bg-[#F6F4F2] border border-[var(--azul)] rounded-md p-2" required>
-                    
+
                                 <select name="fields[${fieldIndex}][referee]" class="referee-select w-full bg-[#F6F4F2] border border-[var(--azul)] rounded-md p-2" required>
                                     <option value="">Seleccione un árbitro</option>
                                     @foreach($referees as $ref)
@@ -140,7 +140,7 @@
                             fieldIndex++;
                         });
                     </script>
-                    
+
                 </form>
             </div>
         </div>

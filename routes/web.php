@@ -105,7 +105,7 @@ Route::middleware(['auth', 'role:2'])->prefix('admin')->group(function () {
     });
     Route::get('/create-player', [RegisteredPlayerController::class, 'index'])->name('create-player');
     Route::post('/create-player', [RegisteredPlayerController::class, 'store'])->name('create-player.store');
-    
+
     Route::get('/tournament-manager', function () {
         return view('admin.tournament-manager');
     });
@@ -169,6 +169,10 @@ Route::middleware('guest')->group(function () {
                 ->name('login');
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
+    //Login Usuario
+    Route::get('/user-login', function (){
+       return view('auth.userLogin');
+    });
     // Recuperación de contraseña
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
                 ->name('password.request');
