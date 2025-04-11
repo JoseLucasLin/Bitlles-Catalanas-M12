@@ -76,6 +76,16 @@
                             @enderror
                         </div>
 
+                        <!-- Campo Número de Rondas -->
+                        <div>
+                            <label for="rounds" class="block text-lg font-semibold text-[var(--azul)]">@lang('admin.total_rounds')</label>
+                            <input type="number" name="rounds" id="rounds" value="{{ old('rounds') }}" min="1" required
+                                class="w-full bg-[#F6F4F2] border border-[var(--azul)] rounded-md focus:border-sky-500 p-2 @error('rounds') border-red-500 @enderror">
+                            @error('rounds')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
                         <!--pistas-->
                         <div id="fields-container" class="col-span-2">
                             <h3 class="text-lg font-semibold text-[var(--azul)] mb-2">@lang('admin.add_fields')</h3>
@@ -115,6 +125,15 @@
                         <button type="submit" class="btn-primary px-4 py-2 bg-[var(--rojo)] text-white rounded-md transition-all duration-300 hover:bg-[var(--azul)] font-bold hover:scale-105">
                             @lang('admin.create_button')
                         </button>
+                    </div>
+
+                    <div class="mt-2">
+                        <a href="/admin" class="text-[var(--azul)] hover:text-[var(--rojo)] font-semibold flex items-center justify-center transition duration-300 underline">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" />
+                            </svg>
+                            <span class="ms-1">@lang('admin.back_to_dashboard')</span>
+                        </a>
                     </div>
 
                     <script>

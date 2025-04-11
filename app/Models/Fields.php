@@ -15,11 +15,6 @@ class Fields extends Model
         'field_name'
     ];
 
-    public function rounds()
-    {
-        return $this->hasMany(Round::class, 'id_field');
-    }
-
     public function refereeTournaments()
     {
         return $this->hasMany(Referee_Tournament::class, 'id_field');

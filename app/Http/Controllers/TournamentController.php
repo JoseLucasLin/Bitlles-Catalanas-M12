@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use App\Models\Type_Tournament;
 use App\Models\User;
 use App\Models\Fields;
+use App\Models\Round;
 use App\Models\Referee_Tournament;
 
 class TournamentController extends Controller
@@ -39,6 +40,9 @@ class TournamentController extends Controller
             'image.image' => 'El archivo debe ser una imagen',
             'image.mimes' => 'Formatos aceptados: JPG, PNG',
             'image.max' => 'La imagen no debe superar 2MB',
+            'rounds.required' => 'Debe indicar cuántas rondas tendrá el torneo',
+            'rounds.integer' => 'El número de rondas debe ser un número entero',
+            'rounds.min' => 'Debe haber al menos una ronda',
             'fields.required' => 'Debe añadir al menos una pista',
             'fields.*.name.required' => 'El nombre de la pista es obligatorio',
             'fields.*.referee.required' => 'Debe asignar un árbitro a cada pista',
@@ -51,6 +55,7 @@ class TournamentController extends Controller
             'partner_price' => 'required|numeric|min:0',
             'expected_date' => 'required|date|after:today',
             'image' => 'required|image|mimes:jpg,png|max:2048',
+            'rounds' => 'required|integer|min:1',
             'fields' => 'required|array|min:1',
             'fields.*.name' => 'required|string|max:120',
             'fields.*.referee' => 'required|integer|exists:users,id',
@@ -80,6 +85,14 @@ class TournamentController extends Controller
                     'id_tournament' => $tournament->id,
                     'id_user_referee' => $field['referee'],
                     'id_field' => $newField->id
+                ]);
+            }
+
+            for ($i = 1; $i <= $validatedData['rounds']; $i++) {
+                \App\Models\Round::create([
+                    'id_tournament' => $tournament->id,
+                    'id_status' => 1, // o el status por defecto (pendiente, por ejemplo)
+                    'round_number' => $i
                 ]);
             }
 

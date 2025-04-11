@@ -11,9 +11,10 @@ class Round extends Model
 
     protected $table = 'rounds';
 
+    public $timestamps = false;
+
     protected $fillable = [
         'id_tournament',
-        'id_field',
         'id_status',
         'round_number',
         'start_time',
@@ -28,11 +29,6 @@ class Round extends Model
     public function tournament()
     {
         return $this->belongsTo(Tournament::class, 'id_tournament');
-    }
-
-    public function field()
-    {
-        return $this->belongsTo(Fields::class, 'id_field');
     }
 
     public function status()
@@ -66,6 +62,30 @@ class Round extends Model
             'id_player_round', // Foreign key on PlayerThrows table
             'id', // Local key on Round table
             'id' // Local key on PlayerRound table
+        );
+    }
+
+    public function field()
+    {
+        return $this->hasOneThrough(
+            Fields::class,
+            Referee_Tournament::class,
+            'id_tournament', // FK en referee_tournaments
+            'id', // FK en fields
+            'id_tournament', // Local key en rounds (usamos id_tournament en lugar de id)
+            'id_field' // Local key en referee_tournaments
+        );
+    }
+
+    public function refereeTournament()
+    {
+        return $this->hasOneThrough(
+            Referee_Tournament::class,
+            Tournament::class,
+            'id', // FK en tournaments
+            'id_tournament', // FK en referee_tournaments
+            'id_tournament', // Local key en rounds
+            'id' // Local key en tournaments
         );
     }
 }
