@@ -124,6 +124,15 @@
             </div>
         @endif
     </div>
+
+    <div class="mt-2">
+        <a href="/admin" class="text-[var(--azul)] hover:text-[var(--rojo)] font-semibold flex items-center justify-center transition duration-300 underline">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" />
+            </svg>
+            <span class="ms-1">@lang('admin.back_to_dashboard')</span>
+        </a>
+    </div>
 </main>
 
 <!-- Modal para ver detalles del jugador -->

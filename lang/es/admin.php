@@ -171,4 +171,6 @@ return [
     'resolve_tie' => 'Resolver empate',
     'modify' => 'Modificar',
     'next_round' => 'Siguiente ronda',
+
+    'total_rounds' => 'Numero de rondas total',
 ];

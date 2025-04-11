@@ -14,6 +14,7 @@ class StatusSeed extends Seeder
     public function run(): void
     {
         DB::table('Status')->insert([
+            ['name' => 'Creado'],
             ['name' => 'Esperando'],
             ['name' => 'Tirando'],
             ['name' => 'Recogiendo']

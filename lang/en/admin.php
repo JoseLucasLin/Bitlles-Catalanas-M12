@@ -172,4 +172,6 @@ return [
     'resolve_tie' => 'Resolve tie',
     'modify' => 'Modify',
     'next_round' => 'Next round',
+
+    'total_rounds' => 'Total rounds number',
 ];
