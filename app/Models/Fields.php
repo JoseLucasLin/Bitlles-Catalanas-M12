@@ -9,7 +9,11 @@ class Fields extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['field_name'];
+    protected $table = 'fields';
+
+    protected $fillable = [
+        'field_name'
+    ];
 
     public function refereeTournaments()
     {

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Players;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MailableLogin;
 
 class PlayerController extends Controller
 {
@@ -78,5 +80,36 @@ class PlayerController extends Controller
     //Elimina un jugador
     public function destroy($id){
         // Implementación futura si necesitas eliminar jugadores
+    }
+
+    /**
+     * Enviar código del jugador por correo electrónico
+     */
+    public function sendCode(Request $request, $id)
+    {
+        $player = Players::findOrFail($id);
+
+        // Verificar que el jugador tenga un correo electrónico
+        if (empty($player->mail)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'El jugador no tiene un correo electrónico registrado'
+            ], 400);
+        }
+
+        try {
+            // Enviar correo con el código
+            Mail::to($player->mail)->send(new MailableLogin($player->name, $player->code));
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Código enviado correctamente a ' . $player->mail
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al enviar el código: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

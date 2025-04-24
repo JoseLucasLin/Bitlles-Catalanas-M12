@@ -19,11 +19,17 @@ return new class extends Migration
         id_status INTEGER NOT NULL
         ); */
         Schema::dropIfExists('rounds');
+
         Schema::create('rounds', function (Blueprint $table) {
-            $table->id()->primary();
-            $table->integer('id_player')->nullable(false)->references('id')->on('players');
-            $table->integer('id_field')->nullable(false)->references('id')->on('fields');
-            $table->integer('id_status')->nullable(false)->references('id')->on('status');
+            $table->id();
+            $table->unsignedBigInteger('id_tournament');
+            $table->unsignedBigInteger('id_status');
+            $table->integer('round_number');
+            $table->timestamp('start_time')->nullable();
+            $table->timestamp('end_time')->nullable();
+
+            $table->foreign('id_tournament')->references('id')->on('tournaments')->onDelete('cascade');
+            $table->foreign('id_status')->references('id')->on('status')->onDelete('restrict');
         });
     }
 

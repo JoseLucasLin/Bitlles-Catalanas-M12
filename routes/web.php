@@ -20,13 +20,16 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\PlayerSearchController;
+use App\Http\Controllers\AddPlayersController;
 
 use App\Mail\MailableLogin;
 use Illuminate\Support\Facades\Mail;
 
 // Rutas principales accesibles para todos
 Route::get('/', [MainController::class, 'index']);
-
+Route::get('player-acces', function (){
+    return view('auth.player-acces');
+ });
 
 // Rutas de prueba
 
@@ -100,12 +103,12 @@ Route::middleware(['auth', 'role:2'])->prefix('admin')->group(function () {
     Route::get('/create-referee', function () {
         return view('admin.create-referee');
     });
-    Route::get('/add-players', function () {
-        return view('admin.add-players');
-    });
+    //Route::get('/add-players', [AddPlayersController::class, 'index'])->name('admin.add-players');
+    //Route::post('/assign-player', [AddPlayersController::class, 'assignPlayer'])->name('admin.assign-player');
+    //Route::delete('/remove-player/{id}', [AddPlayersController::class, 'removePlayer'])->name('admin.remove-player');
     Route::get('/create-player', [RegisteredPlayerController::class, 'index'])->name('create-player');
     Route::post('/create-player', [RegisteredPlayerController::class, 'store'])->name('create-player.store');
-    
+
     Route::get('/tournament-manager', function () {
         return view('admin.tournament-manager');
     });
@@ -116,6 +119,9 @@ Route::middleware(['auth', 'role:2'])->prefix('admin')->group(function () {
     // Rutas para gestionar jugadores
     Route::get('/edit-player/{id}', [PlayerController::class, 'edit'])->name('admin.edit-player');
     Route::put('/update-player/{id}', [PlayerController::class, 'update'])->name('admin.update-player');
+
+    // Ruta para enviar código por correo
+    Route::post('/send-player-code/{id}', [PlayerController::class, 'sendCode'])->name('admin.send-player-code');
 });
 
 // Rutas para árbitros (role:1)
@@ -139,7 +145,7 @@ Route::get('/emailpro', function() {
 // Rutas accesibles para cualquier usuario autenticado
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        return view ('main.index');
     })->name('dashboard');
 
     // Rutas de perfil de usuario
@@ -226,5 +232,9 @@ Route::post('/admin/create-tournament', [TournamentController::class, 'store']) 
 
 //API
 Route::get('/api/players/{id}', [PlayerSearchController::class, 'getPlayerDetails'])->name('api.player.details');
+
+// Agregar en routes/web.php
+Route::post('/player/verify', [App\Http\Controllers\PlayerDashBoardController::class, 'verify'])->name('player.verify');
+Route::get('/player/dashboard/{id}', [App\Http\Controllers\PlayerDashBoardController::class, 'show'])->name('player.dashboard');
 
 

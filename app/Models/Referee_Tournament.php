@@ -14,7 +14,7 @@ class Referee_Tournament extends Model
     protected $fillable = [
         'id_tournament',
         'id_user_referee',
-        'id_field',
+        'id_field'
     ];
 
     public function tournament()
@@ -22,13 +22,13 @@ class Referee_Tournament extends Model
         return $this->belongsTo(Tournament::class, 'id_tournament');
     }
 
-    public function user()
+    public function referee()
     {
         return $this->belongsTo(User::class, 'id_user_referee');
     }
 
     public function field()
     {
-        return $this->belongsTo(Field::class, 'id_field');
+        return $this->belongsTo(Fields::class, 'id_field');
     }
 }

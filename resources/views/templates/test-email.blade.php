@@ -29,9 +29,6 @@
                     <p style="font-size: 28px; font-weight: bold; letter-spacing: 5px; margin: 0; color: #be1622;">{{ $codigo ?? '1a2b3c4d' }}</p>
                 </div>
 
-                <p style="color: #333333; font-size: 16px; line-height: 1.6;">
-                    Aquest codi és vàlid durant 30 minuts. Si no has sol·licitat aquest codi, pots ignorar aquest correu.
-                </p>
             </td>
         </tr>
 
