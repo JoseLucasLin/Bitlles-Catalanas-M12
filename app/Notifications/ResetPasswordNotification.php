@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\HtmlString;
 
 class ResetPasswordNotification extends ResetPassword
 {
@@ -12,16 +13,13 @@ class ResetPasswordNotification extends ResetPassword
      */
     public function toMail($notifiable)
     {
+        $resetUrl = url(route('password.reset', [
+            'token' => $this->token,
+            'mail' => $notifiable->getEmailForPasswordReset(),
+        ], false));
+
         return (new MailMessage)
             ->subject('Restablecer contraseña - Bitlles Catalanes')
-            ->greeting('Hola')
-            ->line('Has recibido este correo porque solicitaste restablecer tu contraseña.')
-            ->action('Restablecer Contraseña', url(route('password.reset', [
-                'token' => $this->token,
-                'mail' => $notifiable->getEmailForPasswordReset(),
-            ], false)))
-            ->line('Este enlace expirará en ' . config('auth.passwords.users.expire') . ' minutos.')
-            ->line('Si no solicitaste restablecer tu contraseña, puedes ignorar este mensaje.')
-            ->salutation('Saludos, Equipo de Bitlles Catalanes');
+            ->view('templates.reset_password_mail', ['resetUrl' => $resetUrl]);
     }
 }
