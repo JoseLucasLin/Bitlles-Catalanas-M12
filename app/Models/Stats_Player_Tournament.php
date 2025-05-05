@@ -9,7 +9,10 @@ class Stats_Player_Tournament extends Model
 {
     use HasFactory;
 
-    protected $table = 'stats_player_tournament';
+    protected $table = 'stats_player_tournaments';
+
+    // Añadir esta línea para desactivar los timestamps
+    public $timestamps = false;
 
     protected $fillable = [
         'id_player',

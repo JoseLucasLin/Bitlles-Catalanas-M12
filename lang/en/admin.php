@@ -53,7 +53,7 @@ return [
         'email' => 'Email',
         'save_changes' => 'Save Changes',
         'update_success' => 'Profile updated successfully!',
-        
+
         'update_password' => 'Update Password',
         'password_description' => 'Ensure your account is using a long, random password to stay secure.',
         'current_password' => 'Current Password',
@@ -61,7 +61,7 @@ return [
         'confirm_password' => 'Confirm Password',
         'change_password' => 'Change Password',
         'password_success' => 'Password updated successfully!',
-        
+
         'delete_account' => 'Delete Account',
         'delete_description' => 'Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.',
         'delete_button' => 'Delete Account',
@@ -147,7 +147,7 @@ return [
     'no' => 'No',
     'never' => 'Never',
     'not_available' => 'Not available',
-    
+
     'edit_player' => 'Edit Player',
     'update_player_info' => 'Update player information',
     'change_profile_pic' => 'Change profile picture',
@@ -174,4 +174,9 @@ return [
     'next_round' => 'Next round',
 
     'total_rounds' => 'Total rounds number',
+    'select_player' => 'Select player',
+    'stats' => 'Stats',
+    'registered_players_list' => 'Registered players list',
+    'add_players' => 'Add players',
+
 ];
