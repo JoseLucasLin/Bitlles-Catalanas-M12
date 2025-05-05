@@ -53,7 +53,7 @@ return [
         'email' => 'Correo Electrónico',
         'save_changes' => 'Guardar Cambios',
         'update_success' => '¡Perfil actualizado correctamente!',
-        
+
         'update_password' => 'Actualizar Contraseña',
         'password_description' => 'Asegúrese de que su cuenta esté usando una contraseña larga y aleatoria para mantener la seguridad.',
         'current_password' => 'Contraseña Actual',
@@ -61,7 +61,7 @@ return [
         'confirm_password' => 'Confirmar Contraseña',
         'change_password' => 'Cambiar Contraseña',
         'password_success' => '¡Contraseña actualizada correctamente!',
-        
+
         'delete_account' => 'Eliminar Cuenta',
         'delete_description' => 'Una vez que se elimine su cuenta, todos sus recursos y datos se borrarán permanentemente. Antes de eliminar su cuenta, descargue cualquier dato o información que desee conservar.',
         'delete_button' => 'Eliminar Cuenta',
@@ -173,4 +173,9 @@ return [
     'next_round' => 'Siguiente ronda',
 
     'total_rounds' => 'Numero de rondas total',
+    'select_player' => 'Seleccionar jugador',
+    'stats' => 'Estadísticas',
+    'registered_players_list' => 'Lista de jugadores registrados',
+    'tournament_round' => 'Ronda del torneo',
+    'add_players' => 'Añadir jugadores',
 ];
