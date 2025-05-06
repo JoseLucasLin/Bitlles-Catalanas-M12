@@ -57,6 +57,10 @@ Route::get('/admin/add-players', function () {
     return view('admin.add-players');
 })->middleware(['auth']);
 
+Route::get('/admin/players-fields', function () {
+    return view('admin.players-fields');
+})->middleware(['auth'])->name('admin.players-fields');
+
 // TOURNAMENT MANAGER
 Route::get('/admin/tournament-manager', function () {
     return view('admin.tournament-manager');

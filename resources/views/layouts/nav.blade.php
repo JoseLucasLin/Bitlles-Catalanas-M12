@@ -2,25 +2,14 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-24">
 
-            <!-- Logo -->
             <div class="flex-shrink-0 flex items-center">
                 <a href="/">
                     <img src="{{ asset('main-img/logo.png') }}" alt="logo" class="h-[7rem]">
                 </a>
             </div>
 
-            <!-- Menú principal (escritorio) -->
-            <div class="hidden md:flex md:items-center md:space-x-6">
-                <a href="#" class="header-link p-3 transition-all duration-300 rounded-lg font-semibold text-lg navbar-text hover:bg-[var(--crema-oscuro)]">{{__("navbar.option1")}}</a>
-                <a href="#" class="header-link p-3 transition-all duration-300 rounded-lg font-semibold text-lg navbar-text hover:bg-[var(--crema-oscuro)]">{{__("navbar.option2")}}</a>
-                <a href="#" class="header-link p-3 transition-all duration-300 rounded-lg font-semibold text-lg navbar-text hover:bg-[var(--crema-oscuro)]">{{__("navbar.option3")}}</a>
-                <a href="#" class="header-link p-3 transition-all duration-300 rounded-lg font-semibold text-lg navbar-text hover:bg-[var(--crema-oscuro)]">{{__("navbar.option4")}}</a>
-                <a href="#" class="header-link p-3 transition-all duration-300 rounded-lg font-semibold text-lg navbar-text hover:bg-[var(--crema-oscuro)]">{{__("navbar.option5")}}</a>
-            </div>
-
-            <!-- Elementos de la derechaa -->
             <div class="flex items-center space-x-2">
-                <!-- Selector de idioma -->
+
                 <div class="relative" x-data="{ languageOpen: false }">
                     <button @click="languageOpen = !languageOpen" @click.away="languageOpen = false" class="text-[var(--azul)] hover:text-[var(--rojo)] flex items-center focus:outline-none p-3 rounded-xl hover:bg-[var(--crema-oscuro)] transition-all duration-300">
                         <img src="{{ asset('flags/' . app()->getLocale() . '.png') }}" alt="{{ app()->getLocale() }}" class="h-5 w-7 me-1">
@@ -48,9 +37,8 @@
                     </div>
                 </div>
 
-                <!-- Menú de usuario (visible en móvil y escritorio) -->
                 @guest
-                    <!-- Botón de login en móvil -->
+
                     <div class="md:hidden">
                         <a class="text-white p-2 transition-all duration-300 rounded-lg font-semibold text-sm bg-[var(--azul)] hover:bg-[var(--rojo)] flex items-center" href="{{ route('login') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -58,14 +46,14 @@
                             </svg>
                         </a>
                     </div>
+
                 @else
-                    <!-- Menú de usuario autenticado en móvil (versión compacta) -->
+
                     <div class="relative md:hidden" x-data="{ mobileProfileOpen: false }">
                         <button @click="mobileProfileOpen = !mobileProfileOpen" class="flex items-center focus:outline-none hover:bg-[var(--crema-oscuro)] p-2 rounded-xl transition-all duration-300" type="button">
                             <img src="{{ asset('user-img/'.Auth::user()->image) }}" alt="user-img" class="w-10 h-10 rounded-full object-cover border-2 border-[var(--azul)]">
                         </button>
 
-                        <!-- Menú desplegable móvil -->
                         <div x-show="mobileProfileOpen" @click.away="mobileProfileOpen = false" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-[var(--azul)]">
                             <div class="px-4 py-2 text-sm text-[var(--azul)] font-bold border-b border-[var(--azul)]">
                                 {{ Auth::user()->username }}
@@ -93,7 +81,6 @@
                     </div>
                 @endguest
 
-                <!-- Menú de usuario (escritorio) - se mantiene igual -->
                 <div class="hidden md:flex md:items-center">
                     @guest
                     <a class="text-white p-3 transition-all duration-300 rounded-lg font-semibold text-lg bg-[var(--azul)] hover:bg-[var(--rojo)] flex items-center" href="{{ route('login') }}">
@@ -136,30 +123,10 @@
                     </div>
                     @endguest
                 </div>
-
-                <!-- Botón de menú móvil -->
-                <div class="flex items-center md:hidden navbar-text">
-                    <button @click="mobileOpen = !mobileOpen" class="header-link p-3 rounded-lg transition-all duration-300 hover:bg-[var(--crema-oscuro)]">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                        </svg>
-                    </button>
-                </div>
             </div>
         </div>
     </div>
 
-    <!-- Menú móvil (se mantiene igual) -->
-    <div x-show="mobileOpen" class="md:hidden navbar-mini">
-        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 text-center">
-            <a href="#" class="block header-link p-3 rounded-lg transition-all duration-300 font-medium text-lg navbar-text hover:bg-[var(--crema)]">{{__("navbar.option1")}}</a>
-            <a href="#" class="block header-link p-3 rounded-lg transition-all duration-300 font-medium text-lg navbar-text hover:bg-[var(--crema)]">{{__("navbar.option2")}}</a>
-            <a href="#" class="block header-link p-3 rounded-lg transition-all duration-300 font-medium text-lg navbar-text hover:bg-[var(--crema)]">{{__("navbar.option3")}}</a>
-            <a href="#" class="block header-link p-3 rounded-lg transition-all duration-300 font-medium text-lg navbar-text hover:bg-[var(--crema)]">{{__("navbar.option4")}}</a>
-            <a href="#" class="block header-link p-3 rounded-lg transition-all duration-300 font-medium text-lg navbar-text hover:bg-[var(--crema)]">{{__("navbar.option5")}}</a>
-        </div>
-    </div>
 </nav>
 
-<!-- Asegúrate de incluir Alpine.js -->
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
