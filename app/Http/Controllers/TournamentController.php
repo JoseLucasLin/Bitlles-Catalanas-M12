@@ -50,7 +50,7 @@ class TournamentController extends Controller
 
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'type' => 'required|integer|exists:Type_Tournament,id',
+            'type' => 'required|integer|exists:type_tournament,id',
             'normal_price' => 'required|numeric|min:0',
             'partner_price' => 'required|numeric|min:0',
             'expected_date' => 'required|date|after:today',

@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\Role;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Illuminate\Support\Facades\Cookie;
 
 class AuthenticatedSessionController extends Controller 
 {
@@ -27,56 +28,73 @@ class AuthenticatedSessionController extends Controller
      * Handle an incoming authentication request.
      */
     public function store(LoginRequest $request): RedirectResponse
-    {
-        
-        $request->authenticate();
-
-        $request->session()->regenerate();
-
-        // Actualizar last_login utilizando el método update en lugar de save
-        $userId = Auth::id();
-        User::where('id', $userId)->update(['last_login' => now()]);
-
-        // Obtener el usuario actualizado
-        $user = Auth::user();
-
-        // Obtener información del rol
-        $role = Role::find($user->role);
-
-        // Verificar que el rol exista y corresponda al esperado
-        if ($role) {
-            if ($role->id == 1 && $role->name == 'arbitro') {
-                // Rol de árbitro verificado
-                return redirect('/');
-            } elseif ($role->id == 2 && $role->name == 'admin') {
-                // Rol de administrador verificado
-                return redirect('/admin');
-            }
-        }
-
-        $token = JWTAuth::fromUser($user);
-
-        cookie()->json(compact('user','token'), 201);
-        // Si no coincide con los roles esperados o hay un problema
-        return redirect('/');
+{
+    // Autenticar usuario
+    if (!Auth::attempt($request->only('mail', 'password'))) {
+        return back()->withErrors(['mail' => 'Las credenciales son incorrectas']);
     }
+
+    // Regenerar sesión (por seguridad)
+    $request->session()->regenerate();
+
+    $user = \App\Models\User::find(Auth::id());
+
+    if ($user) {
+        $user->last_login = now();
+        $user->save();
+    }
+    // Generar el token JWT
+    $token = JWTAuth::fromUser($user);
+
+    // Crear la respuesta de redirección
+    $response = redirect(match ($user->role) {
+        1 => '/',
+        2 => '/admin',
+        default => '/',
+    });
+
+    // Establecer la cookie en la respuesta
+    return $response->withCookie(
+        cookie(
+            'jwt_token', // Nombre de la cookie
+            $token, // Valor (el token)
+            60 * 24 * 7, // Expiración en minutos (7 días)
+            '/', // Ruta
+            null, // Dominio
+            true, // Solo HTTPS
+            true // HttpOnly (previene accesos desde JavaScript)
+        )
+    );
+}
+
 
     /**
      * Destroy an authenticated session.
      */
+
     public function destroy(Request $request): RedirectResponse
     {
+        // Cerrar sesión con Laravel (para autenticación de sesión)
         Auth::guard('web')->logout();
-
+    
+        // Invalidar la sesión
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
-
-        JWTAuth::invalidate(JWTAuth::getToken());
-
-        //return response()->json(['message' => 'Successfully logged out']);
-        return redirect('/');
+    
+        // Intentar invalidar el token JWT si existe
+        try {
+            if ($token = Cookie::get('jwt_token')) {
+                JWTAuth::invalidate($token);
+                Cookie::destroy('jwt_token');
+            }
+        } catch (JWTException $e) {
+            // Manejo del error si el token no es válido
+            return redirect('/')->with('error', 'Token inválido o sesión ya cerrada.');
+        }
+    
+        return redirect('/')->with('message', 'Sesión cerrada exitosamente.');
     }
+    
 
 
 }

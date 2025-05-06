@@ -17,7 +17,7 @@ class PlayerSeed extends Seeder
         //
         for ($i=0; $i < 50; $i++) { 
             # code...
-            DB::table('Player')->insert([
+            DB::table('player')->insert([
                 'name' => 'Pepe-'.Str::random(60),
                 'lastname' => 'NOSOYSANCHEZ-'.Str::random(40),
                 'mail' => Str::random(10).'@example.com',

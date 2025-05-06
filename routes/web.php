@@ -38,7 +38,9 @@ Route::get('/test', function () {
     return view('main.index');
 });
 
-
+Route::get('/general', function () {
+    return view('tables.generalTable');
+});
 // ADMIN
 Route::get('/admin', function () {
     return view('admin.admin-panel');
@@ -154,9 +156,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Otras rutas que requieren autenticación pero no roles específicos
-    Route::get('/general', function () {
-        return view('tables.generalTable');
-    });
+
 
     Route::get('/global', function () {
         return view('tables.globalTable');

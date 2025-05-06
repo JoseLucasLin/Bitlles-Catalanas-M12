@@ -13,7 +13,7 @@ class StatusSeed extends Seeder
      */
     public function run(): void
     {
-        DB::table('Status')->insert([
+        DB::table('status')->insert([
             ['name' => 'Creado'],
             ['name' => 'Esperando'],
             ['name' => 'Tirando'],
