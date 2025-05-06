@@ -65,6 +65,42 @@ Route::get('/admin/players-fields', function () {
 Route::get('/admin/tournament-manager', function () {
     return view('admin.tournament-manager');
 });
+
+Route::middleware(['auth', 'role:2'])->prefix('admin')->group(function () {
+    Route::get('/add-players', [App\Http\Controllers\AddPlayersController::class, 'index'])->name('admin.add-players');
+    Route::post('/players/assign', [App\Http\Controllers\AddPlayersController::class, 'assignPlayer'])->name('admin.players.assign');
+    Route::delete('/players/remove/{id}', [App\Http\Controllers\AddPlayersController::class, 'removePlayer'])->name('admin.players.remove');
+    Route::post('/referees/assign', [App\Http\Controllers\AddPlayersController::class, 'assignReferee'])->name('admin.referees.assign');
+});
+
+
+// Rutas para el gestor de torneos
+Route::middleware(['auth', 'role:2'])->prefix('admin')->group(function () {
+    // Vista principal de gestión de torneos
+
+    Route::get('/admin/tournament-manager', [App\Http\Controllers\TournamentManagerController::class, 'index'])
+    ->name('admin.tournament-manager');
+
+    // Obtener información del torneo
+    Route::get('/tournaments/{id}/info', [App\Http\Controllers\TournamentManagerController::class, 'showTournament']);
+
+    // Obtener jugadores del torneo
+    Route::get('/tournaments/{id}/players', [App\Http\Controllers\TournamentManagerController::class, 'getTournamentPlayers']);
+
+    // Iniciar torneo
+    Route::post('/tournaments/{id}/start', [App\Http\Controllers\TournamentManagerController::class, 'startTournament']);
+
+    // Avanzar a la siguiente ronda
+    Route::post('/tournaments/{id}/next-round', [App\Http\Controllers\TournamentManagerController::class, 'nextRound']);
+
+    // Resolver empates
+    Route::post('/tournaments/{id}/resolve-tie', [App\Http\Controllers\TournamentManagerController::class, 'resolveTie']);
+
+    // Editar torneo
+    Route::get('/tournaments/{id}/edit', [App\Http\Controllers\TournamentManagerController::class, 'edit'])
+        ->name('admin.tournaments.edit');
+});
+
 // CREATE TOURNAMENT
 Route::get('/admin/create-tournament', [TournamentController::class, 'create']) -> name('createTournament');
 
@@ -113,9 +149,6 @@ Route::middleware(['auth', 'role:2'])->prefix('admin')->group(function () {
     Route::get('/create-player', [RegisteredPlayerController::class, 'index'])->name('create-player');
     Route::post('/create-player', [RegisteredPlayerController::class, 'store'])->name('create-player.store');
 
-    Route::get('/tournament-manager', function () {
-        return view('admin.tournament-manager');
-    });
 
     // Rutas de búsqueda de jugadores
     Route::get('/player-search', [PlayerSearchController::class, 'index'])->name('admin.player-search');
@@ -241,4 +274,5 @@ Route::get('/api/players/{id}', [PlayerSearchController::class, 'getPlayerDetail
 Route::post('/player/verify', [App\Http\Controllers\PlayerDashBoardController::class, 'verify'])->name('player.verify');
 Route::get('/player/dashboard/{id}', [App\Http\Controllers\PlayerDashBoardController::class, 'show'])->name('player.dashboard');
 
-
+Route::get('/admin/tournament-manager', [App\Http\Controllers\TournamentManagerController::class, 'index'])
+    ->name('admin.tournament-manager');

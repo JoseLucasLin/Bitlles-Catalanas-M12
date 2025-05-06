@@ -44,7 +44,7 @@ return [
     'search_player' => 'Cercar Jugador',
     'search_player_description' => 'Cerca informació sobre un jugador específic.',
     'search' => 'Cercar',
-    
+
     'profile' => [
         'title' => 'El Meu Perfil',
         'personal_info' => 'Informació Personal',
@@ -53,7 +53,7 @@ return [
         'email' => 'Correu Electrònic',
         'save_changes' => 'Desar Canvis',
         'update_success' => '¡Perfil actualitzat correctament!',
-        
+
         'update_password' => 'Actualitzar Contrasenya',
         'password_description' => 'Asseguri\'s que el seu compte utilitzi una contrasenya llarga i aleatòria per mantenir la seguretat.',
         'current_password' => 'Contrasenya Actual',
@@ -61,7 +61,7 @@ return [
         'confirm_password' => 'Confirmar Contrasenya',
         'change_password' => 'Canviar Contrasenya',
         'password_success' => '¡Contrasenya actualitzada correctament!',
-        
+
         'delete_account' => 'Eliminar Compte',
         'delete_description' => 'Un cop s\'elimini el seu compte, tots els seus recursos i dades s\'esborraran permanentment. Abans d\'eliminar el seu compte, descarregui qualsevol dada o informació que vulgui conservar.',
         'delete_button' => 'Eliminar Compte',
@@ -199,4 +199,8 @@ return [
     'assign_players_to_courts' => 'Assigna jugadors a pistes',
     'distribute_players_desc' => 'Distribueix jugadors entre pistes del torneig.',
     'distribute' => 'Distribuir',
+    'select_player' => 'Seleccionar jugador',
+    'stats' => 'Estadístiques',
+    'registered_players_list' => 'Jugadors registrats',
+    'add_players' => 'Afegir jugador',
 ];
