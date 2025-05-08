@@ -53,6 +53,19 @@ Route::post('/admin/create-referee',[RegisteredUserController::class, 'store'])-
 Route::get('/admin/create-referee',[RegisteredUserController::class, 'index'])->middleware(['auth'])->name("registro.store"); //RegisteredUserController [RegisteredUserController::class, 'index'] view('admin.create-referee') ;
 
 // ADD PLAYERS
+Route::get('/admin/add-players', function () {
+    return view('admin.add-players');
+})->middleware(['auth']);
+
+Route::get('/admin/players-fields', function () {
+    return view('admin.players-fields');
+})->middleware(['auth'])->name('admin.players-fields');
+
+// TOURNAMENT MANAGER
+Route::get('/admin/tournament-manager', function () {
+    return view('admin.tournament-manager');
+});
+
 Route::middleware(['auth', 'role:2'])->prefix('admin')->group(function () {
     Route::get('/add-players', [App\Http\Controllers\AddPlayersController::class, 'index'])->name('admin.add-players');
     Route::post('/players/assign', [App\Http\Controllers\AddPlayersController::class, 'assignPlayer'])->name('admin.players.assign');
@@ -263,5 +276,3 @@ Route::get('/player/dashboard/{id}', [App\Http\Controllers\PlayerDashBoardContro
 
 Route::get('/admin/tournament-manager', [App\Http\Controllers\TournamentManagerController::class, 'index'])
     ->name('admin.tournament-manager');
-
-
