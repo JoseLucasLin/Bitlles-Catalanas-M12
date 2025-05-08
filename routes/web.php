@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\Mail;
 Route::get('/', [MainController::class, 'index']);
 Route::get('player-acces', function (){
     return view('auth.player-acces');
- });
+ })->name('player.acces');
 
 // Rutas de prueba
 

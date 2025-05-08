@@ -15,9 +15,10 @@
             @if($tournaments->isEmpty())
                 <option disabled>No hay torneos disponibles</option>
             @else
+
                 @foreach($tournaments as $tournament)
                     <option value="{{ $tournament->id }}" {{ $tournament->id == $selectedTournament->id ? 'selected' : '' }}>
-                        {{ $tournament->name }}
+                        {{ $tournament->name .($tournament->start_date!=null?$tournament."  Activado":$tournament."  Desactivado")}}
                     </option>
                 @endforeach
             @endif
@@ -45,6 +46,8 @@
     </div>
 
     <div class="mt-8 mb-4">
+        <div>
+        </div>
         <h3 class="text-lg font-semibold text-[var(--azul)] mb-2">@lang('admin.registered_players_list')</h3>
         <div class="bg-[var(--crema)] p-4 rounded-lg border-[var(--azul)] border">
             <table class="w-full">
@@ -115,7 +118,7 @@
             </svg>
             <span>@lang('admin.modify')</span>
         </button>
-
+           
         <button id="next-round" class="bg-[var(--rojo)] text-[var(--blanco)] p-3 rounded-lg transition duration-300 hover:bg-[var(--azul)] font-bold flex items-center justify-center space-x-2"
                 {{ !$tournamentInfo['isStarted'] ? 'disabled' : '' }}>
 
@@ -126,7 +129,7 @@
         </button>
     </div>
 
-
+    
 
 
     @else
@@ -134,20 +137,26 @@
         <h3 class="text-lg font-semibold text-yellow-700 mb-4">No hay torneos disponibles</h3>
         <p class="text-sm text-yellow-600">Por favor, crea un torneo primero antes de usar esta función.</p>
         <div class="mt-4">
-            <a href="{{ route('admin.tournaments.create') }}" class="bg-[var(--rojo)] text-[var(--blanco)] px-4 py-2 rounded-lg transition duration-300 hover:bg-[var(--azul)] font-bold">
+            <a href="" class="bg-[var(--rojo)] text-[var(--blanco)] px-4 py-2 rounded-lg transition duration-300 hover:bg-[var(--azul)] font-bold">
                 @lang('admin.create_tournament')
             </a>
         </div>
     </div>
     @endif
 </main>
-<noscript type="module">
+<script type="module">
     import { io } from 'https://cdn.socket.io/4.3.2/socket.io.esm.min.js'
     const socket = io('http://localhost:8100');
     
     document.addEventListener("DOMContentLoaded", async () => {
         getList();
         setupStartButton();
+        
+        // Load tournament info immediately if channel exists in localStorage
+        const storedChannel = localStorage.getItem('canal');
+        if (storedChannel) {
+            fetchTournamentInfo(storedChannel);
+        }
     });
     
     function getList() {
@@ -159,62 +168,93 @@
     }
     
     function setupStartButton() {
-        const startBtn = document.getElementById('start');
+        const startBtn = document.getElementById('start-tournament');
         
         startBtn.addEventListener('click', () => {
-            const selectedChannel = document.getElementById('chanelTournament').value;
+            const selectedChannel = document.getElementById('tournament-selector').value;
             
-            // Validación mejorada
             if (selectedChannel === 'NOT CONNECTED') {
                 alert('Por favor selecciona un canal primero');
                 return;
             }
             
-            // Verificar si coincide con el canal almacenado
             const storedChannel = localStorage.getItem('canal');
             if (selectedChannel !== storedChannel) {
                 alert('El canal seleccionado no coincide con el almacenado');
                 return;
             }
             
-            // Desactivar el botón
             startBtn.disabled = true;
             startBtn.classList.add('opacity-50', 'cursor-not-allowed');
             startBtn.textContent = 'Iniciando...';
             
-            // Emitir evento con estructura correcta
-            socket.emit('activateTournament', {  // Nombre corregido
+            socket.emit('activateTournament', {
                 channelId: selectedChannel,
-                userId: "ID_REAL_USUARIO"  // Cambiar por ID real
+                userId: "ID_REAL_USUARIO"
             });
         });
     }
     
-    // Escuchar evento de respuesta (nombre corregido)
+    // New function to handle tournament info fetching
+    function fetchTournamentInfo(channelId) {
+        fetch(`/admin/tournaments/${channelId}/info`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta del servidor: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Datos del torneo recibidos:", data);
+                if (data.success) {
+                    const btn = document.getElementById("start-tournament");
+                    const tournament = data.data.tournament;
+    
+                    // Reset to base classes
+                    btn.className = "bg-[var(--rojo)] text-[var(--blanco)] p-3 rounded-lg transition duration-300 hover:bg-[var(--azul)] font-bold flex items-center justify-center space-x-2";
+    
+                    if (tournament.start_date === null) {
+                        // Enable button
+                        btn.classList.remove("opacity-50", "cursor-not-allowed");
+                        btn.disabled = false;
+                    } else {
+                        // Disable button
+                        btn.classList.add("opacity-50", "cursor-not-allowed");
+                        btn.disabled = true;
+                    }
+                    console.table(tournament.start_date);
+                } else {
+                    throw new Error(data.message || "Error desconocido al cargar datos del torneo");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('error', error.message);
+            });
+    }
+    
     socket.on('tournamentStarted', (response) => {
-        const startBtn = document.getElementById('start'); // ID corregido
+        const startBtn = document.getElementById('start-tournament');
         
         if (response.success) {
             startBtn.textContent = 'Torneo Iniciado';
-            // Mostrar notificación de éxito
             showNotification('success', 'Torneo iniciado correctamente');
+            // Reload page after successful start
+            setTimeout(() => window.location.reload(), 1500);
         } else {
             resetStartButton();
             showNotification('error', response.message || 'Error al iniciar torneo');
         }
     });
     
-    // Función para resetear el botón
     function resetStartButton() {
-        const startBtn = document.getElementById('start');
+        const startBtn = document.getElementById('start-tournament');
         startBtn.disabled = false;
         startBtn.classList.remove('opacity-50', 'cursor-not-allowed');
         startBtn.textContent = 'Iniciar Torneo';
     }
     
-    // Función para mostrar notificaciones
     function showNotification(type, message) {
-        // Implementar tu sistema de notificaciones
         alert(`${type.toUpperCase()}: ${message}`);
     }
     
@@ -222,19 +262,19 @@
         console.log('Estado de conexión:', e);
     });
     
-    let data;
-    
     socket.on('getChanels', (e) => {
         console.log('Canales recibidos:', e.result);
         populateSelect(e.result);
     
-        const selectorCanal = document.getElementById("chanelTournament");
+        const selectorCanal = document.getElementById("tournament-selector");
         let canal = localStorage.getItem('canal') || e.result[0]?.id;
         
         if (canal) {
             selectorCanal.value = canal;
             connecToChanel(canal);
             localStorage.setItem('canal', canal);
+            // Fetch tournament info when channels are received
+            fetchTournamentInfo(canal);
         }
         
         selectorCanal.addEventListener("change", (e) => {
@@ -242,6 +282,7 @@
             console.log('Canal cambiado a:', newChannel);
             localStorage.setItem("canal", newChannel);
             connecToChanel(newChannel);
+            fetchTournamentInfo(newChannel);
         });
     });
     
@@ -252,19 +293,19 @@
     }
     
     function populateSelect(result) {
-        const select = document.getElementById('chanelTournament');
+        const select = document.getElementById('tournament-selector');
         select.innerHTML = '<option>NOT CONNECTED</option>';
     
         if (!result || !result.length) return;
-    
+        
         result.forEach((item) => {
             let option = document.createElement('option');
             option.value = item.id;
-            option.textContent = item.name;
+            option.textContent = item.name + (item.start_date ? " Activado" : " Desactivado");
             select.appendChild(option);
         });
     }
-    </noscript>
+    </script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Manejar cambio de torneo seleccionado
@@ -507,29 +548,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Iniciar torneo
-    function startTournament(tournamentId) {
-        if (!confirm('¿Estás seguro de que quieres iniciar este torneo? Una vez iniciado, no podrás añadir más jugadores.')) {
-            return;
-        }
-
-        fetch(`/admin/tournaments/${tournamentId}/start`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert(data.message);
-                updateTournamentInfo(data.data);
-                updateButtonStates(data.data);
-            } else {
-                alert(data.message);
-            }
-        })
+    
         .catch(error => {
             console.error('Error:', error);
             alert('Ha ocurrido un error al iniciar el torneo.');
