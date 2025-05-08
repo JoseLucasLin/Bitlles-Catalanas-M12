@@ -178,5 +178,6 @@ return [
     'stats' => 'Stats',
     'registered_players_list' => 'Registered players list',
     'add_players' => 'Add players',
+    'status' => 'Status',
 
 ];

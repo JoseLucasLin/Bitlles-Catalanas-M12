@@ -178,4 +178,5 @@ return [
     'registered_players_list' => 'Lista de jugadores registrados',
     'tournament_round' => 'Ronda del torneo',
     'add_players' => 'Añadir jugadores',
+    'status' => 'Estado',
 ];

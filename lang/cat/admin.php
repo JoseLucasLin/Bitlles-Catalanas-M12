@@ -178,4 +178,5 @@ return [
     'stats' => 'Estadístiques',
     'registered_players_list' => 'Jugadors registrats',
     'add_players' => 'Afegir jugador',
+    'status' => 'Estat',
 ];
