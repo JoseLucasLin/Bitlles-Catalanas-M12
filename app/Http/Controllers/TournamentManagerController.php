@@ -28,20 +28,17 @@ class TournamentManagerController extends Controller
      */
     public function getTournamentInfo($tournamentId)
     {
-        // Obtener el torneo
         $tournament = Tournament::findOrFail($tournamentId);
+
+        // Usar valores calculados en lugar de columnas de la BD
+        $isStarted = !empty($tournament->start_date);
+        $currentRound = 1; // Calcula esto de otra manera o usa un valor predeterminado
 
         // Contar campos disponibles
         $availableCourts = Referee_Tournament::where('id_tournament', $tournamentId)->count();
 
         // Contar jugadores registrados
         $registeredPlayers = Stats_Player_Tournament::where('id_tournament', $tournamentId)->count();
-
-        // Obtener ronda actual
-        $currentRound = $tournament->current_round ?? 1;
-
-        // Verificar si el torneo ha sido iniciado
-        $isStarted = $tournament->started ?? false;
 
         // Verificar si el torneo ha finalizado
         $isFinished = $tournament->end_date ? true : false;
@@ -103,8 +100,31 @@ class TournamentManagerController extends Controller
         $tournament->start_date = now();
         $tournament->save();
 
-        // Aquí se podría generar los cruces iniciales del torneo
-        // ...
+        // Crear rondas para todos los jugadores del torneo
+        $players = Stats_Player_Tournament::where('id_tournament', $tournamentId)
+            ->with('player')
+            ->get();
+
+        $fields = Referee_Tournament::where('id_tournament', $tournamentId)
+            ->with('field')
+            ->get();
+
+        // Crear rondas para cada jugador
+        foreach ($players as $index => $playerStat) {
+            // Asignar campo de forma cíclica
+            $fieldIndex = $index % count($fields);
+
+            \App\Models\Round::create([
+                'id_tournament' => $tournamentId,
+                'id_status' => 1, // Pendiente
+                'id_field' => $fields[$fieldIndex]->id_field,
+                'round_number' => 1,
+                't1' => 0, // Inicializar con 0
+                't2' => 0, // Inicializar con 0
+                't3' => 0, // Inicializar con 0
+                'id_player' => $playerStat->id_player
+            ]);
+        }
 
         return response()->json([
             'success' => true,
@@ -129,15 +149,44 @@ class TournamentManagerController extends Controller
             ]);
         }
 
-        // Verificar que todas las partidas de la ronda actual estén completadas
-        // (Aquí iría la lógica para verificar que todas las partidas están completadas)
-
         // Incrementar la ronda actual
-        $tournament->current_round = $tournament->current_round + 1;
+        $nextRoundNumber = $tournament->current_round + 1;
+        $tournament->current_round = $nextRoundNumber;
         $tournament->save();
 
-        // Generar los cruces para la siguiente ronda
-        // ...
+        // Obtener todos los jugadores del torneo
+        $players = Stats_Player_Tournament::where('id_tournament', $tournamentId)
+            ->with('player')
+            ->get();
+
+        // Obtener todos los campos del torneo
+        $fields = Referee_Tournament::where('id_tournament', $tournamentId)
+            ->with('field')
+            ->get();
+
+        if ($fields->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No hay campos disponibles para este torneo'
+            ]);
+        }
+
+        // Crear rondas para cada jugador
+        foreach ($players as $index => $playerStat) {
+            // Asignar campo de forma cíclica
+            $fieldIndex = $index % count($fields);
+
+            \App\Models\Round::create([
+                'id_tournament' => $tournamentId,
+                'id_status' => 1, // Pendiente
+                'id_field' => $fields[$fieldIndex]->id_field,
+                'round_number' => $nextRoundNumber,
+                't1' => 0, // Inicializar con 0
+                't2' => 0, // Inicializar con 0
+                't3' => 0, // Inicializar con 0
+                'id_player' => $playerStat->id_player
+            ]);
+        }
 
         return response()->json([
             'success' => true,

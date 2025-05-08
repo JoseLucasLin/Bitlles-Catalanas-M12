@@ -25,24 +25,12 @@ class Players extends Model
     }
     public function rounds()
     {
-        return $this->belongsToMany(Round::class, 'player_round', 'id_player', 'id_round')
-            ->withPivot('total_score')
-            ->using(Player_Round::class);
+        return $this->hasMany(Round::class, 'id_player');
     }
     public function tournaments()
     {
         return $this->belongsToMany(Tournament::class, 'stats_player_tournament', 'id_player', 'id_tournament')
             ->withPivot('total_points', 'accuracy');
     }
-    public function throws()
-    {
-        return $this->hasManyThrough(
-            Player_Throws::class,
-            Player_Round::class,
-            'id_player', // Foreign key on PlayerRound table
-            'id_player_round', // Foreign key on PlayerThrows table
-            'id', // Local key on Player table
-            'id' // Local key on PlayerRound table
-        );
-    }
+
 }

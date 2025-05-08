@@ -19,7 +19,10 @@ class Tournament extends Model
         'image',
         'expected_date',
         'start_date',
-        'end_date'
+        'end_date',
+        'total_rounds',
+        'current_round',
+        'started'
     ];
 
     protected $casts = [
@@ -39,7 +42,7 @@ class Tournament extends Model
 
     public function tournamentRounds()
     {
-        return $this->hasMany(Tournament_Round::class, 'id_tournament');
+        return $this->hasMany(Round::class, 'id_tournament');
     }
 
     public function refereeTournaments()

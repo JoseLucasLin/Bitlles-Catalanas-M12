@@ -24,10 +24,15 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_tournament');
             $table->unsignedBigInteger('id_status');
+            $table->unsignedBigInteger('id_field')->nullable(); // Hacer estos campos opcionales
             $table->integer('round_number');
-            $table->timestamp('start_time')->nullable();
-            $table->timestamp('end_time')->nullable();
+            $table->integer('t1')->default(0); // Añadir valor por defecto
+            $table->integer('t2')->default(0); // Añadir valor por defecto
+            $table->integer('t3')->default(0); // Añadir valor por defecto
+            $table->unsignedBigInteger('id_player')->nullable(); // Hacer este campo opcional
 
+            $table->foreign('id_field')->references('id')->on('fields')->onDelete('cascade');
+            $table->foreign('id_player')->references('id')->on('player')->onDelete('cascade');
             $table->foreign('id_tournament')->references('id')->on('tournaments')->onDelete('cascade');
             $table->foreign('id_status')->references('id')->on('status')->onDelete('restrict');
         });
