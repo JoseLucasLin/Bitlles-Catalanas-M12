@@ -17,9 +17,11 @@ class PlayerSeed extends Seeder
         //
         for ($i=0; $i < 2; $i++) {
             # code...
+
             DB::table('Player')->insert([
                 'name' => 'Pepe-'.Str::random(10),
                 'lastname' => 'NOSOYSANCHEZ-'.Str::random(10),
+
                 'mail' => Str::random(10).'@example.com',
                 'code' => Str::random(15),
                 'partner' => $i%2,

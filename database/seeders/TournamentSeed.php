@@ -24,7 +24,7 @@ class TournamentSeed extends Seeder
             start_date TIMESTAMP,
             end_date TIMESTAMP
         */
-        DB::table('Tournaments')->insert([
+        DB::table('tournaments')->insert([
             'name' => 'Torneo de prueba',
             'type' => 1,
             'normal_price' => (1.1),

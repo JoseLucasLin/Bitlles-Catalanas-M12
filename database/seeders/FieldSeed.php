@@ -18,7 +18,7 @@ class FieldSeed extends Seeder
         //
        for ($i=0; $i < 50; $i++) { 
         # code...
-        DB::table('Fields')->insert([
+        DB::table('fields')->insert([
             'field_name' => 'Pista guay -'.Str::random(5),
             //'email' => Str::random(10).'@example.com',
             //'password' => Hash::make('password'),

@@ -6,9 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Notifications\ResetPasswordNotification;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
 
@@ -28,6 +29,22 @@ class User extends Authenticatable
         'password',
     ];
 
+        /**
+     * Devuelve la clave única del usuario para el token JWT.
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Devuelve un array con las claims personalizadas del token JWT.
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+    
     public function getEmailAttribute()
     {
         return $this->mail;

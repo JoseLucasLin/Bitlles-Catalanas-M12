@@ -19,7 +19,7 @@ class UserSeed extends Seeder
 
         // Crear usuarios aleatorios con rol básico (suponiendo que rol 3 es usuario básico)
         for ($i=1; $i < 3; $i++) {
-            DB::table('Users')->insert([
+            DB::table('users')->insert([
                 'username' => 'username'.Str::random(10),
                 'password' => bcrypt('1234ASDF'),
                 'mail' => Str::random(10).'@example.com',
@@ -31,7 +31,7 @@ class UserSeed extends Seeder
         }
 
         // Crear usuario admin
-        DB::table('Users')->insert([
+        DB::table('users')->insert([
             'username' => 'admin',
             'password' => bcrypt('admin'),
             'mail' => 'admin@gmail.com',
@@ -42,7 +42,7 @@ class UserSeed extends Seeder
         ]);
 
         // Crear usuario árbitro
-        DB::table('Users')->insert([
+        DB::table('users')->insert([
             'username' => 'arbitro',
             'password' => bcrypt('arbitro'),
             'mail' => 'arbitro@gmail.com',
