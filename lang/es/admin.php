@@ -53,7 +53,7 @@ return [
         'email' => 'Correo Electrónico',
         'save_changes' => 'Guardar Cambios',
         'update_success' => '¡Perfil actualizado correctamente!',
-        
+
         'update_password' => 'Actualizar Contraseña',
         'password_description' => 'Asegúrese de que su cuenta esté usando una contraseña larga y aleatoria para mantener la seguridad.',
         'current_password' => 'Contraseña Actual',
@@ -61,7 +61,7 @@ return [
         'confirm_password' => 'Confirmar Contraseña',
         'change_password' => 'Cambiar Contraseña',
         'password_success' => '¡Contraseña actualizada correctamente!',
-        
+
         'delete_account' => 'Eliminar Cuenta',
         'delete_description' => 'Una vez que se elimine su cuenta, todos sus recursos y datos se borrarán permanentemente. Antes de eliminar su cuenta, descargue cualquier dato o información que desee conservar.',
         'delete_button' => 'Eliminar Cuenta',
@@ -173,4 +173,35 @@ return [
     'next_round' => 'Siguiente ronda',
 
     'total_rounds' => 'Numero de rondas total',
+
+    'select_court' => 'Seleccionar pista',
+    'select_court_first' => 'Selecciona un torneo primero',
+    'select_player' => 'Seleccionar jugador',
+    'assign_player' => 'Asignar jugador',
+    'tournament_courts' => 'Pistas del torneo',
+    'select_tournament_to_view_courts' => 'Selecciona un torneo para ver sus pistas',
+
+    'select_players' => 'Seleccionar jugadores',
+    'distribute_players' => 'Distribuir jugadores',
+    'no_players_assigned' => 'No hay jugadores asignados',
+    'remove' => 'Eliminar',
+    'hold_ctrl_to_select_multiple' => 'Mantén Ctrl/Cmd para seleccionar múltiples jugadores',
+    'select_tournament' => 'Seleccionar torneo',
+    'tournament_courts' => 'Pistas del torneo',
+    'select_tournament_first' => 'Por favor selecciona un torneo primero',
+    'select_at_least_one_player' => 'Por favor selecciona al menos un jugador',
+    'no_courts_available_for_tournament' => 'No hay pistas disponibles para este torneo',
+    'player' => 'Jugador',
+    'actions' => 'Acciones',
+    'no_courts_available' => 'No hay pistas disponibles',
+    'select_tournament_to_view_courts' => 'Selecciona un torneo para ver las pistas',
+    'assign_players_to_courts' => 'Asignar jugadores a pistas',
+    'distribute_players_desc' => 'Distribuye jugadores entre pistas del torneo.',
+    'distribute' => 'Distribuir',
+    'select_player' => 'Seleccionar jugador',
+    'stats' => 'Estadísticas',
+    'registered_players_list' => 'Lista de jugadores registrados',
+    'tournament_round' => 'Ronda del torneo',
+    'add_players' => 'Añadir jugadores',
+    'status' => 'Estado',
 ];

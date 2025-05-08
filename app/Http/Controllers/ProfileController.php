@@ -31,6 +31,7 @@ class ProfileController extends Controller
         // Actualiza los campos en el modelo User
         $user->username = $request->name;
         $user->mail = $request->email;
+        $user->image = $request->image;
 
         $user->save();
 

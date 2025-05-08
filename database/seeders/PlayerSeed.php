@@ -15,15 +15,16 @@ class PlayerSeed extends Seeder
     public function run(): void
     {
         //
-        for ($i=0; $i < 50; $i++) { 
+        for ($i=0; $i < 2; $i++) {
             # code...
-            DB::table('player')->insert([
-                'name' => 'Pepe-'.Str::random(60),
-                'lastname' => 'NOSOYSANCHEZ-'.Str::random(40),
+
+            DB::table('Player')->insert([
+                'name' => 'Pepe-'.Str::random(10),
+                'lastname' => 'NOSOYSANCHEZ-'.Str::random(10),
+
                 'mail' => Str::random(10).'@example.com',
                 'code' => Str::random(15),
                 'partner' => $i%2,
-                'image' => Str::random(5).'.jpeg',
                 'last_login' => now(),
                 'attemp_logins' => $i,
             ]);

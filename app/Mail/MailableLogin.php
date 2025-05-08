@@ -39,7 +39,7 @@ class MailableLogin extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'templates.test-email',
+            view: 'templates.send_code_mail',
             with: [
                 'name' => $this->name,
                 'codigo' => $this->codigo
