@@ -66,13 +66,16 @@ class TournamentController extends Controller
             $imageName = time() . '_' . $image->getClientOriginalName();
             $image->move(public_path('tournament-images'), $imageName);
 
+            // Crear el torneo
             $tournament = Tournament::create([
                 'name' => $validatedData['name'],
                 'type' => $validatedData['type'],
                 'normal_price' => $validatedData['normal_price'],
                 'partner_price' => $validatedData['partner_price'],
                 'expected_date' => $validatedData['expected_date'],
-                'image' => $imageName
+                'image' => $imageName,
+                'total_rounds' => $validatedData['rounds'] // Solo incluir las columnas que existen
+                // Eliminar 'current_round' y 'started' de aquí
             ]);
 
             $fields = $validatedData['fields'];
@@ -89,10 +92,26 @@ class TournamentController extends Controller
             }
 
             for ($i = 1; $i <= $validatedData['rounds']; $i++) {
+                // Obtener la primera pista creada para este torneo
+                $firstField = Fields::whereIn('id', function($query) use ($tournament) {
+                    $query->select('id_field')
+                          ->from('referee_tournaments')
+                          ->where('id_tournament', $tournament->id);
+                })->first();
+
+                if (!$firstField) {
+                    throw new \Exception('No se encontró ninguna pista para este torneo');
+                }
+
                 \App\Models\Round::create([
                     'id_tournament' => $tournament->id,
-                    'id_status' => 1, // o el status por defecto (pendiente, por ejemplo)
-                    'round_number' => $i
+                    'id_status' => 1, // Pendiente o el status por defecto
+                    'id_field' => $firstField->id, // Asignar la primera pista disponible
+                    'round_number' => $i,
+                    't1' => 0, // Valor por defecto para t1
+                    't2' => 0, // Valor por defecto para t2
+                    't3' => 0, // Valor por defecto para t3
+                    'id_player' => 1 // ID de un jugador por defecto o placeholder
                 ]);
             }
 

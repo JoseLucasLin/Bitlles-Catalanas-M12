@@ -29,8 +29,9 @@ return new class extends Migration
             $table->integer('type')->nullable(false);
             $table->float('normal_price')->nullable(false);
             $table->float('partner_price')->nullable(false);
+            $table->integer('total_rounds')->default(1)->nullable(false); // Añadido para el número de rondas
             $table->string('image',250)->default('image.png')->nullable(false);
-
+            $table->integer('current_round')->default(0)->nullable(false); // Añadido para la ronda actual
             // Cambiamos expected_date a string como en el comentario
             $table->string('expected_date', 50)->nullable();
 

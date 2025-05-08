@@ -17,6 +17,11 @@ class Round extends Model
         'id_tournament',
         'id_status',
         'round_number',
+        'id_field',
+        't1',
+        't2',
+        't3',
+        'id_player',
         'start_time',
         'end_time'
     ];
@@ -36,45 +41,21 @@ class Round extends Model
         return $this->belongsTo(Status::class, 'id_status');
     }
 
-    public function players()
+    public function player()
     {
-        return $this->belongsToMany(Players::class, 'player_round', 'id_round', 'id_player')
-            ->withPivot('total_score')
-            ->using(Player_Round::class);
+        return $this->belongsTo(Players::class, 'id_player');
     }
 
-    public function playerRounds()
-    {
-        return $this->hasMany(Player_Round::class, 'id_round');
-    }
 
     public function tournamentRounds()
     {
-        return $this->hasMany(Tournament_Round::class, 'id_round');
+        return $this->hasMany(Round::class, 'id_round');
     }
 
-    public function throws()
-    {
-        return $this->hasManyThrough(
-            Player_Throws::class,
-            Player_Round::class,
-            'id_round', // Foreign key on PlayerRound table
-            'id_player_round', // Foreign key on PlayerThrows table
-            'id', // Local key on Round table
-            'id' // Local key on PlayerRound table
-        );
-    }
 
     public function field()
     {
-        return $this->hasOneThrough(
-            Fields::class,
-            Referee_Tournament::class,
-            'id_tournament', // FK en referee_tournaments
-            'id', // FK en fields
-            'id_tournament', // Local key en rounds (usamos id_tournament en lugar de id)
-            'id_field' // Local key en referee_tournaments
-        );
+        return $this->belongsTo(Fields::class, 'id_field');
     }
 
     public function refereeTournament()

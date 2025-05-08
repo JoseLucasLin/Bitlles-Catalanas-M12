@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
 
         // 4. Seeders de relaciones y datos complementarios
         $this->call([
-            Tournament_RoundSeed::class,     // Relación torneos-rondas
+               // Relación torneos-rondas
             Referee_TournamentSeed::class,   // Árbitros asignados a torneos
             Player_History_StatsSeed::class, // Historial y estadísticas de jugadores
             Stats_Player_TournamentSeed::class, // Estadísticas de jugadores en torneos
