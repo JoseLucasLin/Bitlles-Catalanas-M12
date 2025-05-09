@@ -24,6 +24,8 @@ use App\Http\Controllers\AddPlayersController;
 
 use App\Mail\MailableLogin;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 // Rutas principales accesibles para todos
 Route::get('/', [MainController::class, 'index']);
@@ -196,7 +198,32 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::get('/global', function () {
-        return view('tables.globalTable');
+        // Ruta al archivo en public
+        $filePath = public_path('sample_data.json');
+        
+        // Verificar que el archivo existe
+        if (!File::exists($filePath)) {
+            abort(500, 'El archivo JSON no se encuentra');
+        }
+        
+        // Leer el archivo
+        $jsonData = File::get($filePath);
+        $matchData = json_decode($jsonData, true);
+        
+        // Verificar que el JSON es válido
+        if (json_last_error() !== JSON_ERROR_NONE || !isset($matchData['matches'])) {
+            abort(500, 'Error en el formato del JSON');
+        }
+        
+        // Combinar todos los jugadores de todos los campos
+        $allPlayers = collect($matchData['matches'])
+            ->pluck('players')
+            ->flatten(1)
+            ->all();
+        
+        return view('tables.globalTable', [
+            'allPlayers' => $allPlayers
+        ]);
     });
 });
 
