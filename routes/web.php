@@ -163,6 +163,14 @@ Route::middleware(['auth', 'role:2'])->prefix('admin')->group(function () {
 
     // Ruta para enviar código por correo
     Route::post('/send-player-code/{id}', [PlayerController::class, 'sendCode'])->name('admin.send-player-code');
+
+    Route::get('/players-fields', [App\Http\Controllers\FieldPlayerDistributionController::class, 'index'])->name('admin.players-fields');
+    Route::get('/tournaments/{tournamentId}/courts', [App\Http\Controllers\FieldPlayerDistributionController::class, 'getCourts'])->name('admin.tournaments.courts');
+    Route::get('/tournaments/{tournamentId}/available-players', [App\Http\Controllers\FieldPlayerDistributionController::class, 'getPlayers'])->name('admin.tournaments.players');
+    Route::post('/tournaments/distribute-players', [App\Http\Controllers\FieldPlayerDistributionController::class, 'distribute'])->name('admin.tournaments.distribute');
+    Route::get('/tournaments/{tournamentId}/current-distributions', [App\Http\Controllers\FieldPlayerDistributionController::class, 'getCurrentDistributions'])->name('admin.tournaments.current-distributions');
+
+
 });
 
 // Rutas para árbitros (role:1)
@@ -303,3 +311,5 @@ Route::get('/player/dashboard/{id}', [App\Http\Controllers\PlayerDashBoardContro
 
 Route::get('/admin/tournament-manager', [App\Http\Controllers\TournamentManagerController::class, 'index'])
     ->name('admin.tournament-manager');
+
+
