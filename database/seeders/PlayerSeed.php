@@ -15,7 +15,7 @@ class PlayerSeed extends Seeder
     public function run(): void
     {
         //
-        for ($i=0; $i < 2; $i++) {
+        for ($i=0; $i < 20; $i++) {
             # code...
 
             DB::table('Player')->insert([
