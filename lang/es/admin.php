@@ -204,4 +204,14 @@ return [
     'tournament_round' => 'Ronda del torneo',
     'add_players' => 'Añadir jugadores',
     'status' => 'Estado',
+    'save_distribution' => 'Guardar distribución',
+    'distribution_saved' => 'Distribución guardada con éxito',
+    'error_saving_distribution' => 'Error al guardar la distribución',
+    'no_distribution_to_save' => 'No hay distribución para guardar',
+    'processing' => 'Procesando...',
+    'error_loading_courts' => 'Error al cargar las pistas',
+    'error_loading_players' => 'Error al cargar los jugadores',
+
+    'no_players_registered' => 'No hay jugadores registrados para este torneo',
+    'select_tournament_to_view_players' => 'Seleccione un torneo para ver sus jugadores',
 ];

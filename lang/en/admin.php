@@ -204,5 +204,18 @@ return [
     'registered_players_list' => 'Registered players list',
     'add_players' => 'Add players',
     'status' => 'Status',
+    'save_distribution' => 'Save distribution',
+    'distribution_saved' => 'Distribution saved successfully',
+    'error_saving_distribution' => 'Error saving distribution',
+    'no_distribution_to_save' => 'No distribution to save',
+    'processing' => 'Processing...',
+    'error_loading_courts' => 'Error loading courts',
+    'error_loading_players' => 'Error loading players',
+    'no_players_registered' => 'No players registered',
+'select_tournament_to_view_players' => 'Select a tournament to view players',
+    'tournament_round' => 'Tournament round',
+    'add_players' => 'Add players',
+    'no_players_registered' => 'No players registered',
+    'add_players' => 'Add players',
 
 ];
