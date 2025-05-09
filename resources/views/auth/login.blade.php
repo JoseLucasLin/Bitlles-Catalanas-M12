@@ -75,17 +75,6 @@
                         @enderror
                     </div>
 
-                    <!-- Remember Me -->
-                    <div class="block mb-4">
-                        <label for="remember_me" class="inline-flex items-center">
-                            <input id="remember_me" type="checkbox" name="remember" class="rounded border-[var(--azul)] text-[var(--azul)]">
-                            <span class="ml-2 text-sm text-[var(--azul)]">Remember me</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ms-1 size-4 text-[var(--azul)]">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
-                              </svg>                              
-                        </label>
-                    </div>
-
                     <div class="text-center mt-10">
                         <button type="submit" class="bg-[var(--rojo)] text-[var(--blanco)] px-4 py-2 rounded transition duration-300 hover:bg-[var(--azul)] font-bold hover:scale-105">
                             {{__('main.login')}}
