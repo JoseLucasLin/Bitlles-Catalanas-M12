@@ -35,15 +35,20 @@
                 }
                 
                 $latestRound = count($player['rounds']) > 0 ? $player['rounds'][count($player['rounds']) - 1] : null;
+                
+                // Determinar la clase de color según el estado
+                $nameColorClass = '';
+                switch($player['status']) {
+                    case 'playing_next': $nameColorClass = 'bg-green-300'; break;
+                    case 'preparing': $nameColorClass = 'bg-yellow-200'; break;
+                    case 'collecting': $nameColorClass = 'bg-red-400'; break;
+                    default: $nameColorClass = 'bg-gray-200';
+                }
             @endphp
             
-            <tr class="@switch($player['status'])
-                    @case('playing_next') bg-green-300 @break
-                    @case('preparing') bg-yellow-200 @break
-                    @case('collecting') bg-red-400 @break
-                    @default bg-gray-200 @endswitch">
+            <tr>
                 <td class="border border-[var(--azul)] p-2 text-center">{{ $index + 1 }}</td>
-                <td class="border border-[var(--azul)] p-2">{{ $player['name'] }}</td>
+                <td class="border border-[var(--azul)] p-2 {{ $nameColorClass }}">{{ $player['name'] }}</td>
                 <td class="border border-[var(--azul)] p-2 text-center">{{ $playerField }}</td>
                 
                 @if($latestRound)

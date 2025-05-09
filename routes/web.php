@@ -40,9 +40,44 @@ Route::get('/test', function () {
     return view('main.index');
 });
 
+//general
 Route::get('/general', function () {
-    return view('tables.generalTable');
+    // Ruta al archivo en public
+    $filePath = public_path('sample_data2.json');
+    
+    // Verificar que el archivo existe
+    if (!File::exists($filePath)) {
+        abort(500, 'El archivo JSON no se encuentra');
+    }
+    
+    // Leer el archivo
+    $jsonData = File::get($filePath);
+    $tournamentData = json_decode($jsonData, true);
+    
+    // Verificar que el JSON es válido
+    if (json_last_error() !== JSON_ERROR_NONE || !isset($tournamentData['matches'])) {
+        abort(500, 'Error en el formato del JSON');
+    }
+    
+    // Combinar todos los jugadores de todos los partidos
+    $allPlayers = collect($tournamentData['matches'])
+        ->pluck('players')
+        ->flatten(1)
+        ->map(function($player) {
+            // Calcular el total acumulado de todas las rondas
+            $totalAcumulado = collect($player['rounds'])->sum('total');
+            $player['total_acumulado'] = $totalAcumulado;
+            return $player;
+        })
+        ->sortByDesc('total_acumulado') // Ordenar por puntuación descendente
+        ->values()
+        ->all();
+    
+    return view('tables.generalTable', [
+        'allPlayers' => $allPlayers
+    ]);
 });
+
 // ADMIN
 Route::get('/admin', function () {
     return view('admin.admin-panel');
