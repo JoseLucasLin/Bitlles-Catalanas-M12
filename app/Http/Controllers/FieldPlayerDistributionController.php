@@ -168,4 +168,139 @@ class FieldPlayerDistributionController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Obtener la ronda actual del torneo
+     */
+    public function getCurrentRound($tournamentId)
+    {
+        try {
+            // Primero intentamos obtener el valor de current_round del torneo
+            $tournament = Tournament::findOrFail($tournamentId);
+            $currentRound = $tournament->current_round;
+
+            // Si current_round es 0 o null, buscamos la ronda más alta en la tabla rounds
+            if (!$currentRound) {
+                $maxRound = Round::where('id_tournament', $tournamentId)
+                    ->max('round_number');
+                $currentRound = $maxRound ?: 1; // Si no hay rondas, asumimos que es la 1
+            }
+
+            return response()->json([
+                'success' => true,
+                'current_round' => $currentRound
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error al obtener la ronda actual: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al obtener la ronda actual: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Obtener jugadores asignados a una pista en un torneo
+     */
+    public function getPlayersForField($tournamentId, $fieldId)
+    {
+        try {
+            // Obtener TODOS los jugadores asignados a la pista sin filtrar por ronda
+            $players = Round::where('id_tournament', $tournamentId)
+                ->where('id_field', $fieldId)
+                // Eliminado el filtro por round_number
+                ->join('player', 'rounds.id_player', '=', 'player.id')
+                ->select(
+                    'player.id',
+                    'player.name',
+                    'player.lastname',
+                    'rounds.id as round_id',
+                    'rounds.round_number', // Añadido para saber a qué ronda pertenece
+                    'rounds.id_status as status',
+                    'rounds.t1',
+                    'rounds.t2',
+                    'rounds.t3'
+                )
+                ->orderBy('rounds.round_number')
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'tournament_id' => (int)$tournamentId,
+                'field_id' => (int)$fieldId,
+                'total_players' => $players->count(),
+                'players' => $players
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error al obtener jugadores para la pista: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al obtener jugadores para la pista: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Obtener todos los jugadores de un torneo con sus pistas asignadas
+     */
+    public function getTournamentPlayersWithFields($tournamentId)
+    {
+        try {
+            // Obtener TODOS los jugadores del torneo con sus pistas asignadas sin filtrar por ronda
+            $playersWithFields = Round::where('id_tournament', $tournamentId)
+                // Eliminado el filtro por round_number
+                ->join('player', 'rounds.id_player', '=', 'player.id')
+                ->join('fields', 'rounds.id_field', '=', 'fields.id')
+                ->select(
+                    'player.id as player_id',
+                    'player.name',
+                    'player.lastname',
+                    'fields.id as field_id',
+                    'fields.field_name',
+                    'rounds.id as round_id',
+                    'rounds.round_number', // Añadido para saber a qué ronda pertenece
+                    'rounds.id_status as status'
+                )
+                ->orderBy('rounds.round_number')
+                ->orderBy('fields.field_name')
+                ->orderBy('player.name')
+                ->get();
+
+            // Agrupar por pistas
+            $fieldGroups = [];
+            foreach ($playersWithFields as $player) {
+                if (!isset($fieldGroups[$player->field_id])) {
+                    $fieldGroups[$player->field_id] = [
+                        'field_id' => $player->field_id,
+                        'field_name' => $player->field_name,
+                        'players' => []
+                    ];
+                }
+
+                $fieldGroups[$player->field_id]['players'][] = [
+                    'id' => $player->player_id,
+                    'name' => $player->name,
+                    'lastname' => $player->lastname,
+                    'round_id' => $player->round_id,
+                    'round_number' => $player->round_number, // Añadido para saber a qué ronda pertenece
+                    'status' => $player->status
+                ];
+            }
+
+            return response()->json([
+                'success' => true,
+                'tournament_id' => (int)$tournamentId,
+                'total_fields' => count($fieldGroups),
+                'total_players' => $playersWithFields->count(),
+                'fields' => array_values($fieldGroups)
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error al obtener jugadores del torneo: ' . $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al obtener jugadores del torneo: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }

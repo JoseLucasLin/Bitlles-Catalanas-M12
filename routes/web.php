@@ -44,21 +44,21 @@ Route::get('/test', function () {
 Route::get('/general', function () {
     // Ruta al archivo en public
     $filePath = public_path('sample_data2.json');
-    
+
     // Verificar que el archivo existe
     if (!File::exists($filePath)) {
         abort(500, 'El archivo JSON no se encuentra');
     }
-    
+
     // Leer el archivo
     $jsonData = File::get($filePath);
     $tournamentData = json_decode($jsonData, true);
-    
+
     // Verificar que el JSON es válido
     if (json_last_error() !== JSON_ERROR_NONE || !isset($tournamentData['matches'])) {
         abort(500, 'Error en el formato del JSON');
     }
-    
+
     // Combinar todos los jugadores de todos los partidos
     $allPlayers = collect($tournamentData['matches'])
         ->pluck('players')
@@ -72,7 +72,7 @@ Route::get('/general', function () {
         ->sortByDesc('total_acumulado') // Ordenar por puntuación descendente
         ->values()
         ->all();
-    
+
     return view('tables.generalTable', [
         'allPlayers' => $allPlayers
     ]);
@@ -204,7 +204,9 @@ Route::middleware(['auth', 'role:2'])->prefix('admin')->group(function () {
     Route::get('/tournaments/{tournamentId}/available-players', [App\Http\Controllers\FieldPlayerDistributionController::class, 'getPlayers'])->name('admin.tournaments.players');
     Route::post('/tournaments/distribute-players', [App\Http\Controllers\FieldPlayerDistributionController::class, 'distribute'])->name('admin.tournaments.distribute');
     Route::get('/tournaments/{tournamentId}/current-distributions', [App\Http\Controllers\FieldPlayerDistributionController::class, 'getCurrentDistributions'])->name('admin.tournaments.current-distributions');
-
+    Route::get('/tournaments/{tournamentId}/current-round', [App\Http\Controllers\FieldPlayerDistributionController::class, 'getCurrentRound'])->name('admin.tournaments.current-round');
+    Route::get('/tournaments/{tournamentId}/fields/{fieldId}/players', [App\Http\Controllers\FieldPlayerDistributionController::class, 'getPlayersForField'])->name('admin.tournaments.fields.players');
+    Route::get('/tournaments/{tournamentId}/players-with-fields', [App\Http\Controllers\FieldPlayerDistributionController::class, 'getTournamentPlayersWithFields'])->name('admin.tournaments.players-with-fields');
 
 });
 
@@ -243,27 +245,27 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/global', function () {
         // Ruta al archivo en public
         $filePath = public_path('sample_data.json');
-        
+
         // Verificar que el archivo existe
         if (!File::exists($filePath)) {
             abort(500, 'El archivo JSON no se encuentra');
         }
-        
+
         // Leer el archivo
         $jsonData = File::get($filePath);
         $matchData = json_decode($jsonData, true);
-        
+
         // Verificar que el JSON es válido
         if (json_last_error() !== JSON_ERROR_NONE || !isset($matchData['matches'])) {
             abort(500, 'Error en el formato del JSON');
         }
-        
+
         // Combinar todos los jugadores de todos los campos
         $allPlayers = collect($matchData['matches'])
             ->pluck('players')
             ->flatten(1)
             ->all();
-        
+
         return view('tables.globalTable', [
             'allPlayers' => $allPlayers
         ]);
