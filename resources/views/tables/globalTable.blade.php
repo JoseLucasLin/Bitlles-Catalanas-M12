@@ -8,86 +8,86 @@
 
 
         </select>
-        <table id="scoreTable" class="w-full border-collapse border border-gray-300 mb-8">
-            <thead>
-                <tr class="bg-gray-200">
-                    <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">Nº</th>
-                    <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">Jugador</th>
-                    <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">Campo</th>
-                    <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">1</th>
-                    <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">2</th>
-                    <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">3</th>
-                    <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">T1</th>
-                    <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">1</th>
-                    <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">2</th>
-                    <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">3</th>
-                    <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">T2</th>
-                    <th class="border border-[var(--azul)] p-2 text-lg font-bold text-white bg-[#BE1622]">Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($allPlayers as $index => $player)
-                    @php
-                        // Obtener el campo del jugador
-                        $playerField = '';
-                        foreach (json_decode(File::get(public_path('sample_data.json')), true)['matches'] as $match) {
-                            foreach ($match['players'] as $p) {
-                                if ($p['id'] == $player['id']) {
-                                    $playerField = $match['field'];
-                                    break 2;
-                                }
-                            }
+<table id="scoreTable" class="w-full border-collapse border border-gray-300 mb-8">
+    <thead>
+        <tr class="bg-gray-200">
+            <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">Nº</th>
+            <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">Jugador</th>
+            <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">Campo</th>
+            <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">1</th>
+            <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">2</th>
+            <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">3</th>
+            <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">T1</th>
+            <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">1</th>
+            <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">2</th>
+            <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">3</th>
+            <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">T2</th>
+            <th class="border border-[var(--azul)] p-2 text-lg font-bold text-white bg-[#BE1622]">Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($allPlayers as $index => $player)
+            @php
+                // Obtener el campo del jugador
+                $playerField = '';
+                foreach (json_decode(File::get(public_path('sample_data.json')), true)['matches'] as $match) {
+                    foreach ($match['players'] as $p) {
+                        if ($p['id'] == $player['id']) {
+                            $playerField = $match['field'];
+                            break 2;
                         }
+                    }
+                }
 
-                        $latestRound = count($player['rounds']) > 0 ? $player['rounds'][count($player['rounds']) - 1] : null;
+                $latestRound = count($player['rounds']) > 0 ? $player['rounds'][count($player['rounds']) - 1] : null;
 
-                        // Determinar la clase de color según el estado
-                        $nameColorClass = '';
-                        switch ($player['status']) {
-                            case 'playing_next':
-                                $nameColorClass = 'bg-green-300';
-                                break;
-                            case 'preparing':
-                                $nameColorClass = 'bg-yellow-200';
-                                break;
-                            case 'collecting':
-                                $nameColorClass = 'bg-red-400';
-                                break;
-                            default:
-                                $nameColorClass = 'bg-gray-200';
-                        }
-                    @endphp
+                // Determinar la clase de color según el estado
+                $nameColorClass = '';
+                switch ($player['status']) {
+                    case 'playing_next':
+                        $nameColorClass = 'bg-green-300';
+                        break;
+                    case 'preparing':
+                        $nameColorClass = 'bg-yellow-200';
+                        break;
+                    case 'collecting':
+                        $nameColorClass = 'bg-red-400';
+                        break;
+                    default:
+                        $nameColorClass = 'bg-gray-200';
+                }
+            @endphp
 
-                    <tr>
-                        <td class="border border-[var(--azul)] p-2 text-center">{{ $index + 1 }}</td>
-                        <td class="border border-[var(--azul)] p-2 {{ $nameColorClass }}">{{ $player['name'] }}</td>
-                        <td class="border border-[var(--azul)] p-2 text-center">{{ $playerField }}</td>
+            <tr data-player-id="{{ $player['id'] }}">
+                <td class="border border-[var(--azul)] p-2 text-center">{{ $index + 1 }}</td>
+                <td class="border border-[var(--azul)] p-2 {{ $nameColorClass }}">{{ $player['name'] }}</td>
+                <td class="border border-[var(--azul)] p-2 text-center">{{ $playerField }}</td>
 
-                        @if($latestRound)
-                            <td class="border border-[var(--azul)] p-2 text-center">{{ $latestRound['t1'][0] ?? '' }}</td>
-                            <td class="border border-[var(--azul)] p-2 text-center">{{ $latestRound['t1'][1] ?? '' }}</td>
-                            <td class="border border-[var(--azul)] p-2 text-center">{{ $latestRound['t1'][2] ?? '' }}</td>
-                            <td class="border border-[var(--azul)] p-2 text-center">{{ $latestRound['total_t1'] ?? '' }}</td>
-                            <td class="border border-[var(--azul)] p-2 text-center">{{ $latestRound['t2'][0] ?? '' }}</td>
-                            <td class="border border-[var(--azul)] p-2 text-center">{{ $latestRound['t2'][1] ?? '' }}</td>
-                            <td class="border border-[var(--azul)] p-2 text-center">{{ $latestRound['t2'][2] ?? '' }}</td>
-                            <td class="border border-[var(--azul)] p-2 text-center">{{ $latestRound['total_t2'] ?? '' }}</td>
-                            <td class="border border-[var(--azul)] p-2 text-center">{{ $latestRound['total'] ?? '' }}</td>
-                        @else
-                            <td class="border border-[var(--azul)] p-2 text-center"></td>
-                            <td class="border border-[var(--azul)] p-2 text-center"></td>
-                            <td class="border border-[var(--azul)] p-2 text-center"></td>
-                            <td class="border border-[var(--azul)] p-2 text-center"></td>
-                            <td class="border border-[var(--azul)] p-2 text-center"></td>
-                            <td class="border border-[var(--azul)] p-2 text-center"></td>
-                            <td class="border border-[var(--azul)] p-2 text-center"></td>
-                            <td class="border border-[var(--azul)] p-2 text-center"></td>
-                            <td class="border border-[var(--azul)] p-2 text-center"></td>
-                        @endif
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+                @if($latestRound)
+                    <td class="border border-[var(--azul)] p-2 text-center">{{ $latestRound['t1'][0] ?? '' }}</td>
+                    <td class="border border-[var(--azul)] p-2 text-center">{{ $latestRound['t1'][1] ?? '' }}</td>
+                    <td class="border border-[var(--azul)] p-2 text-center">{{ $latestRound['t1'][2] ?? '' }}</td>
+                    <td class="border border-[var(--azul)] p-2 text-center">{{ $latestRound['total_t1'] ?? '' }}</td>
+                    <td class="border border-[var(--azul)] p-2 text-center">{{ $latestRound['t2'][0] ?? '' }}</td>
+                    <td class="border border-[var(--azul)] p-2 text-center">{{ $latestRound['t2'][1] ?? '' }}</td>
+                    <td class="border border-[var(--azul)] p-2 text-center">{{ $latestRound['t2'][2] ?? '' }}</td>
+                    <td class="border border-[var(--azul)] p-2 text-center">{{ $latestRound['total_t2'] ?? '' }}</td>
+                    <td class="border border-[var(--azul)] p-2 text-center">{{ $latestRound['total'] ?? ' ' }}</td>
+                @else
+                    <td class="border border-[var(--azul)] p-2 text-center"></td>
+                    <td class="border border-[var(--azul)] p-2 text-center"></td>
+                    <td class="border border-[var(--azul)] p-2 text-center"></td>
+                    <td class="border border-[var(--azul)] p-2 text-center"></td>
+                    <td class="border border-[var(--azul)] p-2 text-center"></td>
+                    <td class="border border-[var(--azul)] p-2 text-center"></td>
+                    <td class="border border-[var(--azul)] p-2 text-center"></td>
+                    <td class="border border-[var(--azul)] p-2 text-center"></td>
+                     <td class="border border-[var(--azul)] p-2 text-center"></td>
+                @endif
+            </tr>
+        @endforeach
+    </tbody>
+</table>
 
         <div class="flex flex-row justify-center mt-4">
             <p class="bg-green-300 p-1 m-2 border rounded-md">Próximo a jugar</p>
@@ -232,7 +232,7 @@
                         t1Total: parseInt(cells[6].textContent.trim()), // Total T1
                         throws2: [cells[7].textContent.trim(), cells[8].textContent.trim(), cells[9].textContent.trim()], // Los 3 siguientes throws
                         t2Total: parseInt(cells[10].textContent.trim()), // Total T2
-                        total: parseInt(cells[11].textContent.trim()) // Total
+                       // total: parseInt(cells[11].textContent.trim()) // Total
                     };
 
                     tableData.push(rowData); // Agregar la fila de datos al array
@@ -241,14 +241,54 @@
                 return tableData; // Devolver el array con los datos de la tabla
             }
 
-            let arrayFromTable = tableToArray();
+            let players = tableToArray();
 
-            socket.on('submitScore', (data) => {
-                let playerData = null;
-                console.log(arrayFromTable);
+socket.on('submitScore', (data) => {
+    // Buscar al jugador en el array de players usando el ID
+    let playerToUpdate = players.find(player => player.number === data.player);
+    
+    if (playerToUpdate) {
+        // Actualizar los lanzamientos para T1
+        playerToUpdate.throws1 = data.throws.map(value => parseInt(value)); // Actualizamos los lanzamientos
+        playerToUpdate.t1Total = playerToUpdate.throws1.reduce((sum, num) => sum + num, 0); // Recalculamos el total de T1
+        playerToUpdate.total = playerToUpdate.t1Total + playerToUpdate.t2Total; // Si necesitas recalcular el total general
 
+        // Crear el objeto `newData` con los valores que quieres actualizar en la tabla
+        const newData = {
+            t1: playerToUpdate.throws1, // Lanzamientos T1
+            total_t1: playerToUpdate.t1Total, // Total T1
+            t2: playerToUpdate.throws2 || [], // Lanzamientos T2 (si tienes este campo)
+            total_t2: playerToUpdate.t2Total || 0, // Total T2
+            total: playerToUpdate.total // Total general
+        };
+
+        // Llamar a la función para actualizar solo la fila de ese jugador
+        updatePlayerTable(data.player, newData);
+    }
+});
+
+// Función para actualizar la tabla con los nuevos datos del jugador
+function updatePlayerTable(playerId, newData) {
+    // Encuentra la fila correspondiente al jugador con el ID
+    const row = document.querySelector(`#scoreTable tbody tr[data-player-id="${playerId}"]`);
+    if (!row) return; // Si no se encuentra la fila, terminamos
+
+    // Encuentra todas las celdas de la fila
+    const cells = row.querySelectorAll('td');
+
+    // Actualiza los valores en las celdas de la fila
+    cells[3].textContent = newData.t1[0] || '';  // Primer lanzamiento T1
+    cells[4].textContent = newData.t1[1] || '';  // Segundo lanzamiento T1
+    cells[5].textContent = newData.t1[2] || '';  // Tercer lanzamiento T1
+    cells[6].textContent = newData.total_t1 || ''; // Total T1
+    cells[7].textContent = newData.t2[0] || '';  // Primer lanzamiento T2 (si lo tienes)
+    cells[8].textContent = newData.t2[1] || '';  // Segundo lanzamiento T2 (si lo tienes)
+    cells[9].textContent = newData.t2[2] || '';  // Tercer lanzamiento T2 (si lo tienes)
+    cells[10].textContent = newData.total_t2 || ''; // Total T2 (si lo tienes)
+    cells[11].textContent = newData.total || '0';  // Total general
+}
                 // Buscar el partido correspondiente al tournamentId y fieldId
-                arrayFromTable.forEach(match => {
+                /*arrayFromTable.forEach(match => {
                     console.log(data)
                     // Comprobamos si el número del partido coincide con el jugador
                     if (match.number === data.player) {
@@ -256,6 +296,8 @@
                         playerData = match;  // Esto obtiene el objeto 'match' completo
                     }
                 });
+
+                /*
 
                 if (playerData) {
                     console.log('Jugador encontrado:', playerData);
@@ -286,12 +328,12 @@
                     playerData.rounds.push(newRound);
 
                     // Ahora, si necesitas volver a renderizar la tabla
-                    renderTable(arrayFromTable); // Aquí actualizamos la tabla con la nueva información
-                } else {
+                    renderTable(arrayFromTable); // Aquí actualizamos la tabla con la nueva información*/
+                /*} else {
                     console.log('Jugador no encontrado');
                 }
 
-            });
+            });*/
 
             // Función para renderizar la tabla después de actualizar los datos
 function renderTable(matchesData) {
