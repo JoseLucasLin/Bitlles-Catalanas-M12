@@ -202,7 +202,18 @@ function getCurrentDateTime() {
         io.to("1").emit('newMessage', data);
     });
 
+socket.on('submitScore', (data) => {
+    console.log('Puntuación recibida:', data);
 
+io.to(data.tournamentId).emit('submitScore', data);
+
+
+
+
+
+
+    // Procesar los datos, como guardarlos en la base de datos o hacer alguna otra acción
+});
 /*
 
     socket.on('message',(mensage)=>{

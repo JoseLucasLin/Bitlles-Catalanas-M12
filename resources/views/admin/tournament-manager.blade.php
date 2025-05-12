@@ -158,7 +158,27 @@
             fetchTournamentInfo(storedChannel);
         }
     });
-    
+        function fetchTournamentInfo(channelId) {
+        fetch(`/tournaments/${channelId}/info`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta del servidor: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Datos del torneo recibidos:", data);
+                if (data.success) {
+                    console.table(data.tournament?.start_date || data); // asegúrate que el objeto existe
+                } else {
+                    throw new Error(data.message || "Error desconocido al cargar datos del torneo");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('error', error.message);
+            });
+    }
     function getList() {
         console.log("Enviando getTournaments");
         socket.emit('getTournaments', { 
@@ -197,7 +217,7 @@
     
     // New function to handle tournament info fetching
     function fetchTournamentInfo(channelId) {
-        fetch(`/admin/tournaments/${channelId}/info`)
+        fetch(`/tournaments/${channelId}/info`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Error en la respuesta del servidor: ' + response.status);

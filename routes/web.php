@@ -137,6 +137,8 @@ Route::middleware(['auth', 'role:2'])->prefix('admin')->group(function () {
     Route::post('/players/assign', [App\Http\Controllers\AddPlayersController::class, 'assignPlayer'])->name('admin.players.assign');
     Route::delete('/players/remove/{id}', [App\Http\Controllers\AddPlayersController::class, 'removePlayer'])->name('admin.players.remove');
     Route::post('/referees/assign', [App\Http\Controllers\AddPlayersController::class, 'assignReferee'])->name('admin.referees.assign');
+
+
 });
 
 
@@ -147,8 +149,7 @@ Route::middleware(['auth', 'role:2'])->prefix('admin')->group(function () {
     Route::get('/admin/tournament-manager', [App\Http\Controllers\TournamentManagerController::class, 'index'])
     ->name('admin.tournament-manager');
 
-    // Obtener información del torneo
-    Route::get('/tournaments/{id}/info', [App\Http\Controllers\TournamentManagerController::class, 'showTournament']);
+
 
     // Obtener jugadores del torneo
     Route::get('/tournaments/{id}/players', [App\Http\Controllers\TournamentManagerController::class, 'getTournamentPlayers']);
@@ -167,6 +168,9 @@ Route::middleware(['auth', 'role:2'])->prefix('admin')->group(function () {
         ->name('admin.tournaments.edit');
 });
 
+
+
+    Route::get('/tournaments/{id}/info', [App\Http\Controllers\TournamentManagerController::class, 'showTournament']);
 // CREATE TOURNAMENT
 Route::get('/admin/create-tournament', [TournamentController::class, 'create']) -> name('createTournament');
 
@@ -231,12 +235,13 @@ Route::middleware(['auth', 'role:2'])->prefix('admin')->group(function () {
     Route::get('/tournaments/{tournamentId}/available-players', [App\Http\Controllers\FieldPlayerDistributionController::class, 'getPlayers'])->name('admin.tournaments.players');
     Route::post('/tournaments/distribute-players', [App\Http\Controllers\FieldPlayerDistributionController::class, 'distribute'])->name('admin.tournaments.distribute');
     Route::get('/tournaments/{tournamentId}/current-distributions', [App\Http\Controllers\FieldPlayerDistributionController::class, 'getCurrentDistributions'])->name('admin.tournaments.current-distributions');
-    Route::get('/tournaments/{tournamentId}/current-round', [App\Http\Controllers\FieldPlayerDistributionController::class, 'getCurrentRound'])->name('admin.tournaments.current-round');
-    Route::get('/tournaments/{tournamentId}/fields/{fieldId}/players', [App\Http\Controllers\FieldPlayerDistributionController::class, 'getPlayersForField'])->name('admin.tournaments.fields.players');
-    Route::get('/tournaments/{tournamentId}/players-with-fields', [App\Http\Controllers\FieldPlayerDistributionController::class, 'getTournamentPlayersWithFields'])->name('admin.tournaments.players-with-fields');
+    
+
 
 });
-
+Route::get('/tournaments/{tournamentId}/current-round', [App\Http\Controllers\FieldPlayerDistributionController::class, 'getCurrentRound'])->name('admin.tournaments.current-round');
+    Route::get('/tournaments/{tournamentId}/fields/{fieldId}/players', [App\Http\Controllers\FieldPlayerDistributionController::class, 'getPlayersForField'])->name('admin.tournaments.fields.players');
+    Route::get('/tournaments/{tournamentId}/players-with-fields', [App\Http\Controllers\FieldPlayerDistributionController::class, 'getTournamentPlayersWithFields'])->name('admin.tournaments.players-with-fields');
 // Rutas para árbitros (role:1)
 Route::middleware(['auth', 'role:1'])->prefix('referee')->group(function () {
     Route::get('/', function () {
