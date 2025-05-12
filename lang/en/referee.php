@@ -14,6 +14,7 @@ return [
     'select_court' => 'Select Court',
     'current_player_throwing' => 'Throwing Player:',
     'current_player_receiving' => 'Receiving Player:',
+    'current_player_preparing' => 'Preparing Player:',
     'throw_1' => 'Throw 1',
     'throw_2' => 'Throw 2',
     'throw_3' => 'Throw 3',

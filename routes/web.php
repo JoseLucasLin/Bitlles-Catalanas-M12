@@ -27,6 +27,9 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Response;
+
 // Rutas principales accesibles para todos
 Route::get('/', [MainController::class, 'index']);
 Route::get('player-acces', function (){
@@ -42,39 +45,63 @@ Route::get('/test', function () {
 
 //general
 Route::get('/general', function () {
-    // Ruta al archivo en public
+    // Tu lógica actual para procesar los datos
     $filePath = public_path('sample_data2.json');
     
-    // Verificar que el archivo existe
     if (!File::exists($filePath)) {
         abort(500, 'El archivo JSON no se encuentra');
     }
     
-    // Leer el archivo
     $jsonData = File::get($filePath);
     $tournamentData = json_decode($jsonData, true);
     
-    // Verificar que el JSON es válido
     if (json_last_error() !== JSON_ERROR_NONE || !isset($tournamentData['matches'])) {
         abort(500, 'Error en el formato del JSON');
     }
     
-    // Combinar todos los jugadores de todos los partidos
+    // Procesar todos los jugadores (tu lógica actual)
     $allPlayers = collect($tournamentData['matches'])
         ->pluck('players')
         ->flatten(1)
         ->map(function($player) {
-            // Calcular el total acumulado de todas las rondas
             $totalAcumulado = collect($player['rounds'])->sum('total');
-            $player['total_acumulado'] = $totalAcumulado;
-            return $player;
+            
+            $acumulado = 0;
+            $rounds = collect($player['rounds'])->map(function($round) use (&$acumulado) {
+                $acumulado += $round['total'];
+                $round['acumulado'] = $acumulado;
+                return $round;
+            });
+            
+            return [
+                'id' => $player['id'],
+                'name' => $player['name'],
+                'status' => $player['status'],
+                'rounds' => $rounds->toArray(),
+                'total_acumulado' => $totalAcumulado
+            ];
         })
-        ->sortByDesc('total_acumulado') // Ordenar por puntuación descendente
+        ->sortByDesc('total_acumulado')
         ->values()
         ->all();
     
+    $maxRounds = collect($allPlayers)->max(function($player) {
+        return count($player['rounds']);
+    });
+
+    // Si se solicita PDF
+    if (request()->has('export') && request('export') == 'pdf') {
+        $pdf = Pdf::loadView('tables.exportPDF', [
+            'allPlayers' => $allPlayers,
+            'maxRounds' => $maxRounds
+        ]);
+        
+        return $pdf->download('resultados_torneo.pdf');
+    }
+
     return view('tables.generalTable', [
-        'allPlayers' => $allPlayers
+        'allPlayers' => $allPlayers,
+        'maxRounds' => $maxRounds
     ]);
 });
 

@@ -34,9 +34,61 @@
                 <p class="text-base md:text-lg font-semibold text-[var(--azul)]">{{__("referee.current_round")}} 2</p>
             </div>
 
-            <div class="mb-3 md:mb-4">
-                <p class="text-base md:text-lg font-semibold text-[var(--azul)]">{{__("referee.current_player_throwing")}} <span class="text-gray-600 underline">Pepe Pepito</span></p>
-                <p class="text-base md:text-lg font-semibold text-[var(--azul)]">{{__("referee.current_player_receiving")}} <span class="text-gray-600 underline">Pablo Escobar</span></p>
+            <hr class="border-[var(--azul)] border-2 rounded-xl">
+            <div class="mb-3 md:mb-4 space-y-2">
+                <div>
+                    <label class="text-base md:text-lg font-semibold text-[var(--azul)] block mb-1">
+                        {{__("referee.current_player_throwing")}}
+                    </label>
+                    <select class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--azul)]">
+                        <option value="" disabled selected>Selecciona un jugador</option>
+                        <option value="pepe">Pepe Pepito</option>
+                        <option value="juan">Juan Pérez</option>
+                        <option value="maria">María García</option>
+                        <option value="pepe">Pepe Pepito</option>
+                        <option value="juan">Juan Pérez</option>
+                        <option value="maria">María García</option>
+                        <option value="pepe">Pepe Pepito</option>
+                        <option value="juan">Juan Pérez</option>
+                        <option value="maria">María García</option>
+                    </select>
+                </div>
+            
+                <div>
+                    <label class="text-base md:text-lg font-semibold text-[var(--azul)] block mb-1">
+                        {{__("referee.current_player_receiving")}}
+                    </label>
+                    <select class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--azul)]">
+                        <option value="" disabled selected>Selecciona un jugador</option>
+                        <option value="pablo">Pablo Escobar</option>
+                        <option value="ana">Ana Sánchez</option>
+                        <option value="luis">Luis Martínez</option>
+                        <option value="pepe">Pepe Pepito</option>
+                        <option value="juan">Juan Pérez</option>
+                        <option value="maria">María García</option>
+                        <option value="pepe">Pepe Pepito</option>
+                        <option value="juan">Juan Pérez</option>
+                        <option value="maria">María García</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-base md:text-lg font-semibold text-[var(--azul)] block mb-1">
+                        {{__("referee.current_player_preparing")}}
+                    </label>
+                    <select class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--azul)]">
+                        <option value="" disabled selected>Selecciona un jugador</option>
+                        <option value="pablo">Pablo Escobar</option>
+                        <option value="ana">Ana Sánchez</option>
+                        <option value="luis">Luis Martínez</option>
+                        <option value="pepe">Pepe Pepito</option>
+                        <option value="juan">Juan Pérez</option>
+                        <option value="maria">María García</option>
+                        <option value="pepe">Pepe Pepito</option>
+                        <option value="juan">Juan Pérez</option>
+                        <option value="maria">María García</option>
+                    </select>
+                </div>
             </div>
 
             <hr class="border-[var(--azul)] border-2 rounded-xl">

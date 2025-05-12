@@ -14,6 +14,7 @@ return [
     'select_court' => 'Seleccionar Pista',
     'current_player_throwing' => 'Jugador que llança:',
     'current_player_receiving' => 'Jugador que rep:',
+    'current_player_preparing' => 'Jugador que es prepara:',
     'throw_1' => 'Tirada 1',
     'throw_2' => 'Tirada 2',
     'throw_3' => 'Tirada 3',
