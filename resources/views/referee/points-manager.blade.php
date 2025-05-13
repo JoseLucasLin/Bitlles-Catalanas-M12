@@ -389,6 +389,18 @@ function updatePlayerSelects(players) {
         });
     });
 }
+socket.on('nextRound2', (data) => {
+    // Obtenemos todos los elementos con el atributo 'data-current-round'
+    const roundElements = document.querySelectorAll('[data-current-round]');
+    
+    // Iteramos sobre cada uno de esos elementos
+    roundElements.forEach((element) => {
+        // Actualizamos su contenido con el valor de la nueva ronda
+        element.textContent = data.nextRound;
+    });
+
+    console.log(`Ronda actualizada a ${data.nextRound}`);
+});
 
 document.querySelector('select[name="field_id"]').addEventListener('change', (e) => {
     const fieldId = e.target.value;

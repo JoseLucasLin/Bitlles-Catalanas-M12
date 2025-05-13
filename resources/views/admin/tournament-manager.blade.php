@@ -144,6 +144,9 @@
     </div>
     @endif
 </main>
+<script>
+    const userId = "{{ auth()->user()->id }}";
+</script>
 <script type="module">
     import { io } from 'https://cdn.socket.io/4.3.2/socket.io.esm.min.js'
     const socket = io('http://localhost:8100');
@@ -158,27 +161,8 @@
             fetchTournamentInfo(storedChannel);
         }
     });
-        function fetchTournamentInfo(channelId) {
-        fetch(`/tournaments/${channelId}/info`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error en la respuesta del servidor: ' + response.status);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log("Datos del torneo recibidos:", data);
-                if (data.success) {
-                    console.table(data.tournament?.start_date || data); // asegúrate que el objeto existe
-                } else {
-                    throw new Error(data.message || "Error desconocido al cargar datos del torneo");
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showNotification('error', error.message);
-            });
-    }
+
+    
     function getList() {
         console.log("Enviando getTournaments");
         socket.emit('getTournaments', { 
@@ -325,8 +309,7 @@
             select.appendChild(option);
         });
     }
-    </script>
-<script>
+
 document.addEventListener('DOMContentLoaded', function() {
     // Manejar cambio de torneo seleccionado
     const tournamentSelector = document.getElementById('tournament-selector');
@@ -402,7 +385,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log("Cargando información del torneo: " + tournamentId);
 
         // Cargar información del torneo (datos básicos)
-        fetch(`/admin/tournaments/${tournamentId}/info`)
+        fetch(`/tournaments/${tournamentId}/info`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Error en la respuesta del servidor: ' + response.status);
@@ -567,46 +550,36 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('next-round').disabled = !info.isStarted;
     }
 
-    // Iniciar torneo
     
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Ha ocurrido un error al iniciar el torneo.');
-        });
-    }
+    
 
     // Pasar a la siguiente ronda
     function nextRound(tournamentId) {
         if (!confirm('¿Estás seguro de que quieres avanzar a la siguiente ronda?')) {
             return;
         }
+const nextRoundNumber = document.getElementById("current-round");
+const currentNumber = parseInt(nextRoundNumber.textContent);
 
-        fetch(`/admin/tournaments/${tournamentId}/next-round`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert(data.message);
-                updateTournamentInfo(data.data);
-            } else {
-                alert(data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Ha ocurrido un error al avanzar a la siguiente ronda.');
-        });
+if (!isNaN(currentNumber)) {
+    const nextNumber = currentNumber + 1;
+    
+    // Actualiza el DOM
+    nextRoundNumber.textContent = nextNumber;
+    
+    // Emitir el nuevo número de ronda
+    socket.emit('nextRound2', {
+        channelId: tournamentId,
+        nextRound: nextNumber
+    });
+} else {
+    console.warn("El número actual de ronda no es válido");
+}
     }
 
     // Resolver empates
     function resolveTie(tournamentId) {
-        fetch(`/admin/tournaments/${tournamentId}/resolve-tie`, {
+        fetch(`/tournaments/${tournamentId}/resolve-tie`, {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}',

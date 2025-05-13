@@ -214,6 +214,16 @@ io.to(data.tournamentId).emit('submitScore', data);
 
     // Procesar los datos, como guardarlos en la base de datos o hacer alguna otra acción
 });
+
+
+
+socket.on('nextRound2', (data) => {
+    console.log(`Avanzando a la ronda ${data.nextRound} en canal ${data.channelId}`);
+    io.to(data.channelId).emit('nextRound2', data); 
+});
+
+
+
 /*
 
     socket.on('message',(mensage)=>{

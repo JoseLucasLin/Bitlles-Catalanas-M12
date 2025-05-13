@@ -274,7 +274,9 @@ Route::middleware(['auth'])->group(function () {
     // Otras rutas que requieren autenticación pero no roles específicos
 
 
-    Route::get('/global', function () {
+   
+});
+ Route::get('/global', function () {
         // Ruta al archivo en public
         $filePath = public_path('sample_data.json');
 
@@ -302,8 +304,6 @@ Route::middleware(['auth'])->group(function () {
             'allPlayers' => $allPlayers
         ]);
     });
-});
-
 // Rutas de autenticación para invitados (no autenticados)
 Route::middleware('guest')->group(function () {
     // Registro
