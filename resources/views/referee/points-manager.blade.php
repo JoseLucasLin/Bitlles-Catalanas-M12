@@ -56,44 +56,6 @@
             <!-- Las opciones de los jugadores se llenarán dinámicamente aquí -->
         </select>
                     </div>
-
-                    <div>
-                        <label class="text-base md:text-lg font-semibold text-[var(--azul)] block mb-1">
-                            {{__("referee.current_player_receiving")}}
-                        </label>
-                        <select data-show-all-players
-                            class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--azul)]">
-                            <option value="" disabled selected>Selecciona un jugador</option>
-                            <option value="pablo">Pablo Escobar</option>
-                            <option value="ana">Ana Sánchez</option>
-                            <option value="luis">Luis Martínez</option>
-                            <option value="pepe">Pepe Pepito</option>
-                            <option value="juan">Juan Pérez</option>
-                            <option value="maria">María García</option>
-                            <option value="pepe">Pepe Pepito</option>
-                            <option value="juan">Juan Pérez</option>
-                            <option value="maria">María García</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="text-base md:text-lg font-semibold text-[var(--azul)] block mb-1">
-                            {{__("referee.current_player_preparing")}}
-                        </label>
-                        <select
-                            class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--azul)]">
-                            <option value="" disabled selected>Selecciona un jugador</option>
-                            <option value="pablo">Pablo Escobar</option>
-                            <option value="ana">Ana Sánchez</option>
-                            <option value="luis">Luis Martínez</option>
-                            <option value="pepe">Pepe Pepito</option>
-                            <option value="juan">Juan Pérez</option>
-                            <option value="maria">María García</option>
-                            <option value="pepe">Pepe Pepito</option>
-                            <option value="juan">Juan Pérez</option>
-                            <option value="maria">María García</option>
-                        </select>
-                    </div>
                 </div>
 
                 <hr class="border-[var(--azul)] border-2 rounded-xl">
@@ -217,12 +179,6 @@
 
 
 
-            <div class="text-center mt-3 md:mt-4">
-                <button data-show-all-players
-                    class="bg-[var(--rojo)] text-[var(--blanco)] px-4 py-2 rounded transition duration-300 hover:bg-[var(--azul)] font-bold hover:scale-105 text-sm md:text-base">
-                    {{__("referee.show_all_players")}}
-                </button>
-            </div>
         </div>
         </form>
     </main>
@@ -296,32 +252,16 @@ function setupScoreButtons() {
 
 // Configurar eventos para los selectores de estado de jugadores
 function setupPlayerStatusEvents() {
-    // Selector de jugador lanzando
+    // Selector de jugador lanzando (es el único que mantenemos)
     const throwingSelect = document.querySelector('select[data-player-select]');
     if (throwingSelect) {
         throwingSelect.addEventListener('change', function() {
             if (this.value) {
                 updatePlayerStatus(this.value, 2); // 2 = lanzando
-            }
-        });
-    }
 
-    // Selector de jugador recogiendo
-    const collectingSelect = document.querySelector('select[data-show-all-players]');
-    if (collectingSelect) {
-        collectingSelect.addEventListener('change', function() {
-            if (this.value) {
-                updatePlayerStatus(this.value, 4); // 4 = recogiendo
-            }
-        });
-    }
-
-    // Selector de jugador preparándose (identificado por exclusión)
-    const preparingSelect = document.querySelector('select:not([data-player-select]):not([data-show-all-players]):not([name="field_id"]):not([id="chanelTournament"])');
-    if (preparingSelect) {
-        preparingSelect.addEventListener('change', function() {
-            if (this.value) {
-                updatePlayerStatus(this.value, 3); // 3 = preparándose
+                // Actualización visual inmediata
+                const option = this.options[this.selectedIndex];
+                option.style.backgroundColor = '#86efac'; // bg-green-300
             }
         });
     }
@@ -577,105 +517,82 @@ function loadFieldsAndPlayers(tournamentId) {
 
 // ==== Obtener jugadores para un campo específico ====
 function fetchPlayersForField(tournamentId, fieldId) {
+    console.log(`Obteniendo jugadores para torneo ${tournamentId}, campo ${fieldId}`);
+
     fetch(`/tournaments/${tournamentId}/fields/${fieldId}/players`)
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) {
+                throw new Error(`Error HTTP: ${res.status}`);
+            }
+            return res.json();
+        })
         .then(data => {
+            console.log("Respuesta recibida:", data);
+
             // Verificar que la respuesta sea exitosa y contiene el array de jugadores
             if (data.success && Array.isArray(data.players)) {
                 updatePlayerSelects(data.players);
             } else {
                 console.error("La respuesta no contiene un array de jugadores válido:", data);
+                alert("Error: No se pudieron cargar los jugadores correctamente");
             }
         })
-        .catch(err => console.error("Error obteniendo jugadores para pista:", err));
+        .catch(err => {
+            console.error("Error obteniendo jugadores para pista:", err);
+            alert(`Error al cargar jugadores: ${err.message}`);
+        });
 }
 
 // Actualizar selectores de jugadores según su estado
 function updatePlayerSelects(players) {
-    // Agrupar jugadores por estado
+    // Agrupar jugadores por estado - solo nos interesa el estado 2 (lanzando)
     const playersByState = {
-        throwing: [],   // El que está lanzando (estado 2)
-        preparing: [],  // El que se está preparando (estado 3)
-        collecting: []  // El que está recogiendo (estado 4)
+        throwing: []   // El que está lanzando (estado 2)
     };
+
+    console.log('Actualizando selectores con jugadores:', players);
 
     // Clasificar jugadores según su estado
     players.forEach(player => {
-        switch(parseInt(player.status)) {
-            case 2:
-                playersByState.throwing.push(player);
-                break;
-            case 3:
-                playersByState.preparing.push(player);
-                break;
-            case 4:
-                playersByState.collecting.push(player);
-                break;
-            default:
-                // El estado 1 (pendiente) o cualquier otro no se muestra específicamente
-                break;
+        // Asegurar que status sea un número
+        const status = Number(player.status);
+        console.log(`Jugador ${player.id} (${player.name}) tiene estado: ${status}`);
+
+        if (status === 2) {
+            playersByState.throwing.push(player);
         }
     });
 
+    console.log('Jugadores clasificados por estado:', playersByState);
+
     // Actualizar selector de jugador lanzando
     const throwingSelect = document.querySelector('select[data-player-select]');
+    if (!throwingSelect) {
+        console.error('No se encontró el selector para jugadores lanzando');
+        return;
+    }
+
     throwingSelect.innerHTML = '<option value="" disabled selected>Selecciona un jugador</option>';
+
+    // Primero añadir jugadores que ya están en estado lanzando
     playersByState.throwing.forEach(player => {
         const opt = document.createElement('option');
         opt.value = player.id;
         opt.textContent = `${player.name} ${player.lastname}`;
+        opt.style.backgroundColor = '#86efac'; // bg-green-300
         throwingSelect.appendChild(opt);
     });
 
-    // Si no hay jugadores en estado "lanzando", mostrar todos los jugadores
-    if (playersByState.throwing.length === 0) {
-        players.forEach(player => {
+    // Añadir el resto de jugadores
+    players.forEach(player => {
+        // Solo añadir si no está ya en estado 2
+        if (Number(player.status) !== 2) {
             const opt = document.createElement('option');
             opt.value = player.id;
             opt.textContent = `${player.name} ${player.lastname}`;
             throwingSelect.appendChild(opt);
-        });
-    }
-
-    // Actualizar selector de jugador recogiendo
-    const collectingSelect = document.querySelector('select[data-show-all-players]');
-    collectingSelect.innerHTML = '<option value="" disabled selected>Selecciona un jugador</option>';
-    playersByState.collecting.forEach(player => {
-        const opt = document.createElement('option');
-        opt.value = player.id;
-        opt.textContent = `${player.name} ${player.lastname}`;
-        collectingSelect.appendChild(opt);
+        }
     });
-
-    // Si no hay jugadores en estado "recogiendo", mostrar todos los jugadores
-    if (playersByState.collecting.length === 0) {
-        players.forEach(player => {
-            const opt = document.createElement('option');
-            opt.value = player.id;
-            opt.textContent = `${player.name} ${player.lastname}`;
-            collectingSelect.appendChild(opt);
-        });
-    }
-
-    // Actualizar selector de jugador preparándose
-    const preparingSelect = document.querySelector('select:not([data-player-select]):not([data-show-all-players]):not([name="field_id"]):not([id="chanelTournament"])');
-    preparingSelect.innerHTML = '<option value="" disabled selected>Selecciona un jugador</option>';
-    playersByState.preparing.forEach(player => {
-        const opt = document.createElement('option');
-        opt.value = player.id;
-        opt.textContent = `${player.name} ${player.lastname}`;
-        preparingSelect.appendChild(opt);
-    });
-
-    // Si no hay jugadores en estado "preparando", mostrar todos los jugadores
-    if (playersByState.preparing.length === 0) {
-        players.forEach(player => {
-            const opt = document.createElement('option');
-            opt.value = player.id;
-            opt.textContent = `${player.name} ${player.lastname}`;
-            preparingSelect.appendChild(opt);
-        });
-    }
 }
 
 // Actualizar el estado de un jugador
@@ -683,7 +600,13 @@ function updatePlayerStatus(playerId, status) {
     const tournamentId = localStorage.getItem('canal');
     const fieldId = document.querySelector('select[name="field_id"]').value;
 
-    if (!playerId || !tournamentId || !fieldId) return;
+    if (!playerId || !tournamentId || !fieldId) {
+        console.error("Faltan datos para actualizar estado:", { playerId, tournamentId, fieldId });
+        alert('Error: Faltan datos para actualizar estado del jugador');
+        return;
+    }
+
+    console.log(`Enviando actualización de estado: jugador ${playerId}, estado ${status}`);
 
     // Enviar actualización de estado al servidor
     fetch(`/tournaments/${tournamentId}/fields/${fieldId}/players/${playerId}/status`, {
@@ -694,10 +617,15 @@ function updatePlayerStatus(playerId, status) {
         },
         body: JSON.stringify({ status: status })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Error HTTP: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.success) {
-            console.log(`Estado del jugador ${playerId} actualizado a ${status}`);
+            console.log(`Estado del jugador ${playerId} actualizado a ${status}`, data);
 
             // Recargar los jugadores para reflejar los cambios
             fetchPlayersForField(tournamentId, fieldId);
@@ -708,7 +636,7 @@ function updatePlayerStatus(playerId, status) {
     })
     .catch(err => {
         console.error("Error al actualizar estado del jugador:", err);
-        alert('Error de conexión al actualizar el estado del jugador');
+        alert('Error de conexión al actualizar el estado del jugador: ' + err.message);
     });
 }
 

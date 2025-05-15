@@ -90,9 +90,7 @@
 </table>
 
         <div class="flex flex-row justify-center mt-4">
-            <p class="bg-green-300 p-1 m-2 border rounded-md">Próximo a jugar</p>
-            <p class="bg-yellow-200 p-1 m-2 border rounded-md">Se prepara</p>
-            <p class="bg-red-400 p-1 m-2 border rounded-md">Recoge</p>
+            <p class="bg-green-300 p-1 m-2 border rounded-md">Lanzando</p>
             <p class="bg-gray-200 p-1 m-2 border rounded-md">En espera</p>
         </div>
     </main>
@@ -423,12 +421,10 @@
                             total: 0
                         };
 
-                        // Determinar el color basado en el estado
-                        let nameColorClass = 'bg-gray-200'; // Por defecto
-                        switch (player.status) {
-                            case 2: nameColorClass = 'bg-green-300'; break; // playing_next
-                            case 3: nameColorClass = 'bg-yellow-200'; break; // preparing
-                            case 4: nameColorClass = 'bg-red-400'; break; // collecting
+                        // Determinar el color basado en el estado - ahora solo destacamos el estado 2 (lanzando)
+                        let nameColorClass = 'bg-gray-200'; // Por defecto todos en gris
+                        if (player.status === 2) {
+                            nameColorClass = 'bg-green-300'; // Solo el que está lanzando se marca en verde
                         }
 
                         // Crear la fila en la tabla con datos completos
@@ -471,10 +467,8 @@
             allPlayers.forEach((player, index) => {
                 // Determinar el color basado en el estado
                 let nameColorClass = 'bg-gray-200'; // Por defecto
-                switch (player.status) {
-                    case 2: nameColorClass = 'bg-green-300'; break; // playing_next
-                    case 3: nameColorClass = 'bg-yellow-200'; break; // preparing
-                    case 4: nameColorClass = 'bg-red-400'; break; // collecting
+                if (player.status === 2) {
+                    nameColorClass = 'bg-green-300'; // Solo el que está lanzando
                 }
 
                 // Crear la fila en la tabla
