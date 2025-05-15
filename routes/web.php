@@ -47,32 +47,32 @@ Route::get('/test', function () {
 Route::get('/general', function () {
     // Tu lógica actual para procesar los datos
     $filePath = public_path('sample_data2.json');
-    
+
     if (!File::exists($filePath)) {
         abort(500, 'El archivo JSON no se encuentra');
     }
-    
+
     $jsonData = File::get($filePath);
     $tournamentData = json_decode($jsonData, true);
-    
+
     if (json_last_error() !== JSON_ERROR_NONE || !isset($tournamentData['matches'])) {
         abort(500, 'Error en el formato del JSON');
     }
-    
+
     // Procesar todos los jugadores (tu lógica actual)
     $allPlayers = collect($tournamentData['matches'])
         ->pluck('players')
         ->flatten(1)
         ->map(function($player) {
             $totalAcumulado = collect($player['rounds'])->sum('total');
-            
+
             $acumulado = 0;
             $rounds = collect($player['rounds'])->map(function($round) use (&$acumulado) {
                 $acumulado += $round['total'];
                 $round['acumulado'] = $acumulado;
                 return $round;
             });
-            
+
             return [
                 'id' => $player['id'],
                 'name' => $player['name'],
@@ -84,7 +84,7 @@ Route::get('/general', function () {
         ->sortByDesc('total_acumulado')
         ->values()
         ->all();
-    
+
     $maxRounds = collect($allPlayers)->max(function($player) {
         return count($player['rounds']);
     });
@@ -95,7 +95,7 @@ Route::get('/general', function () {
             'allPlayers' => $allPlayers,
             'maxRounds' => $maxRounds
         ]);
-        
+
         return $pdf->download('resultados_torneo.pdf');
     }
 
@@ -235,13 +235,15 @@ Route::middleware(['auth', 'role:2'])->prefix('admin')->group(function () {
     Route::get('/tournaments/{tournamentId}/available-players', [App\Http\Controllers\FieldPlayerDistributionController::class, 'getPlayers'])->name('admin.tournaments.players');
     Route::post('/tournaments/distribute-players', [App\Http\Controllers\FieldPlayerDistributionController::class, 'distribute'])->name('admin.tournaments.distribute');
     Route::get('/tournaments/{tournamentId}/current-distributions', [App\Http\Controllers\FieldPlayerDistributionController::class, 'getCurrentDistributions'])->name('admin.tournaments.current-distributions');
-    
+
 
 
 });
 Route::get('/tournaments/{tournamentId}/current-round', [App\Http\Controllers\FieldPlayerDistributionController::class, 'getCurrentRound'])->name('admin.tournaments.current-round');
     Route::get('/tournaments/{tournamentId}/fields/{fieldId}/players', [App\Http\Controllers\FieldPlayerDistributionController::class, 'getPlayersForField'])->name('admin.tournaments.fields.players');
     Route::get('/tournaments/{tournamentId}/players-with-fields', [App\Http\Controllers\FieldPlayerDistributionController::class, 'getTournamentPlayersWithFields'])->name('admin.tournaments.players-with-fields');
+    Route::get('/tournaments/{tournamentId}/players-scores', [App\Http\Controllers\FieldPlayerDistributionController::class, 'getPlayerScores'])->name('admin.tournaments.players-scores');
+    Route::post('/tournaments/{tournamentId}/fields/{fieldId}/players/{playerId}/status', [App\Http\Controllers\FieldPlayerDistributionController::class, 'updatePlayerStatus'])->name('admin.tournaments.player-status');
 // Rutas para árbitros (role:1)
 Route::middleware(['auth', 'role:1'])->prefix('referee')->group(function () {
     Route::get('/', function () {
@@ -274,7 +276,7 @@ Route::middleware(['auth'])->group(function () {
     // Otras rutas que requieren autenticación pero no roles específicos
 
 
-   
+
 });
  Route::get('/global', function () {
         // Ruta al archivo en public
