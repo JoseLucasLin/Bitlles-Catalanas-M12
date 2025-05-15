@@ -11,6 +11,7 @@ use App\Models\Referee_Tournament;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Exception;
 
 class FieldPlayerDistributionController extends Controller
 {
@@ -300,6 +301,113 @@ class FieldPlayerDistributionController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Error al obtener jugadores del torneo: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Obtener las puntuaciones completas de los jugadores en un torneo
+     */
+    public function getPlayerScores($tournamentId)
+    {
+        try {
+            // Obtener todas las puntuaciones para cada jugador, organizadas por ronda
+            $rounds = Round::where('id_tournament', $tournamentId)
+                ->join('player', 'rounds.id_player', '=', 'player.id')
+                ->select(
+                    'player.id as player_id',
+                    'player.name',
+                    'player.lastname',
+                    'rounds.round_number',
+                    'rounds.t1',
+                    'rounds.t2',
+                    'rounds.t3'
+                )
+                ->get();
+
+            // Organizar los datos por jugador y ronda
+            $playerScores = [];
+            foreach ($rounds as $round) {
+                $playerId = $round->player_id;
+                $roundNumber = $round->round_number;
+
+                if (!isset($playerScores[$playerId])) {
+                    $playerScores[$playerId] = [
+                        'round1' => ['t1' => [0, 0, 0], 'total_t1' => 0],
+                        'round2' => ['t2' => [0, 0, 0], 'total_t2' => 0],
+                        'total' => 0
+                    ];
+                }
+
+                if ($roundNumber == 1) {
+                    $t1 = (int)$round->t1;
+                    $t2 = (int)$round->t2;
+                    $t3 = (int)$round->t3;
+                    $total_t1 = $t1 + $t2 + $t3;
+
+                    $playerScores[$playerId]['round1']['t1'] = [$t1, $t2, $t3];
+                    $playerScores[$playerId]['round1']['total_t1'] = $total_t1;
+                    $playerScores[$playerId]['total'] = $total_t1;
+                } else if ($roundNumber == 2) {
+                    $t1 = (int)$round->t1;
+                    $t2 = (int)$round->t2;
+                    $t3 = (int)$round->t3;
+                    $total_t2 = $t1 + $t2 + $t3;
+
+                    $playerScores[$playerId]['round2']['t2'] = [$t1, $t2, $t3];
+                    $playerScores[$playerId]['round2']['total_t2'] = $total_t2;
+                    $playerScores[$playerId]['total'] =
+                        $playerScores[$playerId]['round1']['total_t1'] + $total_t2;
+                }
+            }
+
+            return response()->json([
+                'success' => true,
+                'playerScores' => $playerScores
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error al obtener puntuaciones de jugadores: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al obtener puntuaciones: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Actualizar el estado de un jugador en un torneo/pista específicos
+     */
+    public function updatePlayerStatus($tournamentId, $fieldId, $playerId, Request $request)
+    {
+        try {
+            // Validar datos recibidos
+            $validated = $request->validate([
+                'status' => 'required|integer|min:1|max:4',
+            ]);
+
+            $status = $request->status;
+            $currentRound = Tournament::findOrFail($tournamentId)->current_round ?? 1;
+
+            // Actualizar el estado del jugador en la ronda actual
+            $updated = Round::where('id_tournament', $tournamentId)
+                ->where('id_field', $fieldId)
+                ->where('id_player', $playerId)
+                ->where('round_number', $currentRound)
+                ->update(['id_status' => $status]);
+
+            if ($updated) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Estado del jugador actualizado correctamente'
+                ]);
+            } else {
+                throw new Exception('No se encontró el registro para actualizar');
+            }
+        } catch (\Exception $e) {
+            Log::error('Error al actualizar estado del jugador: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar estado: ' . $e->getMessage()
             ], 500);
         }
     }

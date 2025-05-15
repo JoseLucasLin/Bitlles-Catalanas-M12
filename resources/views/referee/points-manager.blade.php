@@ -31,7 +31,7 @@
             <form action="" >
                 @csrf
                 <div class="mb-3 md:mb-4">
-                    
+
     <label class="block text-base md:text-lg font-medium text-[var(--azul)]">
         {{__("referee.select_court")}}
     </label>
@@ -207,10 +207,10 @@
                      data-action="submitScores"
                         class="bg-[var(--rojo)] text-[var(--blanco)] px-4 py-2 rounded transition duration-300 hover:bg-[var(--azul)] font-bold hover:scale-105 text-sm md:text-base">
                         {{__("referee.save_scores")}}
-                        
+
                     </button>
                 </div>
-         
+
 
 
 
@@ -231,9 +231,40 @@
 import { io } from 'https://cdn.socket.io/4.3.2/socket.io.esm.min.js'
 const socket = io('http://localhost:8100');
 
-document.addEventListener('DOMContentLoaded', function () {
+// Variables globales
+let currentTournamentId = null;
+let currentFieldId = null;
 
-    // ==== Botones de puntuación ====
+// Función principal que se ejecuta cuando el DOM está listo
+document.addEventListener('DOMContentLoaded', function () {
+    // Configurar botones de puntuación
+    setupScoreButtons();
+
+    // Obtener lista de torneos y configurar selector
+    getList();
+
+    // Cargar torneo guardado si existe
+    const storedChannel = localStorage.getItem('canal');
+    if (storedChannel) {
+        currentTournamentId = storedChannel;
+        fetchTournamentInfo(storedChannel);
+        connecToChanel(storedChannel);
+        fetchCurrentRound(storedChannel);
+    }
+
+    // Configurar eventos para los selectores de estado de jugadores
+    setupPlayerStatusEvents();
+
+    // Configurar evento para envío de puntuaciones
+    setupScoreSubmission();
+
+    // Configurar evento para cambio de campo
+    setupFieldChangeEvent();
+});
+
+// Configurar botones de puntuación
+function setupScoreButtons() {
+    // Botones de puntuación normales
     document.querySelectorAll('.score-btn').forEach(button => {
         button.addEventListener('click', function () {
             const targetId = this.getAttribute('data-target');
@@ -242,298 +273,120 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (action === 'clear') {
                 targetInput.value = '';
+                this.textContent = 'X';
             } else {
                 targetInput.value = this.textContent;
-            }
-        });
-    });
 
-    // ==== Obtener lista de torneos ====
-    function getList() {
-        console.log("Enviando getTournaments");
-        socket.emit('getTournaments', {
-            user: "token",
-            mensaje: "listar"
-        });
-    }
+                // Actualizar el botón de X con el valor seleccionado
+                const clearButton = document.querySelector(`button[data-target="${targetId}"][data-action="clear"]`);
+                if (clearButton) clearButton.textContent = this.textContent;
 
-    // ==== Popular el selector ====
-    function populateSelect(result) {
-        const select = document.getElementById('chanelTournament');
-        select.innerHTML = '';
-
-        if (!result || !result.length) {
-            select.innerHTML = '<option disabled>No hay torneos disponibles</option>';
-            return;
-        }
-
-        result.forEach((item) => {
-            let option = document.createElement('option');
-            option.value = item.id;
-            option.textContent = item.name;
-            select.appendChild(option);
-        });
-    }
-
-    // ==== Obtener información del torneo ====
-    function fetchTournamentInfo(channelId) {
-        fetch(`/tournaments/${channelId}/info`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error en la respuesta del servidor: ' + response.status);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log("Datos del torneo recibidos:", data);
-                if (data.success) {
-                    console.table(data.tournament?.start_date || data); // asegúrate que el objeto existe
-                } else {
-                    throw new Error(data.message || "Error desconocido al cargar datos del torneo");
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showNotification('error', error.message);
-            });
-    }
-
-    // ==== Unirse a canal específico ====
-    function connecToChanel(canal) {
-        if (!canal) return;
-        console.log('Uniéndose al canal:', canal);
-        socket.emit('joinChannel', canal);
-    }
-
-    // ==== Escuchar canales ====
-    socket.on('getChanels', (e) => {
-        console.log('Canales recibidos:', e.result);
-        populateSelect(e.result);
-
-        const selectorCanal = document.getElementById("chanelTournament");
-        let canal = localStorage.getItem('canal') || e.result[0]?.id;
-
-        if (canal) {
-            selectorCanal.value = canal;
-            connecToChanel(canal);
-            localStorage.setItem('canal', canal);
-            fetchTournamentInfo(canal);
-            fetchCurrentRound(canal);
-        }
-
-        selectorCanal.addEventListener("change", (e) => {
-            const newChannel = e.target.value;
-            console.log('Canal cambiado a:', newChannel);
-            localStorage.setItem("canal", newChannel);
-            connecToChanel(newChannel);
-            fetchTournamentInfo(newChannel);
-            fetchCurrentRound(newChannel);
-        });
-    });
-
-    // ==== Estado de conexión ====
-    socket.on('connection', (e) => {
-        console.log('Estado de conexión:', e);
-    });
-
-    // ==== Evento torneo iniciado ====
-    socket.on('tournamentStarted', (response) => {
-        showNotification('success', 'Torneo iniciado correctamente');
-    });
-
-    // ==== Inicialización ====
-    getList();
-    const storedChannel = localStorage.getItem('canal');
-    if (storedChannel) {
-        fetchTournamentInfo(storedChannel);
-        connecToChanel(storedChannel);
-    }
-});
-
-function fetchCurrentRound(tournamentId) {
-    fetch(`/tournaments/${tournamentId}/current-round`)
-        .then(res => res.json())
-        .then(data => {
-
-            if (data && data.current_round !== undefined) {
-                document.querySelectorAll('[data-current-round]').forEach(el => {
-                    
-                    el.textContent = data.current_round;
-                    //console.warn(data)
-                });
-            }
-        })
-        .catch(err => console.error("Error obteniendo la ronda actual:", err));
-}
-
-
-function fetchPlayersForField(tournamentId, fieldId) {
-    fetch(`/tournaments/${tournamentId}/fields/${fieldId}/players`)
-        .then(res => res.json())
-        .then(players => {
-            
-            updatePlayerSelects(players);
-        })
-        .catch(err => console.error("Error obteniendo jugadores para pista:", err));
-}
-
-function updatePlayerSelects(players) {
-    const selects = document.querySelectorAll('select[data-player-select]');
-    selects.forEach(select => {
-        select.innerHTML = '<option value="" disabled selected>Selecciona un jugador</option>';
-        players.forEach(player => {
-            const opt = document.createElement('option');
-            opt.value = player.id;
-            opt.textContent = player.name;
-            select.appendChild(opt);
-        });
-    });
-}
-socket.on('nextRound2', (data) => {
-    // Obtenemos todos los elementos con el atributo 'data-current-round'
-    const roundElements = document.querySelectorAll('[data-current-round]');
-    
-    // Iteramos sobre cada uno de esos elementos
-    roundElements.forEach((element) => {
-        // Actualizamos su contenido con el valor de la nueva ronda
-        element.textContent = data.nextRound;
-    });
-
-    console.log(`Ronda actualizada a ${data.nextRound}`);
-});
-
-document.querySelector('select[name="field_id"]').addEventListener('change', (e) => {
-    const fieldId = e.target.value;
-    const tournamentId = localStorage.getItem('canal');
-    fetchPlayersForField(tournamentId, fieldId);
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    const tournamentId = localStorage.getItem('canal');
-    
-    // Obtener la información de las pistas y jugadores al cargar la página
-    fetch(`/tournaments/${tournamentId}/players-with-fields`)
-        .then(res => res.json())
- .then(data => {
-            const fieldSelect = document.querySelector('select[name="field_id"]');
-            const playerSelect = document.querySelector('select[data-player-select]');
-
-            // Limpiar los selects
-            fieldSelect.innerHTML = '';
-            playerSelect.innerHTML = '<option value="" disabled selected>Selecciona un jugador</option>'; // Limpiar jugadores
-
-            // Rellenar el select de pistas
-            if (data.fields.length === 1) {
-                const field = data.fields[0]; // Solo hay una pista
-                const option = document.createElement('option');
-                option.value = field.field_id; // Asignar el id de la pista
-                option.textContent = `${field.field_name} (${field.players.length} jugadores)`; // Mostrar nombre y cantidad de jugadores
-                fieldSelect.appendChild(option);
-
-                // Rellenar el select de jugadores para esa pista (sin esperar selección)
-                field.players.forEach(player => {
-                    const option = document.createElement('option');
-                    option.value = player.id; // Usamos el id del jugador
-                    option.textContent = `${player.name} ${player.lastname}`; // Mostrar el nombre y apellido del jugador
-                    playerSelect.appendChild(option);
-                });
-            } else {
-                // Si hay más de una pista, rellenamos el select de pistas como antes
-                data.fields.forEach(field => {
-                    const option = document.createElement('option');
-                    option.value = field.field_id; // Asignar el id de la pista
-                    option.textContent = `${field.field_name} (${field.players.length} jugadores)`; // Mostrar nombre y cantidad de jugadores
-                    fieldSelect.appendChild(option);
-                });
-
-                // Añadir el evento de cambio para actualizar los jugadores cuando se selecciona una pista
-                fieldSelect.addEventListener('change', () => {
-                    const selectedFieldId = fieldSelect.value;
-                    const selectedField = data.fields.find(field => field.field_id == selectedFieldId);
-                    
-                    // Limpiar el select de jugadores
-                    playerSelect.innerHTML = '<option value="" disabled selected>Selecciona un jugador</option>';
-                    
-                    // Rellenar el select de jugadores para la pista seleccionada
-                    if (selectedField) {
-                        selectedField.players.forEach(player => {
-                            const option = document.createElement('option');
-                            option.value = player.id; // Usamos el id del jugador
-                            option.textContent = `${player.name} ${player.lastname}`; // Mostrar el nombre y apellido del jugador
-                            playerSelect.appendChild(option);
-                        });
+                // Destacar el botón seleccionado
+                document.querySelectorAll(`button[data-target="${targetId}"]`).forEach(btn => {
+                    if (btn.textContent === this.textContent && !btn.hasAttribute('data-action')) {
+                        btn.classList.add('bg-[var(--rojo)]');
+                    } else if (!btn.hasAttribute('data-action')) {
+                        btn.classList.remove('bg-[var(--rojo)]');
                     }
                 });
             }
-        })
-        .catch(err => console.error("Error al obtener jugadores:", err));
+        });
+    });
+}
 
-
-
-
-
-
-
-
-
-         const updateThrowValue = (target, value) => {
-        const inputField = document.getElementById(target);
-        const clearButton = document.querySelector(`button[data-target="${target}"][data-action="clear"]`);
-
-        // Establecer el valor en el campo oculto
-        inputField.value = value;
-
-        // Actualizar el botón X con el valor seleccionado
-        clearButton.textContent = `${value}`; // Muestra el valor seleccionado
-
-        // Establecer el valor de los botones
-        const buttons = document.querySelectorAll(`button[data-target="${target}"]`);
-        buttons.forEach(button => {
-            // Hacer que los botones seleccionados se muestren con un estilo diferente si están activos
-            if (button.textContent == value) {
-                button.classList.add('bg-[var(--rojo)]');
-            } else {
-                button.classList.remove('bg-[var(--rojo)]');
+// Configurar eventos para los selectores de estado de jugadores
+function setupPlayerStatusEvents() {
+    // Selector de jugador lanzando
+    const throwingSelect = document.querySelector('select[data-player-select]');
+    if (throwingSelect) {
+        throwingSelect.addEventListener('change', function() {
+            if (this.value) {
+                updatePlayerStatus(this.value, 2); // 2 = lanzando
             }
         });
-    };
+    }
 
-    // Agregar evento a todos los botones de puntuación (0, 1, 2, 3, 4, 6, 10)
-    const scoreButtons = document.querySelectorAll('.score-btn');
-    scoreButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const target = button.getAttribute('data-target');
-            const value = button.textContent;
-            updateThrowValue(target, value); // Actualizar el valor del input y botón X
+    // Selector de jugador recogiendo
+    const collectingSelect = document.querySelector('select[data-show-all-players]');
+    if (collectingSelect) {
+        collectingSelect.addEventListener('change', function() {
+            if (this.value) {
+                updatePlayerStatus(this.value, 4); // 4 = recogiendo
+            }
         });
-    });
+    }
 
-    // Evento para el botón de "X" (para restablecer el valor)
-    const clearButtons = document.querySelectorAll('button[data-action="clear"]');
-    clearButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const target = button.getAttribute('data-target');
-            updateThrowValue(target, ''); // Restablecer el valor a vacío
+    // Selector de jugador preparándose (identificado por exclusión)
+    const preparingSelect = document.querySelector('select:not([data-player-select]):not([data-show-all-players]):not([name="field_id"]):not([id="chanelTournament"])');
+    if (preparingSelect) {
+        preparingSelect.addEventListener('change', function() {
+            if (this.value) {
+                updatePlayerStatus(this.value, 3); // 3 = preparándose
+            }
         });
-    });
-});
-document.querySelector('[data-action="submitScores"]').addEventListener('click', (e) => {
-    // Prevenir el comportamiento por defecto, si lo necesitas
-    e.preventDefault();
+    }
+}
 
-    // Obtener los valores de los lanzamientos (ajusta según cómo estén en tu formulario)
+// Configurar evento para cambio de campo
+function setupFieldChangeEvent() {
+    const fieldSelect = document.querySelector('select[name="field_id"]');
+    if (fieldSelect) {
+        fieldSelect.addEventListener('change', function(e) {
+            const fieldId = this.value;
+            currentFieldId = fieldId;
+            const tournamentId = localStorage.getItem('canal');
+            if (tournamentId && fieldId) {
+                fetchPlayersForField(tournamentId, fieldId);
+            }
+        });
+    }
+}
+
+// Configurar envío de puntuaciones
+function setupScoreSubmission() {
+    const submitButton = document.querySelector('[data-action="submitScores"]');
+    if (submitButton) {
+        submitButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            submitScores();
+        });
+    }
+}
+
+// Función para enviar puntuaciones
+function submitScores() {
+    // Obtener la ronda actual
+    const currentRound = parseInt(document.querySelector('[data-current-round]')?.textContent) || 1;
+
+    // Obtener los valores de los lanzamientos
     const throws = [
         document.getElementById('throw1').value,
         document.getElementById('throw2').value,
         document.getElementById('throw3').value,
     ];
 
+    // Validar que todos los lanzamientos tengan valores
+    if (throws.some(t => !t)) {
+        alert('Por favor, completa todos los lanzamientos');
+        return;
+    }
+
     // Obtener el jugador seleccionado
     const selectedPlayer = document.querySelector('select[data-player-select]').value;
+
+    if (!selectedPlayer) {
+        alert('Por favor, selecciona un jugador');
+        return;
+    }
 
     // Obtener el campo y torneo seleccionado
     const fieldId = document.querySelector('select[name="field_id"]').value;
     const tournamentId = document.getElementById('chanelTournament').value;
+
+    // Deshabilitar el botón para evitar envíos duplicados
+    const submitButton = document.querySelector('[data-action="submitScores"]');
+    submitButton.disabled = true;
+    submitButton.classList.add('opacity-50');
 
     // Crear un objeto con los datos a enviar
     const payload = {
@@ -541,16 +394,374 @@ document.querySelector('[data-action="submitScores"]').addEventListener('click',
         fieldId: fieldId,
         throws: throws,
         player: selectedPlayer,
+        round: currentRound
     };
 
-    // Mostrar los datos en consola (opcional)
-    console.log('Enviando puntuaciones:', payload);
-
-    // Enviar los datos al servidor usando WebSockets (ajusta según tu implementación)
+    // Enviar los datos al servidor
     socket.emit('submitScore', payload);
+
+    // Escuchar la confirmación
+    socket.once('scoreSubmitted', handleScoreSubmitted);
+
+    // Escuchar errores
+    socket.once('scoreError', handleScoreError);
+}
+
+// Manejar respuesta exitosa de envío de puntuación
+function handleScoreSubmitted(response) {
+    console.log('Puntuación guardada:', response);
+
+    // Restablecer los campos del formulario
+    document.getElementById('throw1').value = '';
+    document.getElementById('throw2').value = '';
+    document.getElementById('throw3').value = '';
+
+    // Resetear los estilos de los botones
+    document.querySelectorAll('.score-btn').forEach(btn => {
+        btn.classList.remove('bg-[var(--rojo)]');
+    });
+
+    // Resetear los botones X
+    document.querySelectorAll('button[data-action="clear"]').forEach(btn => {
+        btn.textContent = 'X';
+    });
+
+    // Mostrar mensaje de éxito
+    alert(response.message || 'Puntuación enviada correctamente');
+
+    // Re-habilitar el botón
+    const submitButton = document.querySelector('[data-action="submitScores"]');
+    submitButton.disabled = false;
+    submitButton.classList.remove('opacity-50');
+}
+
+// Manejar errores de envío de puntuación
+function handleScoreError(error) {
+    console.error('Error al guardar puntuación:', error);
+    alert(error.message || 'Error al guardar la puntuación. Inténtalo de nuevo.');
+
+    // Re-habilitar el botón
+    const submitButton = document.querySelector('[data-action="submitScores"]');
+    submitButton.disabled = false;
+    submitButton.classList.remove('opacity-50');
+}
+
+// ==== Obtener lista de torneos ====
+function getList() {
+    console.log("Enviando getTournaments");
+    socket.emit('getTournaments', {
+        user: "token",
+        mensaje: "listar"
+    });
+}
+
+// ==== Popular el selector de torneos ====
+function populateSelect(result) {
+    const select = document.getElementById('chanelTournament');
+    if (!select) return;
+
+    select.innerHTML = '';
+
+    if (!result || !result.length) {
+        select.innerHTML = '<option disabled>No hay torneos disponibles</option>';
+        return;
+    }
+
+    result.forEach((item) => {
+        let option = document.createElement('option');
+        option.value = item.id;
+        option.textContent = item.name;
+        select.appendChild(option);
+    });
+
+    // Configurar evento de cambio de torneo
+    select.addEventListener("change", function(e) {
+        const newChannel = this.value;
+        console.log('Canal cambiado a:', newChannel);
+        localStorage.setItem("canal", newChannel);
+        currentTournamentId = newChannel;
+        connecToChanel(newChannel);
+        fetchTournamentInfo(newChannel);
+        fetchCurrentRound(newChannel);
+
+        // Limpiar selectores de campos y jugadores
+        const fieldSelect = document.querySelector('select[name="field_id"]');
+        if (fieldSelect) {
+            fieldSelect.innerHTML = '<option value="" disabled selected>Selecciona un campo</option>';
+        }
+
+        // Cargar campos para el nuevo torneo
+        loadFieldsAndPlayers(newChannel);
+    });
+}
+
+// ==== Unirse a canal específico ====
+function connecToChanel(canal) {
+    if (!canal) return;
+    console.log('Uniéndose al canal:', canal);
+    socket.emit('joinChannel', canal);
+}
+
+// ==== Obtener información del torneo ====
+function fetchTournamentInfo(channelId) {
+    fetch(`/tournaments/${channelId}/info`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la respuesta del servidor: ' + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Datos del torneo recibidos:", data);
+            if (!data.success) {
+                throw new Error(data.message || "Error desconocido al cargar datos del torneo");
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al cargar información del torneo: ' + error.message);
+        });
+}
+
+// ==== Obtener ronda actual ====
+function fetchCurrentRound(tournamentId) {
+    fetch(`/tournaments/${tournamentId}/current-round`)
+        .then(res => res.json())
+        .then(data => {
+            if (data && data.current_round !== undefined) {
+                document.querySelectorAll('[data-current-round]').forEach(el => {
+                    el.textContent = data.current_round;
+                });
+            }
+        })
+        .catch(err => console.error("Error obteniendo la ronda actual:", err));
+}
+
+// Cargar campos y jugadores del torneo seleccionado
+function loadFieldsAndPlayers(tournamentId) {
+    // Obtener la información de las pistas y jugadores
+    fetch(`/tournaments/${tournamentId}/players-with-fields`)
+        .then(res => res.json())
+        .then(data => {
+            if (!data.success) {
+                throw new Error(data.message || "Error al cargar campos y jugadores");
+            }
+
+            const fieldSelect = document.querySelector('select[name="field_id"]');
+            const playerSelect = document.querySelector('select[data-player-select]');
+
+            // Limpiar los selectores
+            fieldSelect.innerHTML = '<option value="" disabled selected>Selecciona un campo</option>';
+            playerSelect.innerHTML = '<option value="" disabled selected>Selecciona un jugador</option>';
+
+            // Rellenar el selector de campos
+            data.fields.forEach(field => {
+                const option = document.createElement('option');
+                option.value = field.field_id;
+                option.textContent = `${field.field_name} (${field.players.length} jugadores)`;
+                fieldSelect.appendChild(option);
+            });
+
+            // Si solo hay un campo, seleccionarlo automáticamente
+            if (data.fields.length === 1) {
+                fieldSelect.value = data.fields[0].field_id;
+                currentFieldId = data.fields[0].field_id;
+                fetchPlayersForField(tournamentId, data.fields[0].field_id);
+            }
+        })
+        .catch(err => {
+            console.error("Error al obtener campos y jugadores:", err);
+            alert("Error al cargar campos y jugadores: " + err.message);
+        });
+}
+
+// ==== Obtener jugadores para un campo específico ====
+function fetchPlayersForField(tournamentId, fieldId) {
+    fetch(`/tournaments/${tournamentId}/fields/${fieldId}/players`)
+        .then(res => res.json())
+        .then(data => {
+            // Verificar que la respuesta sea exitosa y contiene el array de jugadores
+            if (data.success && Array.isArray(data.players)) {
+                updatePlayerSelects(data.players);
+            } else {
+                console.error("La respuesta no contiene un array de jugadores válido:", data);
+            }
+        })
+        .catch(err => console.error("Error obteniendo jugadores para pista:", err));
+}
+
+// Actualizar selectores de jugadores según su estado
+function updatePlayerSelects(players) {
+    // Agrupar jugadores por estado
+    const playersByState = {
+        throwing: [],   // El que está lanzando (estado 2)
+        preparing: [],  // El que se está preparando (estado 3)
+        collecting: []  // El que está recogiendo (estado 4)
+    };
+
+    // Clasificar jugadores según su estado
+    players.forEach(player => {
+        switch(parseInt(player.status)) {
+            case 2:
+                playersByState.throwing.push(player);
+                break;
+            case 3:
+                playersByState.preparing.push(player);
+                break;
+            case 4:
+                playersByState.collecting.push(player);
+                break;
+            default:
+                // El estado 1 (pendiente) o cualquier otro no se muestra específicamente
+                break;
+        }
+    });
+
+    // Actualizar selector de jugador lanzando
+    const throwingSelect = document.querySelector('select[data-player-select]');
+    throwingSelect.innerHTML = '<option value="" disabled selected>Selecciona un jugador</option>';
+    playersByState.throwing.forEach(player => {
+        const opt = document.createElement('option');
+        opt.value = player.id;
+        opt.textContent = `${player.name} ${player.lastname}`;
+        throwingSelect.appendChild(opt);
+    });
+
+    // Si no hay jugadores en estado "lanzando", mostrar todos los jugadores
+    if (playersByState.throwing.length === 0) {
+        players.forEach(player => {
+            const opt = document.createElement('option');
+            opt.value = player.id;
+            opt.textContent = `${player.name} ${player.lastname}`;
+            throwingSelect.appendChild(opt);
+        });
+    }
+
+    // Actualizar selector de jugador recogiendo
+    const collectingSelect = document.querySelector('select[data-show-all-players]');
+    collectingSelect.innerHTML = '<option value="" disabled selected>Selecciona un jugador</option>';
+    playersByState.collecting.forEach(player => {
+        const opt = document.createElement('option');
+        opt.value = player.id;
+        opt.textContent = `${player.name} ${player.lastname}`;
+        collectingSelect.appendChild(opt);
+    });
+
+    // Si no hay jugadores en estado "recogiendo", mostrar todos los jugadores
+    if (playersByState.collecting.length === 0) {
+        players.forEach(player => {
+            const opt = document.createElement('option');
+            opt.value = player.id;
+            opt.textContent = `${player.name} ${player.lastname}`;
+            collectingSelect.appendChild(opt);
+        });
+    }
+
+    // Actualizar selector de jugador preparándose
+    const preparingSelect = document.querySelector('select:not([data-player-select]):not([data-show-all-players]):not([name="field_id"]):not([id="chanelTournament"])');
+    preparingSelect.innerHTML = '<option value="" disabled selected>Selecciona un jugador</option>';
+    playersByState.preparing.forEach(player => {
+        const opt = document.createElement('option');
+        opt.value = player.id;
+        opt.textContent = `${player.name} ${player.lastname}`;
+        preparingSelect.appendChild(opt);
+    });
+
+    // Si no hay jugadores en estado "preparando", mostrar todos los jugadores
+    if (playersByState.preparing.length === 0) {
+        players.forEach(player => {
+            const opt = document.createElement('option');
+            opt.value = player.id;
+            opt.textContent = `${player.name} ${player.lastname}`;
+            preparingSelect.appendChild(opt);
+        });
+    }
+}
+
+// Actualizar el estado de un jugador
+function updatePlayerStatus(playerId, status) {
+    const tournamentId = localStorage.getItem('canal');
+    const fieldId = document.querySelector('select[name="field_id"]').value;
+
+    if (!playerId || !tournamentId || !fieldId) return;
+
+    // Enviar actualización de estado al servidor
+    fetch(`/tournaments/${tournamentId}/fields/${fieldId}/players/${playerId}/status`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ status: status })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log(`Estado del jugador ${playerId} actualizado a ${status}`);
+
+            // Recargar los jugadores para reflejar los cambios
+            fetchPlayersForField(tournamentId, fieldId);
+        } else {
+            console.error('Error al actualizar estado:', data.message);
+            alert('Error al actualizar el estado del jugador: ' + data.message);
+        }
+    })
+    .catch(err => {
+        console.error("Error al actualizar estado del jugador:", err);
+        alert('Error de conexión al actualizar el estado del jugador');
+    });
+}
+
+// Escuchar eventos de WebSocket
+socket.on('connection', (e) => {
+    console.log('Estado de conexión:', e);
 });
 
+socket.on('getChanels', (e) => {
+    console.log('Canales recibidos:', e.result);
+    populateSelect(e.result);
 
+    // Recuperar canal guardado
+    const storedChannel = localStorage.getItem('canal') || (e.result.length > 0 ? e.result[0].id : null);
+
+    if (storedChannel) {
+        const selectorCanal = document.getElementById("chanelTournament");
+        if (selectorCanal) {
+            selectorCanal.value = storedChannel;
+            currentTournamentId = storedChannel;
+            connecToChanel(storedChannel);
+            fetchTournamentInfo(storedChannel);
+            fetchCurrentRound(storedChannel);
+            loadFieldsAndPlayers(storedChannel);
+        }
+    }
+});
+
+socket.on('tournamentStarted', (response) => {
+    if (response.success) {
+        alert('Torneo iniciado correctamente');
+    }
+});
+
+socket.on('nextRound2', (data) => {
+    // Actualizar los elementos que muestran la ronda actual
+    document.querySelectorAll('[data-current-round]').forEach(element => {
+        element.textContent = data.nextRound;
+    });
+
+    // Mostrar notificación visible
+    const notification = document.createElement('div');
+    notification.className = 'fixed top-4 right-4 bg-green-500 text-white p-4 rounded shadow-lg z-50';
+    notification.textContent = `¡Avanzando a la ronda ${data.nextRound}!`;
+    document.body.appendChild(notification);
+
+    // Remover la notificación después de 5 segundos
+    setTimeout(() => {
+        notification.remove();
+    }, 5000);
+
+    console.log(`Ronda actualizada a ${data.nextRound}`);
+});
 </script>
 
 
