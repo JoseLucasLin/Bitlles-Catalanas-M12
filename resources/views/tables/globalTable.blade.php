@@ -3,97 +3,36 @@
     <main class="flex-1 ms-10 me-10">
         <h1 class="text-2xl font-bold text-[var(--azul)] mb-4">Todos los Jugadores</h1>
         <select id="chanelTournament" class="w-full p-2 border border-gray-300 rounded">
-
-            <option disabled>No hay torneos disponibles</option>
-
-
+            <option disabled selected>Selecciona un torneo</option>
         </select>
-<table id="scoreTable" class="w-full border-collapse border border-gray-300 mb-8">
-    <thead>
-        <tr class="bg-gray-200">
-            <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">Nº</th>
-            <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">Jugador</th>
-            <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">Campo</th>
-            <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">1</th>
-            <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">2</th>
-            <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">3</th>
-            <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">T1</th>
-            <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">1</th>
-            <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">2</th>
-            <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">3</th>
-            <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">T2</th>
-            <th class="border border-[var(--azul)] p-2 text-lg font-bold text-white bg-[#BE1622]">Total</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach($allPlayers as $index => $player)
-            @php
-                // Obtener el campo del jugador
-                $playerField = '';
-                foreach (json_decode(File::get(public_path('sample_data.json')), true)['matches'] as $match) {
-                    foreach ($match['players'] as $p) {
-                        if ($p['id'] == $player['id']) {
-                            $playerField = $match['field'];
-                            break 2;
-                        }
-                    }
-                }
 
-                $latestRound = count($player['rounds']) > 0 ? $player['rounds'][count($player['rounds']) - 1] : null;
-
-                // Determinar la clase de color según el estado
-                $nameColorClass = '';
-                switch ($player['status']) {
-                    case 'playing_next':
-                        $nameColorClass = 'bg-green-300';
-                        break;
-                    case 'preparing':
-                        $nameColorClass = 'bg-yellow-200';
-                        break;
-                    case 'collecting':
-                        $nameColorClass = 'bg-red-400';
-                        break;
-                    default:
-                        $nameColorClass = 'bg-gray-200';
-                }
-            @endphp
-
-            <tr data-player-id="{{ $player['id'] }}">
-                <td class="border border-[var(--azul)] p-2 text-center">{{ $index + 1 }}</td>
-                <td class="border border-[var(--azul)] p-2 {{ $nameColorClass }}">{{ $player['name'] }}</td>
-                <td class="border border-[var(--azul)] p-2 text-center">{{ $playerField }}</td>
-
-                @if($latestRound)
-                    <td class="border border-[var(--azul)] p-2 text-center">{{ $latestRound['t1'][0] ?? '' }}</td>
-                    <td class="border border-[var(--azul)] p-2 text-center">{{ $latestRound['t1'][1] ?? '' }}</td>
-                    <td class="border border-[var(--azul)] p-2 text-center">{{ $latestRound['t1'][2] ?? '' }}</td>
-                    <td class="border border-[var(--azul)] p-2 text-center">{{ $latestRound['total_t1'] ?? '' }}</td>
-                    <td class="border border-[var(--azul)] p-2 text-center">{{ $latestRound['t2'][0] ?? '' }}</td>
-                    <td class="border border-[var(--azul)] p-2 text-center">{{ $latestRound['t2'][1] ?? '' }}</td>
-                    <td class="border border-[var(--azul)] p-2 text-center">{{ $latestRound['t2'][2] ?? '' }}</td>
-                    <td class="border border-[var(--azul)] p-2 text-center">{{ $latestRound['total_t2'] ?? '' }}</td>
-                    <td class="border border-[var(--azul)] p-2 text-center">{{ $latestRound['total'] ?? ' ' }}</td>
-                @else
-                    <td class="border border-[var(--azul)] p-2 text-center"></td>
-                    <td class="border border-[var(--azul)] p-2 text-center"></td>
-                    <td class="border border-[var(--azul)] p-2 text-center"></td>
-                    <td class="border border-[var(--azul)] p-2 text-center"></td>
-                    <td class="border border-[var(--azul)] p-2 text-center"></td>
-                    <td class="border border-[var(--azul)] p-2 text-center"></td>
-                    <td class="border border-[var(--azul)] p-2 text-center"></td>
-                    <td class="border border-[var(--azul)] p-2 text-center"></td>
-                     <td class="border border-[var(--azul)] p-2 text-center"></td>
-                @endif
-            </tr>
-        @endforeach
-    </tbody>
-</table>
-
-        <div class="flex flex-row justify-center mt-4">
-            <p class="bg-green-300 p-1 m-2 border rounded-md">Lanzando</p>
-            <p class="bg-gray-200 p-1 m-2 border rounded-md">En espera</p>
-        </div>
+        <table id="scoreTable" class="w-full border-collapse border border-gray-300 mb-8">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">Nº</th>
+                    <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">Jugador</th>
+                    <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">Campo</th>
+                    <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">1</th>
+                    <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">2</th>
+                    <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">3</th>
+                    <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">T1</th>
+                    <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">1</th>
+                    <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">2</th>
+                    <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">3</th>
+                    <th class="border border-[var(--azul)] p-2 text-lg font-bold text-[var(--azul)]">T2</th>
+                    <th class="border border-[var(--azul)] p-2 text-lg font-bold text-white bg-[#BE1622]">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="12" class="border border-[var(--azul)] p-4 text-center">
+                        Selecciona un torneo para ver los jugadores
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </main>
+
     <script type="module">
         import { io } from 'https://cdn.socket.io/4.3.2/socket.io.esm.min.js';
         const socket = io('http://localhost:8100');
@@ -101,7 +40,7 @@
         // Variables globales
         let players = [];
 
-        // Función para convertir tabla a array (movida fuera del DOMContentLoaded)
+        // Función para convertir tabla a array
         function tableToArray() {
             let table = document.getElementById('scoreTable');
             if (!table) {
@@ -119,6 +58,8 @@
 
             rows.forEach(row => {
                 const playerId = row.getAttribute('data-player-id');
+                if (!playerId) return; // Ignorar filas sin ID de jugador
+
                 let cells = row.querySelectorAll('td');
 
                 if (!cells.length || cells.length < 12) return; // Asegurarse de que hay suficientes celdas
@@ -149,7 +90,7 @@
             return tableData;
         }
 
-        // Función para actualizar la tabla con los nuevos datos del jugador (movida fuera del DOMContentLoaded)
+        // Función para actualizar la tabla con los nuevos datos del jugador
         function updatePlayerTable(playerId, newData) {
             // Encuentra la fila correspondiente al jugador con el ID
             const row = document.querySelector(`#scoreTable tbody tr[data-player-id="${playerId}"]`);
@@ -219,11 +160,6 @@
                 })
                 .then(data => {
                     console.log("Datos del torneo recibidos:", data);
-                    if (data.success) {
-                        console.table(data.tournament?.start_date || data);
-                    } else {
-                        throw new Error(data.message || "Error desconocido al cargar datos del torneo");
-                    }
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -239,13 +175,13 @@
             });
         }
 
-        // ==== Popular el selector ====
+        // Popular el selector de torneos
         function populateSelect(result) {
             const select = document.getElementById('chanelTournament');
-            select.innerHTML = '';
+            select.innerHTML = '<option disabled selected>Selecciona un torneo</option>';
 
             if (!result || !result.length) {
-                select.innerHTML = '<option disabled>No hay torneos disponibles</option>';
+                select.innerHTML += '<option disabled>No hay torneos disponibles</option>';
                 return;
             }
 
@@ -301,6 +237,15 @@
                         document.querySelectorAll('[data-current-round]').forEach(el => {
                             el.textContent = data.current_round;
                         });
+
+                        // Añadir un elemento oculto con la ronda si no existe
+                        if (!document.querySelector('[data-current-round]')) {
+                            const roundElement = document.createElement('span');
+                            roundElement.setAttribute('data-current-round', '');
+                            roundElement.style.display = 'none';
+                            roundElement.textContent = data.current_round;
+                            document.body.appendChild(roundElement);
+                        }
                     }
                 })
                 .catch(err => console.error("Error obteniendo la ronda actual:", err));
@@ -344,12 +289,19 @@
                 updatePlayerTable(data.player, newData);
             } else {
                 console.warn(`Jugador con ID ${data.player} no encontrado en el array de jugadores`);
+                // Recargar la tabla completa para obtener el jugador que falta
+                loadAllPlayersFromAPI(localStorage.getItem('canal'));
             }
         });
 
-        // Nueva función para obtener jugadores de todas las pistas para un torneo
+        // Función para obtener jugadores de todas las pistas para un torneo
         function loadAllPlayersFromAPI(tournamentId) {
-            // Mostrar indicador de carga (opcional)
+            if (!tournamentId) {
+                console.error("ID de torneo no válido");
+                return;
+            }
+
+            // Mostrar indicador de carga
             const tbody = document.querySelector('#scoreTable tbody');
             tbody.innerHTML = '<tr><td colspan="12" class="text-center p-4">Cargando jugadores...</td></tr>';
 
@@ -363,7 +315,7 @@
                     if (!data.success) throw new Error(data.message || 'Error desconocido');
 
                     // Procesamos los datos y preparamos los jugadores para la tabla
-                    renderPlayersTable(data.fields);
+                    renderPlayersTable(data.fields, tournamentId);
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -372,11 +324,11 @@
         }
 
         // Función para renderizar la tabla con los datos de la API
-        function renderPlayersTable(fields) {
+        function renderPlayersTable(fields, tournamentId) {
             const tbody = document.querySelector('#scoreTable tbody');
-            tbody.innerHTML = ''; // Limpiar tabla actual
+            tbody.innerHTML = '<tr><td colspan="12" class="text-center p-4">Procesando datos...</td></tr>';
 
-            // Crear un mapa para agrupar jugadores por ID y encontrar la última ronda
+            // Crear un mapa para agrupar jugadores por ID
             const playersMap = new Map();
 
             // Procesar todos los campos y sus jugadores
@@ -399,14 +351,19 @@
             const allPlayers = Array.from(playersMap.values());
 
             // Cargar datos completos de cada jugador desde la API
-            const tournamentId = localStorage.getItem('canal');
-
-            // Hacer una solicitud para obtener los datos completos de puntuación
             fetch(`/tournaments/${tournamentId}/players-scores`)
                 .then(response => response.json())
                 .then(scoresData => {
                     if (!scoresData.success) {
                         throw new Error(scoresData.message || 'Error al cargar puntuaciones');
+                    }
+
+                    // Limpiar tabla
+                    tbody.innerHTML = '';
+
+                    if (allPlayers.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="12" class="text-center p-4">No hay jugadores registrados en este torneo</td></tr>';
+                        return;
                     }
 
                     // Combinar información de jugadores con sus puntuaciones
@@ -421,19 +378,13 @@
                             total: 0
                         };
 
-                        // Determinar el color basado en el estado - ahora solo destacamos el estado 2 (lanzando)
-                        let nameColorClass = 'bg-gray-200'; // Por defecto todos en gris
-                        if (player.status === 2) {
-                            nameColorClass = 'bg-green-300'; // Solo el que está lanzando se marca en verde
-                        }
-
-                        // Crear la fila en la tabla con datos completos
+                        // Crear la fila en la tabla sin aplicar colores según estado
                         const row = document.createElement('tr');
                         row.setAttribute('data-player-id', player.id);
 
                         row.innerHTML = `
                             <td class="border border-[var(--azul)] p-2 text-center">${index + 1}</td>
-                            <td class="border border-[var(--azul)] p-2 ${nameColorClass}">${player.name} ${player.lastname}</td>
+                            <td class="border border-[var(--azul)] p-2">${player.name} ${player.lastname}</td>
                             <td class="border border-[var(--azul)] p-2 text-center">${player.field_name}</td>
                             <td class="border border-[var(--azul)] p-2 text-center">${playerScore.round1.t1[0] || 0}</td>
                             <td class="border border-[var(--azul)] p-2 text-center">${playerScore.round1.t1[1] || 0}</td>
@@ -463,15 +414,15 @@
         // Función auxiliar para renderizar tabla básica en caso de error
         function renderBasicTable(allPlayers) {
             const tbody = document.querySelector('#scoreTable tbody');
+            tbody.innerHTML = '';
+
+            if (allPlayers.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="12" class="text-center p-4">No hay jugadores disponibles</td></tr>';
+                return;
+            }
 
             allPlayers.forEach((player, index) => {
-                // Determinar el color basado en el estado
-                let nameColorClass = 'bg-gray-200'; // Por defecto
-                if (player.status === 2) {
-                    nameColorClass = 'bg-green-300'; // Solo el que está lanzando
-                }
-
-                // Crear la fila en la tabla
+                // Crear la fila en la tabla sin aplicar colores según estado
                 const row = document.createElement('tr');
                 row.setAttribute('data-player-id', player.id);
 
@@ -482,8 +433,8 @@
 
                 row.innerHTML = `
                     <td class="border border-[var(--azul)] p-2 text-center">${index + 1}</td>
-                    <td class="border border-[var(--azul)] p-2 ${nameColorClass}">${player.name} ${player.lastname}</td>
-                    <td class="border border-[var(--azul)] p-2 text-center">${player.field_name}</td>
+                    <td class="border border-[var(--azul)] p-2">${player.name} ${player.lastname || ''}</td>
+                    <td class="border border-[var(--azul)] p-2 text-center">${player.field_name || ''}</td>
                     <td class="border border-[var(--azul)] p-2 text-center">${t1}</td>
                     <td class="border border-[var(--azul)] p-2 text-center">${t2}</td>
                     <td class="border border-[var(--azul)] p-2 text-center">${t3}</td>
@@ -501,6 +452,14 @@
             // Actualizar la variable global para WebSocket
             players = tableToArray();
         }
-    </script>
 
+        // Escuchar evento de cambio de ronda
+        socket.on('nextRound2', (data) => {
+            // Actualizar los elementos que muestran la ronda actual
+            fetchCurrentRound(data.channelId);
+
+            // Recargar los datos
+            loadAllPlayersFromAPI(data.channelId);
+        });
+    </script>
 @endsection

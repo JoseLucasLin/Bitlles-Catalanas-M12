@@ -252,14 +252,12 @@ function setupScoreButtons() {
 
 // Configurar eventos para los selectores de estado de jugadores
 function setupPlayerStatusEvents() {
-    // Selector de jugador lanzando (es el único que mantenemos)
+    // Conservamos el selector pero eliminamos la actualización de estado
     const throwingSelect = document.querySelector('select[data-player-select]');
     if (throwingSelect) {
         throwingSelect.addEventListener('change', function() {
+            // La actualización visual se mantiene pero no enviamos nada al servidor
             if (this.value) {
-                updatePlayerStatus(this.value, 2); // 2 = lanzando
-
-                // Actualización visual inmediata
                 const option = this.options[this.selectedIndex];
                 option.style.backgroundColor = '#86efac'; // bg-green-300
             }
@@ -307,7 +305,8 @@ function submitScores() {
 
     // Validar que todos los lanzamientos tengan valores
     if (throws.some(t => !t)) {
-        alert('Por favor, completa todos los lanzamientos');
+        // Usando console.error en lugar de alert para evitar alertas molestas
+        console.error('Por favor, completa todos los lanzamientos');
         return;
     }
 
@@ -315,7 +314,8 @@ function submitScores() {
     const selectedPlayer = document.querySelector('select[data-player-select]').value;
 
     if (!selectedPlayer) {
-        alert('Por favor, selecciona un jugador');
+        // Usando console.error en lugar de alert
+        console.error('Por favor, selecciona un jugador');
         return;
     }
 
@@ -335,6 +335,7 @@ function submitScores() {
         throws: throws,
         player: selectedPlayer,
         round: currentRound
+        // Se elimina cualquier referencia al estado
     };
 
     // Enviar los datos al servidor
@@ -366,8 +367,12 @@ function handleScoreSubmitted(response) {
         btn.textContent = 'X';
     });
 
-    // Mostrar mensaje de éxito
-    alert(response.message || 'Puntuación enviada correctamente');
+    // Mostrar notificación visual en lugar de alert
+    const notification = document.createElement('div');
+    notification.className = 'fixed top-4 right-4 bg-green-500 text-white p-4 rounded shadow-lg z-50';
+    notification.textContent = response.message || 'Puntuación enviada correctamente';
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 3000);
 
     // Re-habilitar el botón
     const submitButton = document.querySelector('[data-action="submitScores"]');
@@ -378,7 +383,13 @@ function handleScoreSubmitted(response) {
 // Manejar errores de envío de puntuación
 function handleScoreError(error) {
     console.error('Error al guardar puntuación:', error);
-    alert(error.message || 'Error al guardar la puntuación. Inténtalo de nuevo.');
+
+    // Mostrar notificación visual en lugar de alert
+    const notification = document.createElement('div');
+    notification.className = 'fixed top-4 right-4 bg-red-500 text-white p-4 rounded shadow-lg z-50';
+    notification.textContent = error.message || 'Error al guardar la puntuación. Inténtalo de nuevo.';
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 3000);
 
     // Re-habilitar el botón
     const submitButton = document.querySelector('[data-action="submitScores"]');
@@ -545,25 +556,7 @@ function fetchPlayersForField(tournamentId, fieldId) {
 
 // Actualizar selectores de jugadores según su estado
 function updatePlayerSelects(players) {
-    // Agrupar jugadores por estado - solo nos interesa el estado 2 (lanzando)
-    const playersByState = {
-        throwing: []   // El que está lanzando (estado 2)
-    };
-
     console.log('Actualizando selectores con jugadores:', players);
-
-    // Clasificar jugadores según su estado
-    players.forEach(player => {
-        // Asegurar que status sea un número
-        const status = Number(player.status);
-        console.log(`Jugador ${player.id} (${player.name}) tiene estado: ${status}`);
-
-        if (status === 2) {
-            playersByState.throwing.push(player);
-        }
-    });
-
-    console.log('Jugadores clasificados por estado:', playersByState);
 
     // Actualizar selector de jugador lanzando
     const throwingSelect = document.querySelector('select[data-player-select]');
@@ -574,69 +567,16 @@ function updatePlayerSelects(players) {
 
     throwingSelect.innerHTML = '<option value="" disabled selected>Selecciona un jugador</option>';
 
-    // Primero añadir jugadores que ya están en estado lanzando
-    playersByState.throwing.forEach(player => {
+    // Añadir todos los jugadores al selector sin filtrar por estado
+    players.forEach(player => {
         const opt = document.createElement('option');
         opt.value = player.id;
         opt.textContent = `${player.name} ${player.lastname}`;
-        opt.style.backgroundColor = '#86efac'; // bg-green-300
+        // Mantener el resaltado visual para jugadores en estado 2 (lanzando)
+        if (Number(player.status) === 2) {
+            opt.style.backgroundColor = '#86efac'; // bg-green-300
+        }
         throwingSelect.appendChild(opt);
-    });
-
-    // Añadir el resto de jugadores
-    players.forEach(player => {
-        // Solo añadir si no está ya en estado 2
-        if (Number(player.status) !== 2) {
-            const opt = document.createElement('option');
-            opt.value = player.id;
-            opt.textContent = `${player.name} ${player.lastname}`;
-            throwingSelect.appendChild(opt);
-        }
-    });
-}
-
-// Actualizar el estado de un jugador
-function updatePlayerStatus(playerId, status) {
-    const tournamentId = localStorage.getItem('canal');
-    const fieldId = document.querySelector('select[name="field_id"]').value;
-
-    if (!playerId || !tournamentId || !fieldId) {
-        console.error("Faltan datos para actualizar estado:", { playerId, tournamentId, fieldId });
-        alert('Error: Faltan datos para actualizar estado del jugador');
-        return;
-    }
-
-    console.log(`Enviando actualización de estado: jugador ${playerId}, estado ${status}`);
-
-    // Enviar actualización de estado al servidor
-    fetch(`/tournaments/${tournamentId}/fields/${fieldId}/players/${playerId}/status`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: JSON.stringify({ status: status })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`Error HTTP: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-            console.log(`Estado del jugador ${playerId} actualizado a ${status}`, data);
-
-            // Recargar los jugadores para reflejar los cambios
-            fetchPlayersForField(tournamentId, fieldId);
-        } else {
-            console.error('Error al actualizar estado:', data.message);
-            alert('Error al actualizar el estado del jugador: ' + data.message);
-        }
-    })
-    .catch(err => {
-        console.error("Error al actualizar estado del jugador:", err);
-        alert('Error de conexión al actualizar el estado del jugador: ' + err.message);
     });
 }
 
